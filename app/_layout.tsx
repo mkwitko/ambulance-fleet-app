@@ -1,24 +1,54 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Providers } from "@/src/providers";
+import { Slot } from "expo-router";
+import React, { useEffect, useRef } from "react";
+import { Animated, StatusBar } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { disableFontScalingGlobally } from "@/src/config/disable-font-scaling";
+import { preventAutoHideSplash } from "@/src/config/splash-screen";
+import { useLoadFonts } from "@/src/hooks/use-load-fonts";
+import { COLORS } from "@/src/styles/colors";
+import "@/src/styles/global.css";
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import "react-native-gesture-handler";
+import "react-native-reanimated";
+
+// Inicializações globais
+preventAutoHideSplash();
+// initSentry();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded] = useLoadFonts();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    disableFontScalingGlobally();
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <StatusBar
+          backgroundColor={COLORS.primary[900]}
+          translucent={false}
+          barStyle="dark-content"
+        />
+        <Providers>
+          <Slot />
+        </Providers>
+      </Animated.View>
+    </GestureHandlerRootView>
   );
 }
