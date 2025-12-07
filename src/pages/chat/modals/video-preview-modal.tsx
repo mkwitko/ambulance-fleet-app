@@ -214,7 +214,12 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       onRequestClose={handleClose}
       statusBarTranslucent
     >
-      <SafeAreaView className="flex-1 bg-black">
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#000",
+        }}
+      >
         <View className="flex-1">
           {/* Header */}
           {showControls && (

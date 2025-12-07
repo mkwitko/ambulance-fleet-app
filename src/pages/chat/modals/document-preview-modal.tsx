@@ -349,7 +349,12 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#FFF",
+        }}
+      >
         <View className="flex-1">
           <DocumentHeader
             fileName={attachment.name || "Documento.pdf"}

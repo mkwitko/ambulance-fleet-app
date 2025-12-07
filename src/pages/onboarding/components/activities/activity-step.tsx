@@ -8,7 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
-import { Animated, ScrollView, View } from "react-native";
+import { Animated, Dimensions, ScrollView, View } from "react-native";
 import useFinishOnboardHook from "../../hooks/use-finish-onboard-hook";
 import { StepProps } from "../../hooks/use-onboard-steps-hook";
 import { ActivityCard } from "./components/activity-card";
@@ -101,6 +101,8 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
     animateEntrance();
   }, []);
 
+  const SCREEN_WIDTH = Dimensions.get("window").width;
+
   return (
     <View className="flex-1">
       <ScrollView
@@ -152,7 +154,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
                 style={{
                   width: progressAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: ["0%", "100%"],
+                    outputRange: [0, SCREEN_WIDTH],
                   }),
                 }}
               />

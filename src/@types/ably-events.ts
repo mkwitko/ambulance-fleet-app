@@ -3,6 +3,14 @@ export const AblyEvents = {
   status: "status",
   readChat: "readChat",
   shiftStatus: "shiftStatus",
+  radioCall: "radioCall",
 } as const;
 
 export type AblyEvents = keyof typeof AblyEvents;
+
+export const RadioCallTypeEvents = {
+  calling: "CALLING",
+  ended: "ENDED",
+};
+
+export type RadioCallTypeEvents = keyof typeof RadioCallTypeEvents;

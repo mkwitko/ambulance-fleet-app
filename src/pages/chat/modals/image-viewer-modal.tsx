@@ -65,7 +65,12 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
       onRequestClose={handleClose}
       statusBarTranslucent
     >
-      <SafeAreaView className="flex-1 bg-black">
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#000",
+        }}
+      >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <View className="flex-1">
             {/* Header */}

@@ -21,7 +21,11 @@ export default function PublicLayout() {
   }, [checkAuth]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
       <LinearGradient
         className="flex-1"
         colors={[

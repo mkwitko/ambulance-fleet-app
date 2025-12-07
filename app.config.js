@@ -10,15 +10,15 @@ export default ({ config }) => ({
     scheme: "connectapprefactor",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
+    package: "com.connectapp.refactor",
     ios: {
       supportsTablet: true,
+      bundleIdentifier: "com.connectapp.refactor",
     },
     android: {
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
-      android: {
-        permissions: ["RECORD_AUDIO"],
-      },
+      package: "com.connectapp.refactor",
     },
     web: {
       output: "static",

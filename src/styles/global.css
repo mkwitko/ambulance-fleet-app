@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    font-family: "Poppins", sans-serif;
-  }
-}
-
 @layer utilities {
   .bg-connect {
     @apply bg-white/70 border border-input rounded-xl;

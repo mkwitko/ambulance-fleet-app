@@ -6,7 +6,7 @@ import usePermissionsHook from "@/src/pages/onboarding/components/permissions/ho
 import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Animated, ScrollView, View } from "react-native";
+import { Animated, Dimensions, ScrollView, View } from "react-native";
 
 export default function Permissions() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,6 +31,8 @@ export default function Permissions() {
     animationState,
     setModalVisible,
   });
+
+  const SCREEN_WIDTH = Dimensions.get("window").width;
 
   return (
     <View className="flex-1">
@@ -84,7 +86,7 @@ export default function Permissions() {
                 style={{
                   width: progressAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: ["0%", "100%"],
+                    outputRange: [0, SCREEN_WIDTH],
                   }),
                 }}
               />

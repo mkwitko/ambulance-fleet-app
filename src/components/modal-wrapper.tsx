@@ -3,6 +3,7 @@ import useModalAnimationHook from "@/src/hooks/use-modal-animation-hook";
 import React from "react";
 import {
   Animated,
+  Dimensions,
   Modal,
   ScrollView,
   TouchableOpacity,
@@ -32,6 +33,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
   persistent = false,
 }) => {
   const { fadeAnim, scaleAnim } = useModalAnimationHook({ visible });
+  const SCREEN_HEIGHT = Dimensions.get("window").height;
 
   return (
     <Modal
@@ -59,7 +61,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
           className="bg-white rounded-t-[32px] overflow-hidden"
           style={{
             transform: [{ scale: scaleAnim }],
-            maxHeight: `${maxHeightPct}%`,
+            maxHeight: SCREEN_HEIGHT * (maxHeightPct / 100),
           }}
         >
           <ScrollView showsVerticalScrollIndicator={false}>
