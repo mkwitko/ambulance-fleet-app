@@ -7,6 +7,7 @@ const envSchema = z.object({
   EXPO_PUBLIC_APP_VERSION: z.string(),
   EXPO_PUBLIC_SENTRY: z.string(),
   EXPO_PUBLIC_ABLY_API_KEY: z.string(),
+  EXPO_PUBLIC_AGORA_APP_ID: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(Constants.expoConfig?.extra || {});

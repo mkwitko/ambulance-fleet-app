@@ -48,7 +48,7 @@ export const signIn = (
       
       
       return customInstance<SignIn201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/auth/sign-in`, method: 'POST',
+      {url: `https://1b961c64a76e.ngrok-free.app/auth/sign-in`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: signInBody, signal
     },
@@ -113,7 +113,7 @@ export const signOut = (
       
       
       return customInstance<SignOut204>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/auth/sign-out`, method: 'POST', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/auth/sign-out`, method: 'POST', signal
     },
       options);
     }
@@ -176,7 +176,7 @@ export const checkAuth = (
       
       
       return customInstance<CheckAuth200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/auth/status`, method: 'GET', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/auth/status`, method: 'GET', signal
     },
       options);
     }
@@ -186,7 +186,7 @@ export const checkAuth = (
 
 export const getCheckAuthQueryKey = () => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/auth/status`
+    `https://1b961c64a76e.ngrok-free.app/auth/status`
     ] as const;
     }
 

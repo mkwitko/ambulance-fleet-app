@@ -27,11 +27,11 @@ export default function PublicLayout() {
       }}
     >
       <LinearGradient
-        className="flex-1"
+        className="flex-1 bg-white"
         colors={[
-          "rgba(0,128,0,0.05)",
-          "rgba(0,128,0,0.05)",
+          "rgba(0,128,0,0.1)",
           "rgba(0,128,0,0.07)",
+          "rgba(0,128,0,0.09)",
         ]}
         start={{ x: 0.5, y: 1 }}
         end={{ x: 0.5, y: 0 }}

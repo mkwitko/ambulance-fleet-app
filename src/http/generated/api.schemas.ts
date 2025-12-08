@@ -2419,34 +2419,17 @@ export type GetUnreadChatMessages200 = {
 };
 
 export type CreateRadioMeetingBody = {
-  title: string;
   ambulanceId: string;
+  userId?: number;
 };
+
+export type CreateRadioMeeting201Uid = string | number;
 
 export type CreateRadioMeeting201 = {
   id: string;
-};
-
-export type AddRadioParticipantBody = {
-  meetingId: string;
-  name: string;
-  preset_name: string;
-  custom_participant_id: string;
-  ambulanceId: string;
-};
-
-export type AddRadioParticipant201 = {
-  id: string;
-  token: string;
-};
-
-export type RemoveRadioParticipantBody = {
-  meetingId: string;
-  participantId: string;
-  ambulanceId: string;
-};
-
-export type RemoveRadioParticipant201 = {
-  id: string;
+  rtcToken: string;
+  appId: string;
+  uid: CreateRadioMeeting201Uid;
+  expirationSeconds: number;
 };
 

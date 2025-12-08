@@ -1,5 +1,5 @@
 import * as Ably from "ably";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { env } from "../env";
 import { useGetAuthenticatedUser } from "../http/generated/user/user";
 export default function useAbly({
@@ -9,9 +9,21 @@ export default function useAbly({
   events: string[];
   handleMessageReceived: (message: Ably.InboundMessage) => void;
 }) {
-  const realtimeClient = new Ably.Realtime({
-    key: env.EXPO_PUBLIC_ABLY_API_KEY,
-  });
+  const clientRef = useRef<Ably.Realtime | null>(null);
+
+  if (!clientRef.current) {
+    clientRef.current = new Ably.Realtime({
+      key: env.EXPO_PUBLIC_ABLY_API_KEY,
+      echoMessages: false,
+      closeOnUnload: true,
+      recover: (lastConnectionDetails, cb) => cb(true), // 🚀 enables session recovery
+      disconnectedRetryTimeout: 2000,
+      suspendedRetryTimeout: 5000,
+      transportParams: { remainActive: true },
+    });
+  }
+
+  const realtimeClient = clientRef.current;
 
   const { data: user } = useGetAuthenticatedUser();
   useEffect(() => {

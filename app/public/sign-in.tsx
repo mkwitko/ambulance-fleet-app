@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MotiView, useAnimationState } from "moti";
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Image, Keyboard, TextInput, View } from "react-native";
+import { Animated, Image, Keyboard, TextInput, View } from "react-native";
 import { z } from "zod";
 
 import { KeyboardWrapper } from "@/src/components/keyboard-wrapper";
@@ -51,20 +50,52 @@ export default function SignIn() {
   };
 
   // --------------------------------------
-  // 🔥 Framer Motion (Moti) Animation State
+  // 🔥 React Native Animated (substituindo Moti)
   // --------------------------------------
-  const logoAnimation = useAnimationState({
-    closed: { translateY: 0, scale: 1, opacity: 1 },
-    open: { translateY: -60, scale: 0.85, opacity: 0.9 },
-  });
+  const translateY = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const subShow = Keyboard.addListener("keyboardWillShow", () =>
-      logoAnimation.transitionTo("open")
-    );
-    const subHide = Keyboard.addListener("keyboardWillHide", () =>
-      logoAnimation.transitionTo("closed")
-    );
+    const subShow = Keyboard.addListener("keyboardWillShow", () => {
+      Animated.parallel([
+        Animated.timing(translateY, {
+          toValue: -60,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scale, {
+          toValue: 0.85,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0.9,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    });
+
+    const subHide = Keyboard.addListener("keyboardWillHide", () => {
+      Animated.parallel([
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scale, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    });
 
     return () => {
       subShow.remove();
@@ -75,15 +106,15 @@ export default function SignIn() {
   return (
     <KeyboardWrapper className="flex-1" keyboardOffset={30}>
       <View className="flex-1 justify-center items-center px-4">
-        {/* 🔥 LOGO COM ANIMAÇÃO FRAMER MOTION */}
-        <MotiView
-          state={logoAnimation}
-          transition={{ type: "timing", duration: 250 }}
+        {/* 🔥 LOGO COM ANIMAÇÃO REACT NATIVE ANIMATED */}
+        <Animated.View
           style={{
             position: "absolute",
             top: 160,
             width: "100%",
             alignItems: "center",
+            transform: [{ translateY }, { scale }],
+            opacity,
           }}
         >
           <Image
@@ -91,7 +122,7 @@ export default function SignIn() {
             style={{ width: 240, height: 120 }}
             resizeMode="contain"
           />
-        </MotiView>
+        </Animated.View>
 
         {/* 🔥 CARD DO FORM */}
         <View className="w-full bg-white p-6 gap-4 rounded-xl border border-input mt-10">

@@ -1,51 +1,37 @@
+import { AblyEvents, RadioCallTypeEvents } from "@/src/@types/ably-events";
 import { useCheckAuth } from "@/src/http/generated/auth/auth";
-import {
-  useAddRadioParticipant,
-  useRemoveRadioParticipant,
-} from "@/src/http/generated/radio/radio";
-import { COLORS } from "@/src/styles/colors";
+import { useCreateRadioMeeting } from "@/src/http/generated/radio/radio";
+import useAbly from "@/src/services/use-ably";
+import { useAgora } from "@/src/services/use-agora";
 import { LinearGradient } from "expo-linear-gradient";
 import { Slot, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProtectedLayout() {
-  // const [meeting, initMeeting] = useRealtimeKitClient();
-
   const { data: checkAuth } = useCheckAuth();
-  const { mutateAsync: addRadioParticipant } = useAddRadioParticipant();
-  const { mutateAsync: removeRadioParticipant } = useRemoveRadioParticipant();
 
-  // const handleCall = async (ambulanceId: string, meetingId: string) => {
-  //   const participant = await addRadioParticipant({
-  //     data: {
-  //       meetingId,
-  //       name: user?.data.name as string,
-  //       preset_name: "group_call_participant",
-  //       custom_participant_id: user?.data.id as string,
-  //       ambulanceId,
-  //     },
-  //   });
-  //   await initMeeting({
-  //     authToken: participant.token,
-  //     defaults: {
-  //       audio: true,
-  //       video: false,
-  //     },
-  //   });
-  //   meeting?.join();
-  // };
+  const { join, leave, connectionState } = useAgora();
 
-  // const handleLeave = (ambulanceId: string, meetingId: string) => {
-  //   removeRadioParticipant({
-  //     data: {
-  //       meetingId: meetingId as string,
-  //       participantId: user?.data.id as string,
-  //       ambulanceId,
-  //     },
-  //   });
-  //   meeting?.leaveRoom();
-  // };
+  const { mutateAsync: createRadioMeeting } = useCreateRadioMeeting();
+
+  const handleCall = async (ambulanceId: string) => {
+    const response = await createRadioMeeting({
+      data: {
+        ambulanceId,
+      },
+    });
+    await join({
+      token: response.rtcToken,
+      channel: response.id,
+      uid: response.uid as string,
+    });
+  };
+
+  const handleLeave = () => {
+    console.log("Leaving radio call");
+    leave();
+  };
 
   const router = useRouter();
 
@@ -56,32 +42,28 @@ export default function ProtectedLayout() {
     }
   }, [checkAuth]);
 
-  // const { user } = useAbly({
-  //   events: [AblyEvents.radioCall],
-  //   handleMessageReceived: (message) => {
-  //     if (
-  //       message.name === AblyEvents.radioCall &&
-  //       message.data.ambulanceId === user?.data.ambulance?.id
-  //     ) {
-  //       switch (message.data.type) {
-  //         case RadioCallTypeEvents.calling:
-  //           handleCall(message.data.ambulanceId, message.data.meetingId);
-  //           break;
-  //         case RadioCallTypeEvents.ended:
-  //           handleLeave(message.data.ambulanceId, message.data.meetingId);
-  //           break;
-  //       }
-  //     }
-  //   },
-  // });
+  const { user } = useAbly({
+    events: [AblyEvents.radioCall],
+    handleMessageReceived: (message) => {
+      console.log("Ably message received:", message);
+      if (
+        message.name === AblyEvents.radioCall &&
+        message.data.ambulanceId === user?.data.ambulance?.id
+      ) {
+        switch (message.data.type) {
+          case RadioCallTypeEvents.calling:
+            handleCall(message.data.ambulanceId);
+            break;
+          case RadioCallTypeEvents.ended:
+            handleLeave();
+            break;
+        }
+      }
+    },
+  });
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.background,
-      }}
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <LinearGradient
         className="flex-1"
         colors={[

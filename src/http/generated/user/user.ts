@@ -60,7 +60,7 @@ export const createUser = (
       
       
       return customInstance<CreateUser201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users`, method: 'POST',
+      {url: `https://1b961c64a76e.ngrok-free.app/users`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUserBody, signal
     },
@@ -124,7 +124,7 @@ export const getUsers = (
       
       
       return customInstance<GetUsers200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users`, method: 'GET',
+      {url: `https://1b961c64a76e.ngrok-free.app/users`, method: 'GET',
         params, signal
     },
       options);
@@ -135,7 +135,7 @@ export const getUsers = (
 
 export const getGetUsersQueryKey = (params?: GetUsersParams,) => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/users`, ...(params ? [params]: [])
+    `https://1b961c64a76e.ngrok-free.app/users`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -217,7 +217,7 @@ export const deleteUser = (
       
       
       return customInstance<DeleteUser200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/${id}`, method: 'DELETE',
+      {url: `https://1b961c64a76e.ngrok-free.app/users/${id}`, method: 'DELETE',
       headers: {'Content-Type': 'application/json', },
       data: deleteUserBody
     },
@@ -281,7 +281,7 @@ export const updateUser = (
       
       
       return customInstance<UpdateUser200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/${id}`, method: 'PATCH',
+      {url: `https://1b961c64a76e.ngrok-free.app/users/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateUserBody
     },
@@ -344,7 +344,7 @@ export const updateUserPermissions = (
       
       
       return customInstance<UpdateUserPermissions200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/permissions`, method: 'PUT',
+      {url: `https://1b961c64a76e.ngrok-free.app/users/permissions`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateUserPermissionsBody
     },
@@ -408,7 +408,7 @@ export const getAuthenticatedUser = (
       
       
       return customInstance<GetAuthenticatedUser200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/me`, method: 'GET', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/users/me`, method: 'GET', signal
     },
       options);
     }
@@ -418,7 +418,7 @@ export const getAuthenticatedUser = (
 
 export const getGetAuthenticatedUserQueryKey = () => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/users/me`
+    `https://1b961c64a76e.ngrok-free.app/users/me`
     ] as const;
     }
 
@@ -500,7 +500,7 @@ export const getUser = (
       
       
       return customInstance<GetUser200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/user/${id}`, method: 'GET', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/user/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -510,7 +510,7 @@ export const getUser = (
 
 export const getGetUserQueryKey = (id?: string,) => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/user/${id}`
+    `https://1b961c64a76e.ngrok-free.app/user/${id}`
     ] as const;
     }
 
@@ -592,7 +592,7 @@ export const getAuthenticatedUserShiftValidation = (
       
       
       return customInstance<GetAuthenticatedUserShiftValidation200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/me/shift/validation`, method: 'GET', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/users/me/shift/validation`, method: 'GET', signal
     },
       options);
     }
@@ -602,7 +602,7 @@ export const getAuthenticatedUserShiftValidation = (
 
 export const getGetAuthenticatedUserShiftValidationQueryKey = () => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/users/me/shift/validation`
+    `https://1b961c64a76e.ngrok-free.app/users/me/shift/validation`
     ] as const;
     }
 
@@ -684,7 +684,7 @@ export const createInitialUser = (
       
       
       return customInstance<CreateInitialUser201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/users/init`, method: 'POST', signal
+      {url: `https://1b961c64a76e.ngrok-free.app/users/init`, method: 'POST', signal
     },
       options);
     }

@@ -58,7 +58,7 @@ export const createChat = (
       
       
       return customInstance<CreateChat201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chats/${id}`, method: 'POST',
+      {url: `https://1b961c64a76e.ngrok-free.app/chats/${id}`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createChatBody, signal
     },
@@ -122,7 +122,7 @@ export const deleteChat = (
       
       
       return customInstance<DeleteChat200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chats/${id}`, method: 'DELETE',
+      {url: `https://1b961c64a76e.ngrok-free.app/chats/${id}`, method: 'DELETE',
       headers: {'Content-Type': 'application/json', },
       data: deleteChatBody
     },
@@ -187,7 +187,7 @@ export const sendMessage = (
       
       
       return customInstance<SendMessage201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chats/message/${id}`, method: 'POST',
+      {url: `https://1b961c64a76e.ngrok-free.app/chats/message/${id}`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: sendMessageBody, signal
     },
@@ -252,7 +252,7 @@ export const getChats = (
       
       
       return customInstance<GetChats200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chats`, method: 'GET',
+      {url: `https://1b961c64a76e.ngrok-free.app/chats`, method: 'GET',
         params, signal
     },
       options);
@@ -263,7 +263,7 @@ export const getChats = (
 
 export const getGetChatsQueryKey = (params?: GetChatsParams,) => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/chats`, ...(params ? [params]: [])
+    `https://1b961c64a76e.ngrok-free.app/chats`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -346,7 +346,7 @@ export const getChatMessages = (
       
       
       return customInstance<GetChatMessages200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chat/messages/${id}`, method: 'GET',
+      {url: `https://1b961c64a76e.ngrok-free.app/chat/messages/${id}`, method: 'GET',
         params, signal
     },
       options);
@@ -358,7 +358,7 @@ export const getChatMessages = (
 export const getGetChatMessagesQueryKey = (id?: string,
     params?: GetChatMessagesParams,) => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/chat/messages/${id}`, ...(params ? [params]: [])
+    `https://1b961c64a76e.ngrok-free.app/chat/messages/${id}`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -445,7 +445,7 @@ export const readChat = (
       
       
       return customInstance<ReadChat201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chats/${id}/read`, method: 'PUT',
+      {url: `https://1b961c64a76e.ngrok-free.app/chats/${id}/read`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: readChatBody
     },
@@ -511,7 +511,7 @@ export const getUnreadChatMessages = (
       
       
       return customInstance<GetUnreadChatMessages200>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/chat/unread/${id}`, method: 'GET',
+      {url: `https://1b961c64a76e.ngrok-free.app/chat/unread/${id}`, method: 'GET',
         params, signal
     },
       options);
@@ -523,7 +523,7 @@ export const getUnreadChatMessages = (
 export const getGetUnreadChatMessagesQueryKey = (id?: string,
     params?: GetUnreadChatMessagesParams,) => {
     return [
-    `https://5b2dea0b2cf2.ngrok-free.app/chat/unread/${id}`, ...(params ? [params]: [])
+    `https://1b961c64a76e.ngrok-free.app/chat/unread/${id}`, ...(params ? [params]: [])
     ] as const;
     }
 

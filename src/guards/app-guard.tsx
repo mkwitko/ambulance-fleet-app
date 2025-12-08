@@ -1,4 +1,3 @@
-import BlockedNavigationModal from "@/src/components/blocked-navigation-modal";
 import { HeaderWithSidebar } from "@/src/components/sidebar";
 import React, { useEffect } from "react";
 import { AppGuardStatus } from "../@types/app-guard";
@@ -29,13 +28,13 @@ export default function AppGuard({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      <BlockedNavigationModal
+      {/* <BlockedNavigationModal
         showBlockedModal={showBlockedModal}
         setShowBlockedModal={setShowBlockedModal}
         statuses={statuses}
         missingPermissions={missingPermissions}
         retryPermissions={retryPermissions}
-      />
+      /> */}
     </>
   );
 }

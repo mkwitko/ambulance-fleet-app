@@ -19,6 +19,17 @@ export default ({ config }) => ({
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
       package: "com.connectapp.refactor",
+      "permissions": [
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "WAKE_LOCK",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "CAMERA",
+        "READ_CONTACTS"
+      ]
     },
     web: {
       output: "static",
@@ -63,6 +74,7 @@ export default ({ config }) => ({
       EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,
       EXPO_PUBLIC_SENTRY: process.env.EXPO_PUBLIC_SENTRY,
       EXPO_PUBLIC_ABLY_API_KEY: process.env.EXPO_PUBLIC_ABLY_API_KEY,
+      EXPO_PUBLIC_AGORA_APP_ID: process.env.EXPO_PUBLIC_AGORA_APP_ID,
     },
   },
 });

@@ -37,7 +37,7 @@ export const getPressignedUrl = (
       
       
       return customInstance<GetPressignedUrl201>(
-      {url: `https://5b2dea0b2cf2.ngrok-free.app/upload`, method: 'POST',
+      {url: `https://1b961c64a76e.ngrok-free.app/upload`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: getPressignedUrlBody, signal
     },
