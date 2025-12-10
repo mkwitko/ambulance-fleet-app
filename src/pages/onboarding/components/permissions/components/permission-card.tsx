@@ -11,7 +11,6 @@ interface PermissionCardProps {
   granted: boolean;
   canAskAgain: boolean;
   onPress: () => void;
-  animatedValue: Animated.Value;
 }
 
 export const PermissionCard: React.FC<PermissionCardProps> = ({
@@ -21,28 +20,9 @@ export const PermissionCard: React.FC<PermissionCardProps> = ({
   granted,
   canAskAgain,
   onPress,
-  animatedValue,
 }) => {
-  const cardTransform = {
-    opacity: animatedValue,
-    transform: [
-      {
-        translateY: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-      {
-        scale: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0.95, 1],
-        }),
-      },
-    ],
-  };
-
   return (
-    <Animated.View style={cardTransform}>
+    <Animated.View>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={onPress}

@@ -36,7 +36,7 @@ export const createRadioMeeting = (
       
       
       return customInstance<CreateRadioMeeting201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/radio/create-meeting`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/radio/create-meeting`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createRadioMeetingBody, signal
     },

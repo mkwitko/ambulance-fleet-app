@@ -37,6 +37,18 @@ export function useAgora() {
       })
     );
 
+    engine.setParameters(
+      JSON.stringify({
+        "che.audio.force_bluetooth_communication": true,
+      })
+    );
+
+    engine.setParameters(
+      JSON.stringify({
+        "che.audio.keep.audiomode": true,
+      })
+    );
+
     // Optional: improves reliability on Android
     engine.setParameters(
       JSON.stringify({

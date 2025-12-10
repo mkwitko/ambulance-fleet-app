@@ -77,6 +77,7 @@ export const AmbulanceStep: React.FC<StepProps> = ({ onNext, onBack }) => {
             configured={!!ambulance}
             onPress={() => setShowModal(true)}
             animatedValue={cardAnims[0]}
+            isLoading={isLoadingAmbulance || isLoadingUser}
           />
         </View>
       </ScrollView>

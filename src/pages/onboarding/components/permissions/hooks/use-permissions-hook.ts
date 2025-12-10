@@ -1,6 +1,7 @@
 import { Camera } from "expo-camera";
 import * as Contacts from "expo-contacts";
 import * as Location from "expo-location";
+import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { UseAnimationHookReturn } from "./use-animation-hook";
 
@@ -14,6 +15,7 @@ interface PermissionsState {
   locationBackground: PermissionStatus;
   camera: PermissionStatus;
   contacts: PermissionStatus;
+  notifications: PermissionStatus; // <-- ADICIONADO
 }
 
 export type PermissionType = keyof PermissionsState;
@@ -34,6 +36,7 @@ export default function usePermissionsHook({
     locationBackground: { granted: false, canAskAgain: true },
     camera: { granted: false, canAskAgain: true },
     contacts: { granted: false, canAskAgain: true },
+    notifications: { granted: false, canAskAgain: true }, // <-- ADICIONADO
   });
 
   const [currentPermission, setCurrentPermission] =
@@ -61,12 +64,18 @@ export default function usePermissionsHook({
       description:
         "Para podermos saber o seu número de telefone e informar à central.",
     },
+    notifications: {
+      icon: "notifications" as const,
+      title: "Notificações",
+      description: "Para avisar sobre eventos importantes no app.",
+    },
   };
 
   const activeCount = Object.values(permissions).filter(
     (p) => p.granted
   ).length;
-  const totalCount = 4;
+
+  const totalCount = Object.keys(permissionDetails).length; // agora 5
   const progressPercentage = (activeCount / totalCount) * 100;
 
   const currentDetail = currentPermission
@@ -75,11 +84,15 @@ export default function usePermissionsHook({
 
   const permissionTypes = Object.keys(permissionDetails) as PermissionType[];
 
+  // -----------------------------
+  // CHECK ALL PERMISSIONS
+  // -----------------------------
   const checkAllPermissions = async (): Promise<void> => {
     const locationForeground = await Location.getForegroundPermissionsAsync();
     const locationBackground = await Location.getBackgroundPermissionsAsync();
     const camera = await Camera.getCameraPermissionsAsync();
     const contacts = await Contacts.getPermissionsAsync();
+    const notifications = await Notifications.getPermissionsAsync();
 
     setPermissions({
       location: {
@@ -98,28 +111,48 @@ export default function usePermissionsHook({
         granted: contacts.granted,
         canAskAgain: contacts.canAskAgain,
       },
+      notifications: {
+        granted: notifications.granted,
+        canAskAgain: notifications.canAskAgain ?? true,
+      },
     });
   };
 
+  // -----------------------------
+  // REQUEST PERMISSION
+  // -----------------------------
   const requestPermission = async (type: PermissionType): Promise<void> => {
     let result: PermissionStatus;
+
     switch (type) {
       case "location":
         result = await Location.requestForegroundPermissionsAsync();
         break;
+
       case "locationBackground":
         const fg = await Location.requestForegroundPermissionsAsync();
         result = fg.granted
           ? await Location.requestBackgroundPermissionsAsync()
           : fg;
         break;
+
       case "camera":
         result = await Camera.requestCameraPermissionsAsync();
         break;
+
       case "contacts":
         result = await Contacts.requestPermissionsAsync();
         break;
+
+      case "notifications":
+        const notif = await Notifications.requestPermissionsAsync();
+        result = {
+          granted: notif.granted,
+          canAskAgain: notif.canAskAgain ?? true,
+        };
+        break;
     }
+
     setModalVisible(false);
     await checkAllPermissions();
 
@@ -134,17 +167,26 @@ export default function usePermissionsHook({
     setModalVisible(true);
   };
 
+  // -----------------------------
+  // UPDATE PROGRESS
+  // -----------------------------
   useEffect(() => {
     if (!animateProgress) return;
+
     const activeCount = Object.values(permissions).filter(
       (p) => p.granted
     ).length;
-    const progress = activeCount / 4;
+
+    const progress = activeCount / totalCount;
     animateProgress(progress);
 
-    setPermissionsCompleted && setPermissionsCompleted(activeCount === 4);
+    setPermissionsCompleted &&
+      setPermissionsCompleted(activeCount === totalCount);
   }, [permissions]);
 
+  // -----------------------------
+  // INIT
+  // -----------------------------
   useEffect(() => {
     checkAllPermissions();
     animateEntrance && animateEntrance();

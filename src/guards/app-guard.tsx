@@ -1,11 +1,18 @@
 import { HeaderWithSidebar } from "@/src/components/sidebar";
 import React, { useEffect } from "react";
 import { AppGuardStatus } from "../@types/app-guard";
+import BlockedNavigationModal from "../components/blocked-navigation-modal";
 import { useAppGuard } from "./use-app-guard";
 
-export default function AppGuard({ children }: { children: React.ReactNode }) {
-  const [showBlockedModal, setShowBlockedModal] = React.useState(false);
-
+export default function AppGuard({
+  showBlockedModal,
+  setShowBlockedModal,
+  children,
+}: {
+  showBlockedModal: boolean;
+  setShowBlockedModal: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
+}) {
   const { statuses, missingPermissions, retryPermissions, isPathExcluded } =
     useAppGuard();
 
@@ -13,6 +20,8 @@ export default function AppGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isPathExcluded) return;
+
+    console.log({ statuses, missingPermissions });
     setShowBlockedModal(
       statuses.includes(AppGuardStatus.MISSING_PERMISSIONS) ||
         statuses.includes(AppGuardStatus.INVALID_SHIFT)
@@ -28,13 +37,13 @@ export default function AppGuard({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      {/* <BlockedNavigationModal
+      <BlockedNavigationModal
         showBlockedModal={showBlockedModal}
         setShowBlockedModal={setShowBlockedModal}
         statuses={statuses}
         missingPermissions={missingPermissions}
         retryPermissions={retryPermissions}
-      /> */}
+      />
     </>
   );
 }

@@ -56,7 +56,7 @@ export const createCompanyGroup = (
       
       
       return customInstance<CreateCompanyGroup201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCompanyGroupBody, signal
     },
@@ -121,7 +121,7 @@ export const getCompanyGroups = (
       
       
       return customInstance<GetCompanyGroups200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups`, method: 'GET',
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups`, method: 'GET',
         params, signal
     },
       options);
@@ -132,7 +132,7 @@ export const getCompanyGroups = (
 
 export const getGetCompanyGroupsQueryKey = (params?: GetCompanyGroupsParams,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/company-groups`, ...(params ? [params]: [])
+    `https://5566b0946a83.ngrok-free.app/company-groups`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -215,7 +215,7 @@ export const updateCompanyGroup = (
       
       
       return customInstance<UpdateCompanyGroup204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateCompanyGroupBody
     },
@@ -279,7 +279,7 @@ export const deleteCompanyGroup = (
       
       
       return customInstance<DeleteCompanyGroup204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}`, method: 'DELETE'
     },
       options);
     }
@@ -342,7 +342,7 @@ export const getCompanyGroup = (
       
       
       return customInstance<GetCompanyGroup200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}`, method: 'GET', signal
     },
       options);
     }
@@ -352,7 +352,7 @@ export const getCompanyGroup = (
 
 export const getGetCompanyGroupQueryKey = (companyGroupId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}`
+    `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}`
     ] as const;
     }
 
@@ -436,7 +436,7 @@ export const createCompanyGroupPhoneNumber = (
       
       
       return customInstance<CreateCompanyGroupPhoneNumber201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}/phones`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}/phones`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCompanyGroupPhoneNumberBodyItem, signal
     },
@@ -501,7 +501,7 @@ export const getCompanyGroupPhones = (
       
       
       return customInstance<GetCompanyGroupPhones200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}/phones`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}/phones`, method: 'GET', signal
     },
       options);
     }
@@ -511,7 +511,7 @@ export const getCompanyGroupPhones = (
 
 export const getGetCompanyGroupPhonesQueryKey = (companyGroupId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}/phones`
+    `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}/phones`
     ] as const;
     }
 
@@ -594,7 +594,7 @@ export const deleteCompanyGroupPhoneNumber = (
       
       
       return customInstance<DeleteCompanyGroupPhoneNumber204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company-groups/${companyGroupId}/phones/${phoneId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/company-groups/${companyGroupId}/phones/${phoneId}`, method: 'DELETE'
     },
       options);
     }

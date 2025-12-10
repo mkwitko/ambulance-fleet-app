@@ -56,7 +56,7 @@ export const createUnit = (
       
       
       return customInstance<CreateUnit201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/units`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUnitBody, signal
     },
@@ -121,7 +121,7 @@ export const getUnits = (
       
       
       return customInstance<GetUnits200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units`, method: 'GET',
+      {url: `https://5566b0946a83.ngrok-free.app/units`, method: 'GET',
         params, signal
     },
       options);
@@ -132,7 +132,7 @@ export const getUnits = (
 
 export const getGetUnitsQueryKey = (params?: GetUnitsParams,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/units`, ...(params ? [params]: [])
+    `https://5566b0946a83.ngrok-free.app/units`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -215,7 +215,7 @@ export const updateUnit = (
       
       
       return customInstance<UpdateUnit204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateUnitBody
     },
@@ -279,7 +279,7 @@ export const deleteUnit = (
       
       
       return customInstance<DeleteUnit204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}`, method: 'DELETE'
     },
       options);
     }
@@ -342,7 +342,7 @@ export const getUnit = (
       
       
       return customInstance<GetUnit200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}`, method: 'GET', signal
     },
       options);
     }
@@ -352,7 +352,7 @@ export const getUnit = (
 
 export const getGetUnitQueryKey = (unitId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/units/${unitId}`
+    `https://5566b0946a83.ngrok-free.app/units/${unitId}`
     ] as const;
     }
 
@@ -435,7 +435,7 @@ export const deleteUnitPhoneNumber = (
       
       
       return customInstance<DeleteUnitPhoneNumber204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}/phones/${phoneId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}/phones/${phoneId}`, method: 'DELETE'
     },
       options);
     }
@@ -498,7 +498,7 @@ export const getUnitsPhones = (
       
       
       return customInstance<GetUnitsPhones200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}/phones`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}/phones`, method: 'GET', signal
     },
       options);
     }
@@ -508,7 +508,7 @@ export const getUnitsPhones = (
 
 export const getGetUnitsPhonesQueryKey = (unitId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/units/${unitId}/phones`
+    `https://5566b0946a83.ngrok-free.app/units/${unitId}/phones`
     ] as const;
     }
 
@@ -592,7 +592,7 @@ export const createUnitPhoneNumber = (
       
       
       return customInstance<CreateUnitPhoneNumber201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/units/${unitId}/phones`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/units/${unitId}/phones`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUnitPhoneNumberBodyItem, signal
     },

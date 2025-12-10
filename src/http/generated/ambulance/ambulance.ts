@@ -71,7 +71,7 @@ export const createAmbulanceDocuments = (
       
       
       return customInstance<CreateAmbulanceDocuments201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/documents`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}/documents`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createAmbulanceDocumentsBody, signal
     },
@@ -135,7 +135,7 @@ export const getAmbulanceDocuments = (
       
       
       return customInstance<GetAmbulanceDocuments200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/documents`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}/documents`, method: 'GET', signal
     },
       options);
     }
@@ -145,7 +145,7 @@ export const getAmbulanceDocuments = (
 
 export const getGetAmbulanceDocumentsQueryKey = (id?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/documents`
+    `https://5566b0946a83.ngrok-free.app/ambulances/${id}/documents`
     ] as const;
     }
 
@@ -227,7 +227,7 @@ export const updateAmbulanceDocument = (
       
       
       return customInstance<UpdateAmbulanceDocument200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/documents/${id}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/documents/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateAmbulanceDocumentBody
     },
@@ -290,7 +290,7 @@ export const updateAmbulanceDocumentsInBulk = (
       
       
       return customInstance<UpdateAmbulanceDocumentsInBulk200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/documents`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/documents`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateAmbulanceDocumentsInBulkBody
     },
@@ -354,7 +354,7 @@ export const deleteAmbulanceDocument = (
       
       
       return customInstance<DeleteAmbulanceDocument204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/documents/${id}/${baseId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/documents/${id}/${baseId}`, method: 'DELETE'
     },
       options);
     }
@@ -416,7 +416,7 @@ export const createAmbulance = (
       
       
       return customInstance<CreateAmbulance201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createAmbulanceBody, signal
     },
@@ -481,7 +481,7 @@ export const getAmbulances = (
       
       
       return customInstance<GetAmbulances200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances`, method: 'GET',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances`, method: 'GET',
         params, signal
     },
       options);
@@ -492,7 +492,7 @@ export const getAmbulances = (
 
 export const getGetAmbulancesQueryKey = (params?: GetAmbulancesParams,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/ambulances`, ...(params ? [params]: [])
+    `https://5566b0946a83.ngrok-free.app/ambulances`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -573,7 +573,7 @@ export const deleteAmbulance = (
       
       
       return customInstance<DeleteAmbulance204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}`, method: 'DELETE'
     },
       options);
     }
@@ -635,7 +635,7 @@ export const getAmbulance = (
       
       
       return customInstance<GetAmbulance200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -645,7 +645,7 @@ export const getAmbulance = (
 
 export const getGetAmbulanceQueryKey = (id?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/ambulances/${id}`
+    `https://5566b0946a83.ngrok-free.app/ambulances/${id}`
     ] as const;
     }
 
@@ -727,7 +727,7 @@ export const updateAmbulance = (
       
       
       return customInstance<UpdateAmbulance204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateAmbulanceBody
     },
@@ -792,7 +792,7 @@ export const getAmbulancesControl = (
       
       
       return customInstance<GetAmbulancesControl200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/control`, method: 'GET',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/control`, method: 'GET',
         params, signal
     },
       options);
@@ -803,7 +803,7 @@ export const getAmbulancesControl = (
 
 export const getGetAmbulancesControlQueryKey = (params?: GetAmbulancesControlParams,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/ambulances/control`, ...(params ? [params]: [])
+    `https://5566b0946a83.ngrok-free.app/ambulances/control`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -885,7 +885,7 @@ export const switchAmbulanceStatus = (
       
       
       return customInstance<SwitchAmbulanceStatus204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/switch-status`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}/switch-status`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: switchAmbulanceStatusBody
     },
@@ -949,7 +949,7 @@ export const switchAmbulanceShift = (
       
       
       return customInstance<SwitchAmbulanceShift204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/switch-shift`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}/switch-shift`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: switchAmbulanceShiftBody
     },
@@ -1012,7 +1012,7 @@ export const associateUserToAmbulance = (
       
       
       return customInstance<AssociateUserToAmbulance201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/associate-user`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/associate-user`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: associateUserToAmbulanceBody
     },
@@ -1075,7 +1075,7 @@ export const deassociateUserFromAmbulance = (
       
       
       return customInstance<DeassociateUserFromAmbulance201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/deassociate-user`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/deassociate-user`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: deassociateUserFromAmbulanceBody
     },
@@ -1139,7 +1139,7 @@ export const getAmbulancePhones = (
       
       
       return customInstance<GetAmbulancePhones200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/phones`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/ambulances/${id}/phones`, method: 'GET', signal
     },
       options);
     }
@@ -1149,7 +1149,7 @@ export const getAmbulancePhones = (
 
 export const getGetAmbulancePhonesQueryKey = (id?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/ambulances/${id}/phones`
+    `https://5566b0946a83.ngrok-free.app/ambulances/${id}/phones`
     ] as const;
     }
 

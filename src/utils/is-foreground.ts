@@ -8,6 +8,7 @@ export function useAppIsForeground() {
     const subscription = AppState.addEventListener(
       "change",
       (state: AppStateStatus) => {
+        console.log("AppState changed to:", state);
         setIsForeground(state === "active");
       }
     );

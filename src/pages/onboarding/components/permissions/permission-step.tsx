@@ -109,7 +109,6 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
               granted={permissions[type].granted}
               canAskAgain={permissions[type].canAskAgain}
               onPress={() => openModal(type)}
-              animatedValue={cardAnims[index]}
             />
           ))}
         </View>

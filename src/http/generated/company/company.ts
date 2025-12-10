@@ -59,7 +59,7 @@ export const createCompany = (
       
       
       return customInstance<CreateCompany201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/companies`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCompanyBody, signal
     },
@@ -124,7 +124,7 @@ export const getCompanies = (
       
       
       return customInstance<GetCompanies200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies`, method: 'GET',
+      {url: `https://5566b0946a83.ngrok-free.app/companies`, method: 'GET',
         params, signal
     },
       options);
@@ -135,7 +135,7 @@ export const getCompanies = (
 
 export const getGetCompaniesQueryKey = (params?: GetCompaniesParams,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/companies`, ...(params ? [params]: [])
+    `https://5566b0946a83.ngrok-free.app/companies`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -218,7 +218,7 @@ export const updateCompany = (
       
       
       return customInstance<UpdateCompany204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateCompanyBody
     },
@@ -282,7 +282,7 @@ export const deleteCompany = (
       
       
       return customInstance<DeleteCompany204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}`, method: 'DELETE'
     },
       options);
     }
@@ -345,7 +345,7 @@ export const getCompany = (
       
       
       return customInstance<GetCompany200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}`, method: 'GET', signal
     },
       options);
     }
@@ -355,7 +355,7 @@ export const getCompany = (
 
 export const getGetCompanyQueryKey = (companyId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/companies/${companyId}`
+    `https://5566b0946a83.ngrok-free.app/companies/${companyId}`
     ] as const;
     }
 
@@ -439,7 +439,7 @@ export const createCompanyPhoneNumber = (
       
       
       return customInstance<CreateCompanyPhoneNumber201>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}/phones`, method: 'POST',
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}/phones`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCompanyPhoneNumberBodyItem, signal
     },
@@ -504,7 +504,7 @@ export const getCompaniesPhones = (
       
       
       return customInstance<GetCompaniesPhones200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}/phones`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}/phones`, method: 'GET', signal
     },
       options);
     }
@@ -514,7 +514,7 @@ export const getCompaniesPhones = (
 
 export const getGetCompaniesPhonesQueryKey = (companyId?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/companies/${companyId}/phones`
+    `https://5566b0946a83.ngrok-free.app/companies/${companyId}/phones`
     ] as const;
     }
 
@@ -597,7 +597,7 @@ export const deleteCompanyPhoneNumber = (
       
       
       return customInstance<DeleteCompanyPhoneNumber204>(
-      {url: `https://1b961c64a76e.ngrok-free.app/companies/${companyId}/phones/${phoneId}`, method: 'DELETE'
+      {url: `https://5566b0946a83.ngrok-free.app/companies/${companyId}/phones/${phoneId}`, method: 'DELETE'
     },
       options);
     }
@@ -660,7 +660,7 @@ export const getCompanyModules = (
       
       
       return customInstance<GetCompanyModules200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company/modules/${id}`, method: 'GET', signal
+      {url: `https://5566b0946a83.ngrok-free.app/company/modules/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -670,7 +670,7 @@ export const getCompanyModules = (
 
 export const getGetCompanyModulesQueryKey = (id?: string,) => {
     return [
-    `https://1b961c64a76e.ngrok-free.app/company/modules/${id}`
+    `https://5566b0946a83.ngrok-free.app/company/modules/${id}`
     ] as const;
     }
 
@@ -753,7 +753,7 @@ export const updateCompanyModule = (
       
       
       return customInstance<UpdateCompanyModule200>(
-      {url: `https://1b961c64a76e.ngrok-free.app/company/modules/${id}`, method: 'PUT',
+      {url: `https://5566b0946a83.ngrok-free.app/company/modules/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateCompanyModuleBody
     },

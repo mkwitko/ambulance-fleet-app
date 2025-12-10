@@ -2,7 +2,12 @@ import { Typography } from "@/src/components/ui/typography";
 import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { Animated, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Animated,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface ActivityCardProps {
   icon: keyof typeof MaterialIcons.glyphMap;
@@ -11,6 +16,7 @@ interface ActivityCardProps {
   configured: boolean;
   onPress: () => void;
   animatedValue?: Animated.Value;
+  isLoading?: boolean;
 }
 
 export const ActivityCard: React.FC<ActivityCardProps> = ({
@@ -20,6 +26,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   configured,
   onPress,
   animatedValue,
+  isLoading = false,
 }) => {
   const cardTransform = animatedValue
     ? {
@@ -46,6 +53,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={onPress}
+        disabled={isLoading}
         className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
       >
         <View className="flex-row items-start gap-4">
@@ -53,7 +61,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <View
             className={`p-4 rounded-xl ${
               configured ? "bg-primary-200/50" : "bg-gray-200/50"
-            }`}
+            } ${isLoading ? "opacity-50" : ""}`}
           >
             <MaterialIcons
               name={icon}
@@ -72,7 +80,12 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               </Typography>
 
               {/* STATUS BADGE */}
-              {configured ? (
+              {isLoading ? (
+                <ActivityIndicator
+                  size="small"
+                  color={COLORS.primary.DEFAULT}
+                />
+              ) : configured ? (
                 <View className="flex-row items-center gap-1.5 bg-primary-100 px-3 py-2 rounded-full">
                   <View className="w-2 h-2 rounded-full bg-primary-500" />
                   <Typography variant="extraSmall" className="text-primary-700">

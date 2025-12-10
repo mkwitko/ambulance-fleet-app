@@ -19,17 +19,6 @@ export default ({ config }) => ({
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
       package: "com.connectapp.refactor",
-      "permissions": [
-        "RECORD_AUDIO",
-        "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
-        "WAKE_LOCK",
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION",
-        "CAMERA",
-        "READ_CONTACTS"
-      ]
     },
     web: {
       output: "static",
@@ -37,6 +26,25 @@ export default ({ config }) => ({
     },
     plugins: [
       "expo-router",
+      [
+        "expo-background-connection-plugin",
+        {
+          "notificationTitle": "Call Active",
+          "notificationBody": "Your connection is active"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+						'./assets/sounds/notification.mp3',
+						'./assets/sounds/notification_destination.mp3',
+					],
+        }
+      ],
       [
         "expo-splash-screen",
         {

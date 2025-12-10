@@ -96,7 +96,7 @@ export default function Permissions() {
 
         {/* LISTA DE PERMISSÕES */}
         <View className="px-6 gap-4">
-          {permissionTypes.map((type, index) => (
+          {permissionTypes.map((type) => (
             <PermissionCard
               key={type}
               icon={permissionDetails[type].icon}
@@ -105,7 +105,6 @@ export default function Permissions() {
               granted={permissions[type].granted}
               canAskAgain={permissions[type].canAskAgain}
               onPress={() => openModal(type)}
-              animatedValue={cardAnims[index]}
             />
           ))}
         </View>
