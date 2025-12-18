@@ -1,9 +1,13 @@
 import { Role } from "../@types/roles";
-import { useGetAuthenticatedUser } from "../http/generated/user/user";
+import {
+  useGetAuthenticatedUserAssociations,
+  useGetAuthenticatedUserPermissions,
+} from "../http/generated/user/user";
 import { hasPermission } from "../utils/permissions";
 
 export default function useGetUserPermissions() {
-  const { data: user } = useGetAuthenticatedUser();
+  const { data: user } = useGetAuthenticatedUserPermissions();
+  const { data: userAssociations } = useGetAuthenticatedUserAssociations();
   const userData = user?.data;
 
   const perms = {
@@ -24,14 +28,14 @@ export default function useGetUserPermissions() {
   // Helpers
   const getCompanyGroupId = () => {
     if (perms.isAdmin || perms.canCompanyGroup) {
-      return userData?.companyGroup?.id;
+      return userAssociations?.data.companyGroup?.id;
     }
     return undefined;
   };
 
   const getCompaniesId = () => {
     if (!perms.isAdmin && !perms.canCompanyGroup && perms.canCompany) {
-      return userData?.companies.map((c) => c.id);
+      return userAssociations?.data.companies.map((c) => c.id);
     }
     return undefined;
   };
@@ -43,7 +47,7 @@ export default function useGetUserPermissions() {
       !perms.canCompany &&
       perms.canUnit
     ) {
-      return userData?.units.map((u) => u.id);
+      return userAssociations?.data.units.map((u) => u.id);
     }
     return undefined;
   };

@@ -52,7 +52,7 @@ export const createModule = (
       
       
       return customInstance<CreateModule201>(
-      {url: `https://5566b0946a83.ngrok-free.app/modules`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/modules`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createModuleBody, signal
     },
@@ -117,7 +117,7 @@ export const getModules = (
       
       
       return customInstance<GetModules200>(
-      {url: `https://5566b0946a83.ngrok-free.app/modules`, method: 'GET',
+      {url: `https://92d80dbecae0.ngrok-free.app/modules`, method: 'GET',
         params, signal
     },
       options);
@@ -128,7 +128,7 @@ export const getModules = (
 
 export const getGetModulesQueryKey = (params?: GetModulesParams,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/modules`, ...(params ? [params]: [])
+    `https://92d80dbecae0.ngrok-free.app/modules`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -211,7 +211,7 @@ export const updateModule = (
       
       
       return customInstance<UpdateModule204>(
-      {url: `https://5566b0946a83.ngrok-free.app/modules/${moduleId}`, method: 'PUT',
+      {url: `https://92d80dbecae0.ngrok-free.app/modules/${moduleId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateModuleBody
     },
@@ -275,7 +275,7 @@ export const deleteModule = (
       
       
       return customInstance<DeleteModule204>(
-      {url: `https://5566b0946a83.ngrok-free.app/modules/${moduleId}`, method: 'DELETE'
+      {url: `https://92d80dbecae0.ngrok-free.app/modules/${moduleId}`, method: 'DELETE'
     },
       options);
     }
@@ -338,7 +338,7 @@ export const getModule = (
       
       
       return customInstance<GetModule200>(
-      {url: `https://5566b0946a83.ngrok-free.app/modules/${moduleId}`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/modules/${moduleId}`, method: 'GET', signal
     },
       options);
     }
@@ -348,7 +348,7 @@ export const getModule = (
 
 export const getGetModuleQueryKey = (moduleId?: string,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/modules/${moduleId}`
+    `https://92d80dbecae0.ngrok-free.app/modules/${moduleId}`
     ] as const;
     }
 

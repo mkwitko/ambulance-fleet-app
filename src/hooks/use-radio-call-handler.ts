@@ -3,9 +3,11 @@ import { AblyEvents, RadioCallTypeEvents } from "@/src/@types/ably-events";
 import { useCreateRadioMeeting } from "@/src/http/generated/radio/radio";
 import useAbly from "@/src/services/use-ably";
 import { useAgora } from "@/src/services/use-agora";
+import { useGetAuthenticatedUserAmbulance } from "../http/generated/user/user";
 
 export function useRadioCallHandler() {
   const { join, leave } = useAgora();
+  const { data: user } = useGetAuthenticatedUserAmbulance();
   const { mutateAsync: createRadioMeeting } = useCreateRadioMeeting();
 
   const handleCall = async (ambulanceId: string) => {
@@ -24,7 +26,7 @@ export function useRadioCallHandler() {
     leave();
   };
 
-  const { user } = useAbly({
+  useAbly({
     events: [AblyEvents.radioCall],
     handleMessageReceived: (message) => {
       if (

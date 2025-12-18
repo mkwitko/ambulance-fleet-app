@@ -7,5 +7,5 @@ export type NavigationRoute = {
   label: string;
   icon: keyof typeof MaterialIcons.glyphMap;
   description: string;
-  status: AppGuardStatusType;
+  status: AppGuardStatusType[];
 };

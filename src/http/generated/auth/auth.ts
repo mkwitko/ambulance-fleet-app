@@ -27,6 +27,8 @@ import type {
   CheckAuth200,
   SignIn201,
   SignInBody,
+  SignInComms201,
+  SignInCommsBody,
   SignOut204
 } from '../api.schemas';
 
@@ -38,7 +40,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Sign in to the application informing the document and password
+ * Sign in to the application informing the mail and password
  * @summary Sign in
  */
 export const signIn = (
@@ -48,7 +50,7 @@ export const signIn = (
       
       
       return customInstance<SignIn201>(
-      {url: `https://5566b0946a83.ngrok-free.app/auth/sign-in`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/auth/sign-in`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: signInBody, signal
     },
@@ -103,6 +105,71 @@ export const useSignIn = <TError = unknown,
       return useMutation(mutationOptions, queryClient);
     }
     /**
+ * Sign in to the application informing the mail and password
+ * @summary Sign in comms user
+ */
+export const signInComms = (
+    signInCommsBody: SignInCommsBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<SignInComms201>(
+      {url: `https://92d80dbecae0.ngrok-free.app/auth/sign-in/comms`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: signInCommsBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getSignInCommsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signInComms>>, TError,{data: SignInCommsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof signInComms>>, TError,{data: SignInCommsBody}, TContext> => {
+
+const mutationKey = ['signInComms'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signInComms>>, {data: SignInCommsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  signInComms(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SignInCommsMutationResult = NonNullable<Awaited<ReturnType<typeof signInComms>>>
+    export type SignInCommsMutationBody = SignInCommsBody
+    export type SignInCommsMutationError = unknown
+
+    /**
+ * @summary Sign in comms user
+ */
+export const useSignInComms = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signInComms>>, TError,{data: SignInCommsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof signInComms>>,
+        TError,
+        {data: SignInCommsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getSignInCommsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * Sign out of the application
  * @summary Sign out
  */
@@ -113,7 +180,7 @@ export const signOut = (
       
       
       return customInstance<SignOut204>(
-      {url: `https://5566b0946a83.ngrok-free.app/auth/sign-out`, method: 'POST', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/auth/sign-out`, method: 'POST', signal
     },
       options);
     }
@@ -176,7 +243,7 @@ export const checkAuth = (
       
       
       return customInstance<CheckAuth200>(
-      {url: `https://5566b0946a83.ngrok-free.app/auth/status`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/auth/status`, method: 'GET', signal
     },
       options);
     }
@@ -186,7 +253,7 @@ export const checkAuth = (
 
 export const getCheckAuthQueryKey = () => {
     return [
-    `https://5566b0946a83.ngrok-free.app/auth/status`
+    `https://92d80dbecae0.ngrok-free.app/auth/status`
     ] as const;
     }
 

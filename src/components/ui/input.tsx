@@ -10,6 +10,7 @@ const input = tv({
       default: "bg-white border-gray-200",
       error: "bg-white border-error",
       disabled: "bg-gray-100 text-gray-400 border-gray-100",
+      ghost: "bg-transparent border-transparent shadow-none",
     },
   },
   defaultVariants: {
@@ -18,7 +19,7 @@ const input = tv({
 });
 
 interface InputProps extends TextInputProps {
-  variant?: "default" | "error" | "disabled";
+  variant?: "default" | "error" | "disabled" | "ghost";
   className?: string;
 }
 

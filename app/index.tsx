@@ -1,16 +1,17 @@
 import { hideSplashScreen } from "@/src/config/splash-screen";
 import { useCheckAuth } from "@/src/http/generated/auth/auth";
-import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
+import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { useRootNavigationState, useRouter } from "expo-router";
 import { useEffect } from "react";
 
 export default function Index() {
   const { data: checkAuth, isLoading: isLoadingCheckAuth } = useCheckAuth();
-  const { data: user, isLoading: isLoadingUser } = useGetAuthenticatedUser({
-    query: {
-      enabled: checkAuth?.isAuthenticated === true,
-    },
-  });
+  const { data: user, isLoading: isLoadingUser } =
+    useGetAuthenticatedUserAmbulance({
+      query: {
+        enabled: checkAuth?.isAuthenticated === true,
+      },
+    });
   const router = useRouter();
   const rootNavigationState = useRootNavigationState();
 

@@ -15,6 +15,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CreateAblyToken201,
+  CreateAblyTokenBody,
+  CreateRadioIntercomms201,
+  CreateRadioIntercommsBody,
   CreateRadioMeeting201,
   CreateRadioMeetingBody
 } from '../api.schemas';
@@ -36,7 +40,7 @@ export const createRadioMeeting = (
       
       
       return customInstance<CreateRadioMeeting201>(
-      {url: `https://5566b0946a83.ngrok-free.app/radio/create-meeting`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/radio/create-meeting`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createRadioMeetingBody, signal
     },
@@ -87,6 +91,134 @@ export const useCreateRadioMeeting = <TError = unknown,
       > => {
 
       const mutationOptions = getCreateRadioMeetingMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary Create a radio intercomms
+ */
+export const createRadioIntercomms = (
+    createRadioIntercommsBody: CreateRadioIntercommsBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateRadioIntercomms201>(
+      {url: `https://92d80dbecae0.ngrok-free.app/radio/create-intercomms`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRadioIntercommsBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateRadioIntercommsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRadioIntercomms>>, TError,{data: CreateRadioIntercommsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRadioIntercomms>>, TError,{data: CreateRadioIntercommsBody}, TContext> => {
+
+const mutationKey = ['createRadioIntercomms'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRadioIntercomms>>, {data: CreateRadioIntercommsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createRadioIntercomms(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRadioIntercommsMutationResult = NonNullable<Awaited<ReturnType<typeof createRadioIntercomms>>>
+    export type CreateRadioIntercommsMutationBody = CreateRadioIntercommsBody
+    export type CreateRadioIntercommsMutationError = unknown
+
+    /**
+ * @summary Create a radio intercomms
+ */
+export const useCreateRadioIntercomms = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRadioIntercomms>>, TError,{data: CreateRadioIntercommsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createRadioIntercomms>>,
+        TError,
+        {data: CreateRadioIntercommsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateRadioIntercommsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary Create Ably token for radio intercomms
+ */
+export const createAblyToken = (
+    createAblyTokenBody: CreateAblyTokenBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateAblyToken201>(
+      {url: `https://92d80dbecae0.ngrok-free.app/radio/ably-token`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAblyTokenBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateAblyTokenMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAblyToken>>, TError,{data: CreateAblyTokenBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAblyToken>>, TError,{data: CreateAblyTokenBody}, TContext> => {
+
+const mutationKey = ['createAblyToken'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAblyToken>>, {data: CreateAblyTokenBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAblyToken(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAblyTokenMutationResult = NonNullable<Awaited<ReturnType<typeof createAblyToken>>>
+    export type CreateAblyTokenMutationBody = CreateAblyTokenBody
+    export type CreateAblyTokenMutationError = unknown
+
+    /**
+ * @summary Create Ably token for radio intercomms
+ */
+export const useCreateAblyToken = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAblyToken>>, TError,{data: CreateAblyTokenBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAblyToken>>,
+        TError,
+        {data: CreateAblyTokenBody},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAblyTokenMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

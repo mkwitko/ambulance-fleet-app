@@ -5,7 +5,6 @@ import {
   Animated,
   Dimensions,
   Modal,
-  ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -18,6 +17,7 @@ interface ModalWrapperProps {
   title?: string;
   icon?: React.ReactNode;
   footer?: React.ReactNode;
+  stickyFooter?: boolean;
   maxHeightPct?: number;
   persistent?: boolean;
 }
@@ -29,6 +29,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
   title,
   icon,
   footer,
+  stickyFooter,
   maxHeightPct = 90,
   persistent = false,
 }) => {
@@ -64,27 +65,29 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
             maxHeight: SCREEN_HEIGHT * (maxHeightPct / 100),
           }}
         >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View className="p-6 gap-6">
-              {/* ÍCONE */}
-              {icon && <View className="items-center">{icon}</View>}
+          <View className="p-6 gap-6">
+            {/* ÍCONE */}
+            {icon && <View className="items-center">{icon}</View>}
 
-              {/* TÍTULO */}
-              {title && (
-                <View>
-                  <Typography variant="title" weight="bold" align="center">
-                    {title}
-                  </Typography>
-                </View>
-              )}
+            {/* TÍTULO */}
+            {title && (
+              <View>
+                <Typography variant="title" weight="bold" align="center">
+                  {title}
+                </Typography>
+              </View>
+            )}
 
-              {/* CONTEÚDO */}
-              {children}
+            {/* CONTEÚDO */}
+            {children}
 
-              {/* FOOTER */}
-              {footer && <View className="mt-4">{footer}</View>}
-            </View>
-          </ScrollView>
+            {/* FOOTER */}
+            {!stickyFooter && footer && <View className="mt-4">{footer}</View>}
+          </View>
+
+          {stickyFooter && footer && (
+            <View className="absolute left-0 bottom-0 right-0">{footer}</View>
+          )}
         </Animated.View>
       </Animated.View>
     </Modal>

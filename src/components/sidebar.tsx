@@ -3,14 +3,18 @@ import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { useGetAuthenticatedUser } from "../http/generated/user/user";
+import {
+  useGetAuthenticatedUser,
+  useGetAuthenticatedUserAmbulance,
+} from "../http/generated/user/user";
 import SidebarModal from "./sidebar-modal";
 
 export const HeaderWithSidebar: React.FC<{
   canNavigate: boolean;
   setShowBlockedModal: (value: boolean) => void;
 }> = ({ canNavigate, setShowBlockedModal }) => {
-  const { data: user } = useGetAuthenticatedUser();
+  const { data: userInfo } = useGetAuthenticatedUser();
+  const { data: user } = useGetAuthenticatedUserAmbulance();
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   const handleMenuPress = () => {
@@ -83,7 +87,7 @@ export const HeaderWithSidebar: React.FC<{
                 weight="bold"
                 className={canNavigate ? "text-white" : "text-muted-foreground"}
               >
-                {user?.data.name
+                {userInfo?.data.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")
@@ -100,6 +104,7 @@ export const HeaderWithSidebar: React.FC<{
         sidebarVisible={sidebarVisible}
         setSidebarVisible={setSidebarVisible}
         user={user}
+        userInfo={userInfo}
       />
     </>
   );

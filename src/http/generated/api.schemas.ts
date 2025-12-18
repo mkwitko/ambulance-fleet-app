@@ -96,7 +96,6 @@ export type CreateAmbulanceDocumentsBodyDocumentsItem = {
 
 export type CreateAmbulanceDocumentsBody = {
   documents: CreateAmbulanceDocumentsBodyDocumentsItem[];
-  baseId: string;
 };
 
 export type CreateAmbulanceDocuments201 = {
@@ -146,7 +145,6 @@ export type UpdateAmbulanceDocumentsInBulkBodyDocumentsItem = {
 
 export type UpdateAmbulanceDocumentsInBulkBody = {
   documents: UpdateAmbulanceDocumentsInBulkBodyDocumentsItem[];
-  baseId: string;
 };
 
 export type UpdateAmbulanceDocumentsInBulk200 = {
@@ -671,16 +669,21 @@ export type GetAmbulancePhones200 = {
 };
 
 export type SignInBody = {
-  /**
-   * The document of the user (Example: 12332145698)
-   * @minLength 11
-   * @maxLength 11
-   */
-  document: string;
+  mail: string;
   password: string;
 };
 
 export type SignIn201 = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type SignInCommsBody = {
+  mail: string;
+  password: string;
+};
+
+export type SignInComms201 = {
   accessToken: string;
   refreshToken: string;
 };
@@ -1484,6 +1487,9 @@ export const CreateUserBodyRolesItem = {
   'ambulance:delete': 'ambulance:delete',
   'ambulance:switchBase': 'ambulance:switchBase',
   'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
   'ambulanceDocuments:create': 'ambulanceDocuments:create',
   'ambulanceDocuments:update': 'ambulanceDocuments:update',
   'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
@@ -1498,11 +1504,27 @@ export const CreateUserBodyRolesItem = {
   'driver:update': 'driver:update',
   'driver:delete': 'driver:delete',
   'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
 } as const;
 
 export type CreateUserBody = {
   name: string;
-  document: string;
+  mail: string;
+  document?: string;
   birthDate: unknown;
   roles: CreateUserBodyRolesItem[];
   companyGroupId: string;
@@ -1556,6 +1578,7 @@ export type GetUsers200DataItem = {
   companies: GetUsers200DataItemCompaniesItem[];
   units: GetUsers200DataItemUnitsItem[];
   name: string;
+  mail: string;
   /** @nullable */
   document: string | null;
   /** @nullable */
@@ -1633,6 +1656,9 @@ export const UpdateUserBodyRoleIdsItem = {
   'ambulance:delete': 'ambulance:delete',
   'ambulance:switchBase': 'ambulance:switchBase',
   'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
   'ambulanceDocuments:create': 'ambulanceDocuments:create',
   'ambulanceDocuments:update': 'ambulanceDocuments:update',
   'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
@@ -1647,6 +1673,21 @@ export const UpdateUserBodyRoleIdsItem = {
   'driver:update': 'driver:update',
   'driver:delete': 'driver:delete',
   'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
 } as const;
 
 export type UpdateUserBody = {
@@ -1711,6 +1752,9 @@ export const UpdateUserPermissionsBodyRoleIdsItem = {
   'ambulance:delete': 'ambulance:delete',
   'ambulance:switchBase': 'ambulance:switchBase',
   'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
   'ambulanceDocuments:create': 'ambulanceDocuments:create',
   'ambulanceDocuments:update': 'ambulanceDocuments:update',
   'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
@@ -1725,6 +1769,21 @@ export const UpdateUserPermissionsBodyRoleIdsItem = {
   'driver:update': 'driver:update',
   'driver:delete': 'driver:delete',
   'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
 } as const;
 
 export type UpdateUserPermissionsBody = {
@@ -1740,128 +1799,14 @@ export type UpdateUserPermissions404 = {
   message: string;
 };
 
-export type GetAuthenticatedUser200DataRolesItem = typeof GetAuthenticatedUser200DataRolesItem[keyof typeof GetAuthenticatedUser200DataRolesItem];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetAuthenticatedUser200DataRolesItem = {
-  'companyGroup:read': 'companyGroup:read',
-  'companyGroup:update': 'companyGroup:update',
-  'companyGroup:createPhoneNumber': 'companyGroup:createPhoneNumber',
-  'companyGroup:deletePhoneNumber': 'companyGroup:deletePhoneNumber',
-  'companyGroup:updatePhoneNumber': 'companyGroup:updatePhoneNumber',
-  'company:create': 'company:create',
-  'company:read': 'company:read',
-  'company:update': 'company:update',
-  'company:delete': 'company:delete',
-  'company:createPhoneNumber': 'company:createPhoneNumber',
-  'company:deletePhoneNumber': 'company:deletePhoneNumber',
-  'company:updatePhoneNumber': 'company:updatePhoneNumber',
-  'unit:create': 'unit:create',
-  'unit:read': 'unit:read',
-  'unit:update': 'unit:update',
-  'unit:delete': 'unit:delete',
-  'unit:createPhoneNumber': 'unit:createPhoneNumber',
-  'unit:deletePhoneNumber': 'unit:deletePhoneNumber',
-  'unit:updatePhoneNumber': 'unit:updatePhoneNumber',
-  'base:create': 'base:create',
-  'base:read': 'base:read',
-  'base:update': 'base:update',
-  'base:delete': 'base:delete',
-  'base:createPhoneNumber': 'base:createPhoneNumber',
-  'base:deletePhoneNumber': 'base:deletePhoneNumber',
-  'base:updatePhoneNumber': 'base:updatePhoneNumber',
-  'user:create': 'user:create',
-  'user:read': 'user:read',
-  'user:update': 'user:update',
-  'user:delete': 'user:delete',
-  'user:assignRole': 'user:assignRole',
-  'ambulance:create': 'ambulance:create',
-  'ambulance:read': 'ambulance:read',
-  'ambulance:update': 'ambulance:update',
-  'ambulance:delete': 'ambulance:delete',
-  'ambulance:switchBase': 'ambulance:switchBase',
-  'ambulance:switchStatus': 'ambulance:switchStatus',
-  'ambulanceDocuments:create': 'ambulanceDocuments:create',
-  'ambulanceDocuments:update': 'ambulanceDocuments:update',
-  'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
-  'ambulanceDocuments:bulkUpdate': 'ambulanceDocuments:bulkUpdate',
-  'sys_admin:accessAll': 'sys_admin:accessAll',
-  'chat:create': 'chat:create',
-  'chat:delete': 'chat:delete',
-  'chat:read': 'chat:read',
-  'chat:sendMessage': 'chat:sendMessage',
-  'driver:read': 'driver:read',
-  'driver:create': 'driver:create',
-  'driver:update': 'driver:update',
-  'driver:delete': 'driver:delete',
-  'driver:driver': 'driver:driver',
-} as const;
-
-/**
- * @nullable
- */
-export type GetAuthenticatedUser200DataCompanyGroup = {
-  id: string;
-  name: string;
-} | null;
-
-export type GetAuthenticatedUser200DataCompaniesItem = {
-  id: string;
-  name: string;
-};
-
-export type GetAuthenticatedUser200DataUnitsItem = {
-  id: string;
-  name: string;
-};
-
-export type GetAuthenticatedUser200DataAmbulanceAmbulanceShiftHistoriesItem = {
-  shiftStart: string;
-  /** @nullable */
-  shiftEnd: string | null;
-};
-
-export type GetAuthenticatedUser200DataAmbulanceChatsItemMessagesItem = {
-  createdAt: string;
-};
-
-export type GetAuthenticatedUser200DataAmbulanceChatsItem = {
-  id: string;
-  /** @nullable */
-  readByAppAt: string | null;
-  /** @nullable */
-  readByWebAt: string | null;
-  messages: GetAuthenticatedUser200DataAmbulanceChatsItemMessagesItem[];
-};
-
-/**
- * @nullable
- */
-export type GetAuthenticatedUser200DataAmbulance = {
-  id: string;
-  name: string;
-  status: string;
-  ambulanceShiftHistories: GetAuthenticatedUser200DataAmbulanceAmbulanceShiftHistoriesItem[];
-  licensePlate: string;
-  chats: GetAuthenticatedUser200DataAmbulanceChatsItem[];
-  unitId: string;
-} | null;
-
 export type GetAuthenticatedUser200Data = {
   id: string;
   name: string;
+  mail: string;
   /** @nullable */
   document: string | null;
   /** @nullable */
   avatarUrl: string | null;
-  roles: GetAuthenticatedUser200DataRolesItem[];
-  /** @nullable */
-  companyGroup: GetAuthenticatedUser200DataCompanyGroup;
-  companies: GetAuthenticatedUser200DataCompaniesItem[];
-  units: GetAuthenticatedUser200DataUnitsItem[];
-  /** @nullable */
-  ambulance: GetAuthenticatedUser200DataAmbulance;
 };
 
 export type GetAuthenticatedUser200 = {
@@ -1910,6 +1855,9 @@ export const GetUser200DataRolesItem = {
   'ambulance:delete': 'ambulance:delete',
   'ambulance:switchBase': 'ambulance:switchBase',
   'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
   'ambulanceDocuments:create': 'ambulanceDocuments:create',
   'ambulanceDocuments:update': 'ambulanceDocuments:update',
   'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
@@ -1924,6 +1872,21 @@ export const GetUser200DataRolesItem = {
   'driver:update': 'driver:update',
   'driver:delete': 'driver:delete',
   'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
 } as const;
 
 export type GetUser200DataCompaniesItem = {
@@ -1937,6 +1900,7 @@ export type GetUser200DataUnitsItem = {
 export type GetUser200Data = {
   id: string;
   name: string;
+  mail: string;
   /** @nullable */
   document: string | null;
   /** @nullable */
@@ -1970,6 +1934,249 @@ export type GetAuthenticatedUserShiftValidation200Data = {
 
 export type GetAuthenticatedUserShiftValidation200 = {
   data: GetAuthenticatedUserShiftValidation200Data;
+};
+
+export type GetAuthenticatedUserPermissions200DataRolesItem = typeof GetAuthenticatedUserPermissions200DataRolesItem[keyof typeof GetAuthenticatedUserPermissions200DataRolesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetAuthenticatedUserPermissions200DataRolesItem = {
+  'companyGroup:read': 'companyGroup:read',
+  'companyGroup:update': 'companyGroup:update',
+  'companyGroup:createPhoneNumber': 'companyGroup:createPhoneNumber',
+  'companyGroup:deletePhoneNumber': 'companyGroup:deletePhoneNumber',
+  'companyGroup:updatePhoneNumber': 'companyGroup:updatePhoneNumber',
+  'company:create': 'company:create',
+  'company:read': 'company:read',
+  'company:update': 'company:update',
+  'company:delete': 'company:delete',
+  'company:createPhoneNumber': 'company:createPhoneNumber',
+  'company:deletePhoneNumber': 'company:deletePhoneNumber',
+  'company:updatePhoneNumber': 'company:updatePhoneNumber',
+  'unit:create': 'unit:create',
+  'unit:read': 'unit:read',
+  'unit:update': 'unit:update',
+  'unit:delete': 'unit:delete',
+  'unit:createPhoneNumber': 'unit:createPhoneNumber',
+  'unit:deletePhoneNumber': 'unit:deletePhoneNumber',
+  'unit:updatePhoneNumber': 'unit:updatePhoneNumber',
+  'base:create': 'base:create',
+  'base:read': 'base:read',
+  'base:update': 'base:update',
+  'base:delete': 'base:delete',
+  'base:createPhoneNumber': 'base:createPhoneNumber',
+  'base:deletePhoneNumber': 'base:deletePhoneNumber',
+  'base:updatePhoneNumber': 'base:updatePhoneNumber',
+  'user:create': 'user:create',
+  'user:read': 'user:read',
+  'user:update': 'user:update',
+  'user:delete': 'user:delete',
+  'user:assignRole': 'user:assignRole',
+  'ambulance:create': 'ambulance:create',
+  'ambulance:read': 'ambulance:read',
+  'ambulance:update': 'ambulance:update',
+  'ambulance:delete': 'ambulance:delete',
+  'ambulance:switchBase': 'ambulance:switchBase',
+  'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
+  'ambulanceDocuments:create': 'ambulanceDocuments:create',
+  'ambulanceDocuments:update': 'ambulanceDocuments:update',
+  'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
+  'ambulanceDocuments:bulkUpdate': 'ambulanceDocuments:bulkUpdate',
+  'sys_admin:accessAll': 'sys_admin:accessAll',
+  'chat:create': 'chat:create',
+  'chat:delete': 'chat:delete',
+  'chat:read': 'chat:read',
+  'chat:sendMessage': 'chat:sendMessage',
+  'driver:read': 'driver:read',
+  'driver:create': 'driver:create',
+  'driver:update': 'driver:update',
+  'driver:delete': 'driver:delete',
+  'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
+} as const;
+
+export type GetAuthenticatedUserPermissions200Data = {
+  id: string;
+  roles: GetAuthenticatedUserPermissions200DataRolesItem[];
+};
+
+export type GetAuthenticatedUserPermissions200 = {
+  data: GetAuthenticatedUserPermissions200Data;
+};
+
+export type GetAuthenticatedUserCurrentAmbulance200Data = {
+  id: string;
+  /** @nullable */
+  ambulanceId: string | null;
+};
+
+export type GetAuthenticatedUserCurrentAmbulance200 = {
+  data: GetAuthenticatedUserCurrentAmbulance200Data;
+};
+
+export type GetAuthenticatedUserRoles200DataRolesItem = typeof GetAuthenticatedUserRoles200DataRolesItem[keyof typeof GetAuthenticatedUserRoles200DataRolesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetAuthenticatedUserRoles200DataRolesItem = {
+  'companyGroup:read': 'companyGroup:read',
+  'companyGroup:update': 'companyGroup:update',
+  'companyGroup:createPhoneNumber': 'companyGroup:createPhoneNumber',
+  'companyGroup:deletePhoneNumber': 'companyGroup:deletePhoneNumber',
+  'companyGroup:updatePhoneNumber': 'companyGroup:updatePhoneNumber',
+  'company:create': 'company:create',
+  'company:read': 'company:read',
+  'company:update': 'company:update',
+  'company:delete': 'company:delete',
+  'company:createPhoneNumber': 'company:createPhoneNumber',
+  'company:deletePhoneNumber': 'company:deletePhoneNumber',
+  'company:updatePhoneNumber': 'company:updatePhoneNumber',
+  'unit:create': 'unit:create',
+  'unit:read': 'unit:read',
+  'unit:update': 'unit:update',
+  'unit:delete': 'unit:delete',
+  'unit:createPhoneNumber': 'unit:createPhoneNumber',
+  'unit:deletePhoneNumber': 'unit:deletePhoneNumber',
+  'unit:updatePhoneNumber': 'unit:updatePhoneNumber',
+  'base:create': 'base:create',
+  'base:read': 'base:read',
+  'base:update': 'base:update',
+  'base:delete': 'base:delete',
+  'base:createPhoneNumber': 'base:createPhoneNumber',
+  'base:deletePhoneNumber': 'base:deletePhoneNumber',
+  'base:updatePhoneNumber': 'base:updatePhoneNumber',
+  'user:create': 'user:create',
+  'user:read': 'user:read',
+  'user:update': 'user:update',
+  'user:delete': 'user:delete',
+  'user:assignRole': 'user:assignRole',
+  'ambulance:create': 'ambulance:create',
+  'ambulance:read': 'ambulance:read',
+  'ambulance:update': 'ambulance:update',
+  'ambulance:delete': 'ambulance:delete',
+  'ambulance:switchBase': 'ambulance:switchBase',
+  'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
+  'ambulanceDocuments:create': 'ambulanceDocuments:create',
+  'ambulanceDocuments:update': 'ambulanceDocuments:update',
+  'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
+  'ambulanceDocuments:bulkUpdate': 'ambulanceDocuments:bulkUpdate',
+  'sys_admin:accessAll': 'sys_admin:accessAll',
+  'chat:create': 'chat:create',
+  'chat:delete': 'chat:delete',
+  'chat:read': 'chat:read',
+  'chat:sendMessage': 'chat:sendMessage',
+  'driver:read': 'driver:read',
+  'driver:create': 'driver:create',
+  'driver:update': 'driver:update',
+  'driver:delete': 'driver:delete',
+  'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
+} as const;
+
+export type GetAuthenticatedUserRoles200Data = {
+  id: string;
+  roles: GetAuthenticatedUserRoles200DataRolesItem[];
+};
+
+export type GetAuthenticatedUserRoles200 = {
+  data: GetAuthenticatedUserRoles200Data;
+};
+
+/**
+ * @nullable
+ */
+export type GetAuthenticatedUserAssociations200DataCompanyGroup = {
+  id: string;
+  name: string;
+} | null;
+
+export type GetAuthenticatedUserAssociations200DataCompaniesItem = {
+  id: string;
+  name: string;
+};
+
+export type GetAuthenticatedUserAssociations200DataUnitsItem = {
+  id: string;
+  name: string;
+};
+
+export type GetAuthenticatedUserAssociations200Data = {
+  id: string;
+  /** @nullable */
+  companyGroup: GetAuthenticatedUserAssociations200DataCompanyGroup;
+  companies: GetAuthenticatedUserAssociations200DataCompaniesItem[];
+  units: GetAuthenticatedUserAssociations200DataUnitsItem[];
+};
+
+export type GetAuthenticatedUserAssociations200 = {
+  data: GetAuthenticatedUserAssociations200Data;
+};
+
+export type GetAuthenticatedUserAmbulance200DataAmbulanceChatsItem = {
+  id: string;
+};
+
+export type GetAuthenticatedUserAmbulance200DataAmbulanceAmbulanceShiftHistoriesItem = {
+  shiftStart: string;
+  /** @nullable */
+  shiftEnd: string | null;
+};
+
+/**
+ * @nullable
+ */
+export type GetAuthenticatedUserAmbulance200DataAmbulance = {
+  id: string;
+  name: string;
+  status: string;
+  chats: GetAuthenticatedUserAmbulance200DataAmbulanceChatsItem[];
+  ambulanceShiftHistories: GetAuthenticatedUserAmbulance200DataAmbulanceAmbulanceShiftHistoriesItem[];
+  licensePlate: string;
+  unitId: string;
+} | null;
+
+export type GetAuthenticatedUserAmbulance200Data = {
+  id: string;
+  /** @nullable */
+  ambulance: GetAuthenticatedUserAmbulance200DataAmbulance;
+};
+
+export type GetAuthenticatedUserAmbulance200 = {
+  data: GetAuthenticatedUserAmbulance200Data;
 };
 
 export type CreateInitialUser201 = {
@@ -2431,5 +2638,380 @@ export type CreateRadioMeeting201 = {
   appId: string;
   uid: CreateRadioMeeting201Uid;
   expirationSeconds: number;
+};
+
+export type CreateRadioIntercommsBody = {
+  id: string;
+  baseId: string;
+};
+
+export type CreateRadioIntercomms201Uid = string | number;
+
+export type CreateRadioIntercomms201 = {
+  id: string;
+  rtcToken: string;
+  appId: string;
+  uid: CreateRadioIntercomms201Uid;
+  expirationSeconds: number;
+};
+
+export type CreateAblyTokenBody = {
+  channel: string;
+};
+
+export type CreateAblyToken201 = {
+  tokenRequest: unknown;
+  clientId: string;
+  expiresIn: number;
+};
+
+export type CreateIntegrationBodyIntegrationType = typeof CreateIntegrationBodyIntegrationType[keyof typeof CreateIntegrationBodyIntegrationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CreateIntegrationBodyIntegrationType = {
+  DRIVERS: 'DRIVERS',
+  IRIS: 'IRIS',
+} as const;
+
+export type CreateIntegrationBody = {
+  name: string;
+  url: string;
+  login?: string;
+  password: string;
+  integrationType: CreateIntegrationBodyIntegrationType;
+  companyGroupId: string;
+  companiesId?: string[];
+  unitsId?: string[];
+};
+
+export type CreateIntegration201 = {
+  id: string;
+};
+
+export type GetIntegrationsParams = {
+unitsId?: string[];
+companiesId?: string[];
+companyGroupId?: string;
+};
+
+export type GetIntegrations200DataItemIntegrationType = typeof GetIntegrations200DataItemIntegrationType[keyof typeof GetIntegrations200DataItemIntegrationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetIntegrations200DataItemIntegrationType = {
+  DRIVERS: 'DRIVERS',
+  IRIS: 'IRIS',
+} as const;
+
+export type GetIntegrations200DataItemCompanyGroup = {
+  id: string;
+  name: string;
+};
+
+export type GetIntegrations200DataItemCompaniesItem = {
+  id: string;
+  name: string;
+};
+
+export type GetIntegrations200DataItemUnitsItem = {
+  id: string;
+  name: string;
+};
+
+export type GetIntegrations200DataItem = {
+  id: string;
+  name: string;
+  url: string;
+  integrationType: GetIntegrations200DataItemIntegrationType;
+  companyGroup: GetIntegrations200DataItemCompanyGroup;
+  companies: GetIntegrations200DataItemCompaniesItem[];
+  units: GetIntegrations200DataItemUnitsItem[];
+};
+
+export type GetIntegrations200 = {
+  data: GetIntegrations200DataItem[];
+};
+
+export type GetIntegrationsId200DataIntegrationType = typeof GetIntegrationsId200DataIntegrationType[keyof typeof GetIntegrationsId200DataIntegrationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetIntegrationsId200DataIntegrationType = {
+  DRIVERS: 'DRIVERS',
+  IRIS: 'IRIS',
+} as const;
+
+/**
+ * @nullable
+ */
+export type GetIntegrationsId200DataCompanyGroup = {
+  id: string;
+  name: string;
+} | null;
+
+export type GetIntegrationsId200DataCompaniesItem = {
+  id: string;
+  name: string;
+  companyGroupId: string;
+};
+
+export type GetIntegrationsId200DataUnitsItem = {
+  id: string;
+  name: string;
+  companyId: string;
+  companyGroupId: string;
+};
+
+export type GetIntegrationsId200Data = {
+  id: string;
+  name: string;
+  url: string;
+  /** @nullable */
+  login: string | null;
+  password: string;
+  integrationType: GetIntegrationsId200DataIntegrationType;
+  /** @nullable */
+  companyGroup: GetIntegrationsId200DataCompanyGroup;
+  companies: GetIntegrationsId200DataCompaniesItem[];
+  units: GetIntegrationsId200DataUnitsItem[];
+};
+
+export type GetIntegrationsId200 = {
+  data: GetIntegrationsId200Data;
+};
+
+export type UpdateIntegrationBodyIntegrationType = typeof UpdateIntegrationBodyIntegrationType[keyof typeof UpdateIntegrationBodyIntegrationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateIntegrationBodyIntegrationType = {
+  DRIVERS: 'DRIVERS',
+  IRIS: 'IRIS',
+} as const;
+
+export type UpdateIntegrationBody = {
+  name?: string;
+  url?: string;
+  login?: string;
+  password?: string;
+  integrationType?: UpdateIntegrationBodyIntegrationType;
+  companyGroupId?: string;
+  companiesId?: string[];
+  unitsId?: string[];
+};
+
+export type UpdateIntegration200 = {
+  id: string;
+};
+
+export type DeleteIntegrationsId200 = {
+  success: boolean;
+};
+
+export type GetDriversIntegrationParams = {
+ambulanceId: string;
+};
+
+export type GetDriversIntegration200Item = {
+  IdSocorrista: number;
+  NomeSocorrista: string;
+  CPFSocorrista?: number;
+  UnidadeSocorrista?: number;
+  NomeUnidade?: string;
+  IdBase?: number;
+  NomeBase?: string;
+};
+
+export type AssociateDriverBody = {
+  ambulanceId: string;
+  driverId: string;
+};
+
+export type AssociateDriver200 = {
+  idTurno: string;
+};
+
+export type LogoutDriverBody = {
+  id: string;
+  ambulanceId: string;
+  idTurno: string;
+};
+
+export type GetCurrentDriverParams = {
+ambulanceId: string;
+};
+
+/**
+ * @nullable
+ */
+export type GetCurrentDriver200 = {
+  id: string;
+  idTurno: string;
+  driverId: string;
+} | null;
+
+export type CreateCommsUserBody = {
+  name: string;
+  mail: string;
+  password: string;
+  baseId: string;
+};
+
+export type CreateCommsUser201 = {
+  id: string;
+};
+
+export type GetCommsUsersParams = {
+name?: string;
+unitsId?: string[];
+companiesId?: string[];
+companyGroupId?: string;
+};
+
+export type GetCommsUsers200DataItemBase = {
+  id: string;
+  name: string;
+};
+
+export type GetCommsUsers200DataItem = {
+  id: string;
+  name: string;
+  mail: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+  base: GetCommsUsers200DataItemBase;
+};
+
+export type GetCommsUsers200 = {
+  data: GetCommsUsers200DataItem[];
+};
+
+export type UpdateCommsUserBody = {
+  name?: string;
+  mail?: string;
+  password?: string;
+  companyGroupId?: string;
+  companyId?: string;
+  unitId?: string;
+  baseId?: string;
+};
+
+export type UpdateCommsUser200 = {
+  id: string;
+};
+
+export type GetCommsUserById200Base = {
+  id: string;
+  name: string;
+};
+
+export type GetCommsUserById200 = {
+  id: string;
+  name: string;
+  mail: string;
+  password: string;
+  base: GetCommsUserById200Base;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DeleteCommsUser200 = {
+  id: string;
+};
+
+export type GetAuthenticatedCommsUser200DataRolesItem = typeof GetAuthenticatedCommsUser200DataRolesItem[keyof typeof GetAuthenticatedCommsUser200DataRolesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetAuthenticatedCommsUser200DataRolesItem = {
+  'companyGroup:read': 'companyGroup:read',
+  'companyGroup:update': 'companyGroup:update',
+  'companyGroup:createPhoneNumber': 'companyGroup:createPhoneNumber',
+  'companyGroup:deletePhoneNumber': 'companyGroup:deletePhoneNumber',
+  'companyGroup:updatePhoneNumber': 'companyGroup:updatePhoneNumber',
+  'company:create': 'company:create',
+  'company:read': 'company:read',
+  'company:update': 'company:update',
+  'company:delete': 'company:delete',
+  'company:createPhoneNumber': 'company:createPhoneNumber',
+  'company:deletePhoneNumber': 'company:deletePhoneNumber',
+  'company:updatePhoneNumber': 'company:updatePhoneNumber',
+  'unit:create': 'unit:create',
+  'unit:read': 'unit:read',
+  'unit:update': 'unit:update',
+  'unit:delete': 'unit:delete',
+  'unit:createPhoneNumber': 'unit:createPhoneNumber',
+  'unit:deletePhoneNumber': 'unit:deletePhoneNumber',
+  'unit:updatePhoneNumber': 'unit:updatePhoneNumber',
+  'base:create': 'base:create',
+  'base:read': 'base:read',
+  'base:update': 'base:update',
+  'base:delete': 'base:delete',
+  'base:createPhoneNumber': 'base:createPhoneNumber',
+  'base:deletePhoneNumber': 'base:deletePhoneNumber',
+  'base:updatePhoneNumber': 'base:updatePhoneNumber',
+  'user:create': 'user:create',
+  'user:read': 'user:read',
+  'user:update': 'user:update',
+  'user:delete': 'user:delete',
+  'user:assignRole': 'user:assignRole',
+  'ambulance:create': 'ambulance:create',
+  'ambulance:read': 'ambulance:read',
+  'ambulance:update': 'ambulance:update',
+  'ambulance:delete': 'ambulance:delete',
+  'ambulance:switchBase': 'ambulance:switchBase',
+  'ambulance:switchStatus': 'ambulance:switchStatus',
+  'ambulance:switchShift': 'ambulance:switchShift',
+  'ambulance:associateUser': 'ambulance:associateUser',
+  'ambulanceControl:read': 'ambulanceControl:read',
+  'ambulanceDocuments:create': 'ambulanceDocuments:create',
+  'ambulanceDocuments:update': 'ambulanceDocuments:update',
+  'ambulanceDocuments:delete': 'ambulanceDocuments:delete',
+  'ambulanceDocuments:bulkUpdate': 'ambulanceDocuments:bulkUpdate',
+  'sys_admin:accessAll': 'sys_admin:accessAll',
+  'chat:create': 'chat:create',
+  'chat:delete': 'chat:delete',
+  'chat:read': 'chat:read',
+  'chat:sendMessage': 'chat:sendMessage',
+  'driver:read': 'driver:read',
+  'driver:create': 'driver:create',
+  'driver:update': 'driver:update',
+  'driver:delete': 'driver:delete',
+  'driver:driver': 'driver:driver',
+  'driver:associateDriver': 'driver:associateDriver',
+  'integrations:create': 'integrations:create',
+  'integrations:read': 'integrations:read',
+  'integrations:update': 'integrations:update',
+  'integrations:delete': 'integrations:delete',
+  'radio:access': 'radio:access',
+  'radio:read': 'radio:read',
+  'radio:create': 'radio:create',
+  'radio:update': 'radio:update',
+  'radio:delete': 'radio:delete',
+  'comms:access': 'comms:access',
+  'comms:read': 'comms:read',
+  'comms:create': 'comms:create',
+  'comms:update': 'comms:update',
+  'comms:delete': 'comms:delete',
+} as const;
+
+export type GetAuthenticatedCommsUser200DataBase = {
+  id: string;
+  name: string;
+};
+
+export type GetAuthenticatedCommsUser200Data = {
+  id: string;
+  name: string;
+  mail: string;
+  roles: GetAuthenticatedCommsUser200DataRolesItem[];
+  companyGroupId: string;
+  base: GetAuthenticatedCommsUser200DataBase;
+};
+
+export type GetAuthenticatedCommsUser200 = {
+  data: GetAuthenticatedCommsUser200Data;
 };
 

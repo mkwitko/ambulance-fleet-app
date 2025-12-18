@@ -4,7 +4,7 @@ import {
   GetAmbulanceDocuments200DataDocumentsItem,
   GetChatMessages200DataItemMessageType,
 } from "@/src/http/generated/api.schemas";
-import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
+import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { DocumentViewerModal } from "@/src/pages/chat/modals/document-preview-modal";
 import { COLORS } from "@/src/styles/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Animated, ScrollView, TouchableOpacity, View } from "react-native";
 
 export default function Documents() {
-  const { data: user } = useGetAuthenticatedUser();
+  const { data: user } = useGetAuthenticatedUserAmbulance();
   const { data: documents } = useGetAmbulanceDocuments(
     user?.data.ambulance?.id as string,
     {

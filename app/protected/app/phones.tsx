@@ -1,6 +1,6 @@
 import { Typography } from "@/src/components/ui/typography";
 import { useGetAmbulancePhones } from "@/src/http/generated/ambulance/ambulance";
-import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
+import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { COLORS } from "@/src/styles/colors";
 import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
@@ -17,7 +17,7 @@ import {
 type PhoneSource = "companyGroup" | "company" | "unit";
 
 export default function Phones() {
-  const { data: user } = useGetAuthenticatedUser();
+  const { data: user } = useGetAuthenticatedUserAmbulance();
   const { data: phones } = useGetAmbulancePhones(
     user?.data.ambulance?.id as string,
     {

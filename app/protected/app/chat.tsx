@@ -1,6 +1,7 @@
 import { AblyEvents } from "@/src/@types/ably-events";
 import KeyboardSpacer from "@/src/components/keyboard-spacer";
 import { GetChatMessages200DataItem } from "@/src/http/generated/api.schemas";
+import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { AudioRecordingPreview } from "@/src/pages/chat/audio-recording-preview";
 import ChatInput from "@/src/pages/chat/chat-input";
 import { ChatOverlay } from "@/src/pages/chat/chat-overlay";
@@ -29,7 +30,9 @@ export default function Chat() {
     null
   );
 
-  const { user } = useAbly({
+  const { data: user } = useGetAuthenticatedUserAmbulance();
+
+  useAbly({
     events: [AblyEvents.messages, AblyEvents.status, AblyEvents.readChat],
     handleMessageReceived: (message) => {
       setIncomingMessage(message);

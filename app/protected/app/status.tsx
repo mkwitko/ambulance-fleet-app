@@ -25,7 +25,7 @@ import {
 } from "@/src/http/generated/ambulance/ambulance";
 import {
   getGetAuthenticatedUserShiftValidationQueryKey,
-  useGetAuthenticatedUser,
+  useGetAuthenticatedUserAmbulance,
 } from "@/src/http/generated/user/user";
 
 // ==== HOOKS INTERNOS ====
@@ -38,15 +38,15 @@ import useShiftHook, {
 } from "@/src/pages/onboarding/components/activities/hooks/use-shift-hook";
 
 export default function Status() {
+  const [loading, setLoading] = useState(false);
   // ====== MODAL STATES ======
   const [shiftModalVisible, setShiftModalVisible] = useState(false);
   const [contactModalVisible, setContactModalVisible] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [driverModalVisible, setDriverModalVisible] = useState(false);
-  const [ambulanceModalVisible, setAmbulanceModalVisible] = useState(false);
 
   // ====== USER DATA ======
-  const { data: user } = useGetAuthenticatedUser();
+  const { data: user } = useGetAuthenticatedUserAmbulance();
   const ambulance = user?.data.ambulance;
 
   // ====== LOCAL STATE ======
@@ -77,10 +77,19 @@ export default function Status() {
     setShiftConfig,
   });
 
-  const { driverAssociated, hasDriverPermission, handleAssociateDriver } =
-    useDriversHook({
-      setDriverModalVisible,
-    });
+  const {
+    driverAssociated,
+    hasDriverPermission,
+    handleSetDriver,
+    handleUnsetDriver,
+    drivers,
+    handleAssociateDriver,
+    handleLogoutDriver,
+    foundDriver,
+    currentDriver,
+  } = useDriversHook({
+    setDriverModalVisible,
+  });
 
   const { isValidStatus, handleSaveStatus } = useAmbulanceStatusHook({
     selectedStatus,
@@ -110,6 +119,7 @@ export default function Status() {
 
   // ====== SAVE CONFIG ======
   const handleFinishOnboarding = async () => {
+    setLoading(true);
     if (ambulance?.status !== selectedStatus) {
       switchAmbulanceStatus({
         id: ambulance?.id as string,
@@ -132,14 +142,22 @@ export default function Status() {
       });
       const invalidateShiftQueryKey =
         getGetAuthenticatedUserShiftValidationQueryKey();
-      await queryClient
-        .invalidateQueries({
-          queryKey: invalidateShiftQueryKey,
-        })
-        .then((response) => {
-          console.log({ response });
-        });
+      await queryClient.invalidateQueries({
+        queryKey: invalidateShiftQueryKey,
+      });
     }
+
+    if (!driverAssociated) {
+      await handleLogoutDriver();
+      console.log("Driver logged out");
+    }
+
+    if (driverAssociated) {
+      await handleAssociateDriver();
+      console.log("Driver associated");
+    }
+
+    setLoading(false);
   };
 
   // =====================================================================
@@ -214,16 +232,16 @@ export default function Status() {
           />
 
           {/* DRIVER */}
-          {hasDriverPermission && (
+          {hasDriverPermission && drivers && (
             <ActivityCard
               icon="badge"
               title="Associar Motorista"
               description={
-                driverAssociated
-                  ? "Motorista associado"
+                foundDriver
+                  ? foundDriver.NomeSocorrista
                   : "Vincule seu perfil de motorista"
               }
-              configured={driverAssociated}
+              configured={!!foundDriver}
               onPress={() => setDriverModalVisible(true)}
             />
           )}
@@ -235,7 +253,7 @@ export default function Status() {
         <Button
           title="Confirmar Configurações"
           onPress={handleFinishOnboarding}
-          loading={isSwitchingShift || isSwitchingStatus}
+          loading={isSwitchingShift || isSwitchingStatus || loading}
         />
       </View>
 
@@ -267,11 +285,14 @@ export default function Status() {
         />
       )}
 
-      {driverModalVisible && (
+      {driverModalVisible && drivers && (
         <DriverModal
           visible={driverModalVisible}
-          onAssociate={handleAssociateDriver}
+          onAssociate={handleSetDriver}
+          onRemove={handleUnsetDriver}
           onClose={() => setDriverModalVisible(false)}
+          drivers={drivers}
+          driverAssociated={driverAssociated}
         />
       )}
     </View>

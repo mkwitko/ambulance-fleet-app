@@ -73,11 +73,15 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
     setShiftConfig,
   });
 
-  const { driverAssociated, hasDriverPermission, handleAssociateDriver } =
-    useDriversHook({
-      animationState: animationActivitiesState,
-      setDriverModalVisible,
-    });
+  const {
+    driverAssociated,
+    foundDriver,
+    hasDriverPermission,
+    handleAssociateDriver,
+    drivers,
+  } = useDriversHook({
+    setDriverModalVisible,
+  });
 
   const { progressPercentage, activeCount, totalCount } =
     useActivitiesProgressHook({
@@ -207,16 +211,16 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
             onPress={() => setContactModalVisible(true)}
           />
 
-          {hasDriverPermission && (
+          {hasDriverPermission && drivers && (
             <ActivityCard
               icon="badge"
               title="Associar Motorista"
               description={
-                driverAssociated
-                  ? "Motorista associado"
+                foundDriver
+                  ? foundDriver.NomeSocorrista
                   : "Vincule seu perfil de motorista"
               }
-              configured={driverAssociated}
+              configured={!!foundDriver}
               onPress={() => setDriverModalVisible(true)}
             />
           )}
@@ -294,11 +298,12 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
         />
       )}
 
-      {driverModalVisible && (
+      {driverModalVisible && drivers && (
         <DriverModal
           visible={driverModalVisible}
           onAssociate={handleAssociateDriver}
           onClose={() => setDriverModalVisible(false)}
+          drivers={drivers}
         />
       )}
     </View>

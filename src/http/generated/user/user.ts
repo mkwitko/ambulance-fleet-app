@@ -31,6 +31,11 @@ import type {
   DeleteUser404,
   DeleteUserBody,
   GetAuthenticatedUser200,
+  GetAuthenticatedUserAmbulance200,
+  GetAuthenticatedUserAssociations200,
+  GetAuthenticatedUserCurrentAmbulance200,
+  GetAuthenticatedUserPermissions200,
+  GetAuthenticatedUserRoles200,
   GetAuthenticatedUserShiftValidation200,
   GetUser200,
   GetUsers200,
@@ -60,7 +65,7 @@ export const createUser = (
       
       
       return customInstance<CreateUser201>(
-      {url: `https://5566b0946a83.ngrok-free.app/users`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/users`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUserBody, signal
     },
@@ -124,7 +129,7 @@ export const getUsers = (
       
       
       return customInstance<GetUsers200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users`, method: 'GET',
+      {url: `https://92d80dbecae0.ngrok-free.app/users`, method: 'GET',
         params, signal
     },
       options);
@@ -135,7 +140,7 @@ export const getUsers = (
 
 export const getGetUsersQueryKey = (params?: GetUsersParams,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/users`, ...(params ? [params]: [])
+    `https://92d80dbecae0.ngrok-free.app/users`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -217,7 +222,7 @@ export const deleteUser = (
       
       
       return customInstance<DeleteUser200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/${id}`, method: 'DELETE',
+      {url: `https://92d80dbecae0.ngrok-free.app/users/${id}`, method: 'DELETE',
       headers: {'Content-Type': 'application/json', },
       data: deleteUserBody
     },
@@ -281,7 +286,7 @@ export const updateUser = (
       
       
       return customInstance<UpdateUser200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/${id}`, method: 'PATCH',
+      {url: `https://92d80dbecae0.ngrok-free.app/users/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateUserBody
     },
@@ -344,7 +349,7 @@ export const updateUserPermissions = (
       
       
       return customInstance<UpdateUserPermissions200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/permissions`, method: 'PUT',
+      {url: `https://92d80dbecae0.ngrok-free.app/users/permissions`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateUserPermissionsBody
     },
@@ -408,7 +413,7 @@ export const getAuthenticatedUser = (
       
       
       return customInstance<GetAuthenticatedUser200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/me`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me`, method: 'GET', signal
     },
       options);
     }
@@ -418,7 +423,7 @@ export const getAuthenticatedUser = (
 
 export const getGetAuthenticatedUserQueryKey = () => {
     return [
-    `https://5566b0946a83.ngrok-free.app/users/me`
+    `https://92d80dbecae0.ngrok-free.app/users/me`
     ] as const;
     }
 
@@ -500,7 +505,7 @@ export const getUser = (
       
       
       return customInstance<GetUser200>(
-      {url: `https://5566b0946a83.ngrok-free.app/user/${id}`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/user/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -510,7 +515,7 @@ export const getUser = (
 
 export const getGetUserQueryKey = (id?: string,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/user/${id}`
+    `https://92d80dbecae0.ngrok-free.app/user/${id}`
     ] as const;
     }
 
@@ -592,7 +597,7 @@ export const getAuthenticatedUserShiftValidation = (
       
       
       return customInstance<GetAuthenticatedUserShiftValidation200>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/me/shift/validation`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/shift/validation`, method: 'GET', signal
     },
       options);
     }
@@ -602,7 +607,7 @@ export const getAuthenticatedUserShiftValidation = (
 
 export const getGetAuthenticatedUserShiftValidationQueryKey = () => {
     return [
-    `https://5566b0946a83.ngrok-free.app/users/me/shift/validation`
+    `https://92d80dbecae0.ngrok-free.app/users/me/shift/validation`
     ] as const;
     }
 
@@ -675,6 +680,466 @@ export function useGetAuthenticatedUserShiftValidation<TData = Awaited<ReturnTyp
 
 
 /**
+ * @summary Get authenticated user permissions
+ */
+export const getAuthenticatedUserPermissions = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAuthenticatedUserPermissions200>(
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/permissions`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAuthenticatedUserPermissionsQueryKey = () => {
+    return [
+    `https://92d80dbecae0.ngrok-free.app/users/me/permissions`
+    ] as const;
+    }
+
+    
+export const getGetAuthenticatedUserPermissionsQueryOptions = <TData = Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthenticatedUserPermissionsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>> = ({ signal }) => getAuthenticatedUserPermissions(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthenticatedUserPermissionsQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>>
+export type GetAuthenticatedUserPermissionsQueryError = unknown
+
+
+export function useGetAuthenticatedUserPermissions<TData = Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserPermissions<TData = Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserPermissions<TData = Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get authenticated user permissions
+ */
+
+export function useGetAuthenticatedUserPermissions<TData = Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserPermissions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthenticatedUserPermissionsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get authenticated user ambulance
+ */
+export const getAuthenticatedUserCurrentAmbulance = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAuthenticatedUserCurrentAmbulance200>(
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/ambulance`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAuthenticatedUserCurrentAmbulanceQueryKey = () => {
+    return [
+    `https://92d80dbecae0.ngrok-free.app/users/me/ambulance`
+    ] as const;
+    }
+
+    
+export const getGetAuthenticatedUserCurrentAmbulanceQueryOptions = <TData = Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthenticatedUserCurrentAmbulanceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>> = ({ signal }) => getAuthenticatedUserCurrentAmbulance(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthenticatedUserCurrentAmbulanceQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>>
+export type GetAuthenticatedUserCurrentAmbulanceQueryError = unknown
+
+
+export function useGetAuthenticatedUserCurrentAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserCurrentAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserCurrentAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get authenticated user ambulance
+ */
+
+export function useGetAuthenticatedUserCurrentAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserCurrentAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthenticatedUserCurrentAmbulanceQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get authenticated user roles
+ */
+export const getAuthenticatedUserRoles = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAuthenticatedUserRoles200>(
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/roles`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAuthenticatedUserRolesQueryKey = () => {
+    return [
+    `https://92d80dbecae0.ngrok-free.app/users/me/roles`
+    ] as const;
+    }
+
+    
+export const getGetAuthenticatedUserRolesQueryOptions = <TData = Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthenticatedUserRolesQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>> = ({ signal }) => getAuthenticatedUserRoles(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthenticatedUserRolesQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>>
+export type GetAuthenticatedUserRolesQueryError = unknown
+
+
+export function useGetAuthenticatedUserRoles<TData = Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserRoles>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserRoles>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserRoles<TData = Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserRoles>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserRoles>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserRoles<TData = Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get authenticated user roles
+ */
+
+export function useGetAuthenticatedUserRoles<TData = Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthenticatedUserRolesQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get authenticated user associations
+ */
+export const getAuthenticatedUserAssociations = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAuthenticatedUserAssociations200>(
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/associations`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAuthenticatedUserAssociationsQueryKey = () => {
+    return [
+    `https://92d80dbecae0.ngrok-free.app/users/me/associations`
+    ] as const;
+    }
+
+    
+export const getGetAuthenticatedUserAssociationsQueryOptions = <TData = Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthenticatedUserAssociationsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>> = ({ signal }) => getAuthenticatedUserAssociations(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthenticatedUserAssociationsQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>>
+export type GetAuthenticatedUserAssociationsQueryError = unknown
+
+
+export function useGetAuthenticatedUserAssociations<TData = Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserAssociations<TData = Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserAssociations<TData = Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get authenticated user associations
+ */
+
+export function useGetAuthenticatedUserAssociations<TData = Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAssociations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthenticatedUserAssociationsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get authenticated user ambulance info
+ */
+export const getAuthenticatedUserAmbulance = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAuthenticatedUserAmbulance200>(
+      {url: `https://92d80dbecae0.ngrok-free.app/users/me/ambulance/info`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetAuthenticatedUserAmbulanceQueryKey = () => {
+    return [
+    `https://92d80dbecae0.ngrok-free.app/users/me/ambulance/info`
+    ] as const;
+    }
+
+    
+export const getGetAuthenticatedUserAmbulanceQueryOptions = <TData = Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthenticatedUserAmbulanceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>> = ({ signal }) => getAuthenticatedUserAmbulance(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthenticatedUserAmbulanceQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>>
+export type GetAuthenticatedUserAmbulanceQueryError = unknown
+
+
+export function useGetAuthenticatedUserAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthenticatedUserAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get authenticated user ambulance info
+ */
+
+export function useGetAuthenticatedUserAmbulance<TData = Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthenticatedUserAmbulance>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthenticatedUserAmbulanceQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * @summary Create initial user
  */
 export const createInitialUser = (
@@ -684,7 +1149,7 @@ export const createInitialUser = (
       
       
       return customInstance<CreateInitialUser201>(
-      {url: `https://5566b0946a83.ngrok-free.app/users/init`, method: 'POST', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/users/init`, method: 'POST', signal
     },
       options);
     }

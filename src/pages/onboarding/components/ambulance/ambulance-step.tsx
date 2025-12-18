@@ -3,7 +3,7 @@ import { Typography } from "@/src/components/ui/typography";
 import useGetUserPermissions from "@/src/hooks/use-get-user-permissions";
 import { useGetAmbulances } from "@/src/http/generated/ambulance/ambulance";
 import { GetAmbulances200DataItem } from "@/src/http/generated/api.schemas";
-import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
+import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { useOnboarding } from "@/src/providers/onboarding-context";
 import React, { useEffect } from "react";
 import { ScrollView, View } from "react-native";
@@ -16,7 +16,8 @@ export const AmbulanceStep: React.FC<StepProps> = ({ onNext, onBack }) => {
   const { animateEntrance, cardAnims } = useConfirmationAnimationsHook();
   const { ambulance, setAmbulance } = useOnboarding();
 
-  const { data: user, isLoading: isLoadingUser } = useGetAuthenticatedUser();
+  const { data: user, isLoading: isLoadingUser } =
+    useGetAuthenticatedUserAmbulance();
 
   const { queryParams, hasSomePermission } = useGetUserPermissions();
   const { data: ambulances, isLoading: isLoadingAmbulance } = useGetAmbulances(

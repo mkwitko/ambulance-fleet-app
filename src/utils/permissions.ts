@@ -1,10 +1,10 @@
 import {
-  GetAuthenticatedUser200Data,
-  GetAuthenticatedUser200DataRolesItem,
+  GetAuthenticatedUserPermissions200Data,
+  GetAuthenticatedUserPermissions200DataRolesItem,
 } from "../http/generated/api.schemas";
 
 export function hasPermission(
-  user: GetAuthenticatedUser200Data | undefined,
+  user: GetAuthenticatedUserPermissions200Data | undefined,
   permission: string,
   bypassAdmin = true
 ): boolean {
@@ -12,12 +12,12 @@ export function hasPermission(
   if (
     bypassAdmin &&
     user.roles.includes(
-      GetAuthenticatedUser200DataRolesItem["sys_admin:accessAll"]
+      GetAuthenticatedUserPermissions200DataRolesItem["sys_admin:accessAll"]
     )
   )
     return true;
 
   return user.roles.includes(
-    permission as GetAuthenticatedUser200DataRolesItem
+    permission as GetAuthenticatedUserPermissions200DataRolesItem
   );
 }

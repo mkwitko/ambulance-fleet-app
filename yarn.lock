@@ -4759,7 +4759,7 @@ expo-audio@~1.0.15:
   resolved "https://registry.yarnpkg.com/expo-audio/-/expo-audio-1.0.16.tgz#6cee98909c5c8b641832e73d944cf0be1c16d4de"
   integrity sha512-j7otyjtO+8PVbemoCoRBr2Em0Kv9to3bfz5UpI5tDVVb5gD1dkn7sjv6/W6tWNqx14WLR1Wijh/ACecVv1Py+g==
 
-expo-background-connection-plugin@/Users/mauriciodeoliveirakwitko/Downloads/expo-background-connection-plugin:
+"expo-background-connection-plugin@file:../../../../Downloads/expo-background-connection-plugin":
   version "1.0.0"
   dependencies:
     "@expo/config-plugins" "^8.0.0"
@@ -5226,6 +5226,11 @@ functions-have-names@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
+
+fuse.js@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-7.1.0.tgz#306228b4befeee11e05b027087c2744158527d09"
+  integrity sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==
 
 generator-function@^2.0.0:
   version "2.0.1"

@@ -1,6 +1,6 @@
 import {
   CreateUserBodyRolesItem,
-  GetAuthenticatedUser200DataRolesItem as Role,
+  GetAuthenticatedUserPermissions200DataRolesItem as Role,
 } from "../http/generated/api.schemas";
 
 const RolesData: Role[] = Object.values(CreateUserBodyRolesItem);

@@ -1,30 +1,80 @@
+import KeyboardSpacer from "@/src/components/keyboard-spacer";
 import { ModalWrapper } from "@/src/components/modal-wrapper";
 import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 import { Typography } from "@/src/components/ui/typography";
+import { GetDriversIntegration200Item } from "@/src/http/generated/api.schemas";
 import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { TextInput, View } from "react-native";
+import Fuse from "fuse.js";
+import React, { useEffect, useMemo, useState } from "react";
+import { FlatList, Pressable, View } from "react-native";
 
 interface DriverModalProps {
   visible: boolean;
-  onAssociate: (driverName: string) => void;
+  onAssociate: (driver: GetDriversIntegration200Item) => void;
+  onRemove: (driver: GetDriversIntegration200Item) => void;
   onClose: () => void;
+  drivers: GetDriversIntegration200Item[];
+  driverAssociated?: string | null;
 }
 
 export const DriverModal: React.FC<DriverModalProps> = ({
   visible,
   onAssociate,
+  onRemove,
   onClose,
+  drivers,
+  driverAssociated,
 }) => {
-  const [driverName, setDriverName] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedDriver, setSelectedDriver] =
+    useState<GetDriversIntegration200Item | null>(null);
 
-  const canSave = driverName.trim().length >= 3;
+  useEffect(() => {
+    if (driverAssociated) {
+      const associated = drivers.find(
+        (driver) => String(driver.IdSocorrista) === driverAssociated
+      );
+      setSelectedDriver(associated || null);
+    }
+  }, [drivers, driverAssociated]);
+
+  /**
+   * Fuse instance
+   */
+  const fuse = useMemo(
+    () =>
+      new Fuse(drivers, {
+        keys: ["NomeSocorrista"],
+        threshold: 0.3,
+        ignoreLocation: true,
+      }),
+    [drivers]
+  );
+
+  /**
+   * Filtered list
+   */
+  const filteredDrivers = useMemo(() => {
+    if (!search.trim()) return drivers;
+    return fuse.search(search).map((r) => r.item);
+  }, [search, fuse, drivers]);
 
   const handleAssociate = () => {
-    if (canSave) {
-      onAssociate(driverName.trim());
-      setDriverName("");
+    if (selectedDriver) {
+      onAssociate(selectedDriver);
+      setSelectedDriver(null);
+      setSearch("");
+      onClose();
+    }
+  };
+
+  const handleLogout = () => {
+    if (selectedDriver) {
+      onRemove(selectedDriver);
+      setSelectedDriver(null);
+      setSearch("");
       onClose();
     }
   };
@@ -49,71 +99,115 @@ export const DriverModal: React.FC<DriverModalProps> = ({
         </View>
       }
       footer={
-        <View className="gap-3">
-          <Button
-            title="Associar Motorista"
-            onPress={handleAssociate}
-            disabled={!canSave}
-          />
+        <View className="bg-white px-4 pt-4 pb-6 gap-3 border-t border-gray-200">
+          {driverAssociated &&
+          String(selectedDriver?.IdSocorrista) === driverAssociated ? (
+            <Button
+              title="Remover Motorista"
+              variant="destructive"
+              onPress={handleLogout}
+            />
+          ) : (
+            <Button
+              title="Associar Motorista"
+              onPress={handleAssociate}
+              disabled={!selectedDriver}
+            />
+          )}
           <Button variant="secondary" title="Cancelar" onPress={onClose} />
         </View>
       }
+      stickyFooter
     >
-      {/* HANDLE */}
-      <View className="pt-4 pb-2 items-center">
-        <View className="w-12 h-1.5 bg-gray-300 rounded-full" />
-      </View>
-
-      {/* TÍTULO + DESCRIÇÃO */}
-      <View className="mb-6">
-        <Typography variant="title" weight="bold" className="mb-3 text-center">
-          Associar Motorista
-        </Typography>
-        <Typography
-          variant="body"
-          tone="muted"
-          className="text-center leading-6"
-        >
-          Informe o nome do motorista para vincular ao seu perfil
-        </Typography>
-      </View>
-
-      {/* CAMPO DE NOME */}
-      <View className="gap-4 mb-8">
+      <View className="relative gap-4">
+        {/* TÍTULO */}
         <View>
-          <Typography variant="small" weight="semibold" className="mb-2">
-            Nome do Motorista
+          <Typography
+            variant="title"
+            weight="bold"
+            className="mb-2 text-center"
+          >
+            Associar Motorista
           </Typography>
-          <View className="bg-gray-100 rounded-xl px-4 py-4 flex-row items-center">
+          <Typography variant="body" tone="muted" className="text-center">
+            Busque e selecione um motorista
+          </Typography>
+        </View>
+
+        {/* SEARCH */}
+        <View>
+          <View className="border border-gray-200 rounded-xl bg-white px-4 py-2 flex-row items-center">
             <MaterialIcons
-              name="person"
+              name="search"
               size={20}
               color={COLORS.mutedForeground}
             />
-            <TextInput
-              value={driverName}
-              onChangeText={setDriverName}
-              placeholder="Digite o nome completo"
-              className="flex-1 ml-3 text-base"
+            <Input
+              value={search}
+              variant="ghost"
+              onChangeText={setSearch}
+              placeholder="Buscar por nome"
+              className="flex-1"
               autoCapitalize="words"
             />
           </View>
         </View>
 
-        {/* INFO */}
-        <View className="bg-amber-50 rounded-xl px-4 py-3 flex-row gap-2">
-          <MaterialIcons
-            name="info-outline"
-            size={16}
-            color={COLORS.warning.DEFAULT}
-          />
-          <Typography
-            variant="extraSmall"
-            className="text-amber-900 flex-1 leading-5"
-          >
-            O motorista receberá uma notificação sobre a associação
-          </Typography>
-        </View>
+        <FlatList
+          data={filteredDrivers}
+          keyExtractor={(item) => String(item.IdSocorrista)}
+          contentContainerStyle={{ paddingBottom: 120 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={true}
+          renderItem={({ item }) => {
+            const selected = selectedDriver?.IdSocorrista === item.IdSocorrista;
+            return (
+              <Pressable
+                onPress={() =>
+                  setSelectedDriver((prev) =>
+                    prev?.IdSocorrista === item.IdSocorrista ? null : item
+                  )
+                }
+                className={`flex-row items-center px-4 py-4 rounded-xl border mb-3 ${
+                  selected
+                    ? "border-primary-500 bg-primary-50"
+                    : "border-gray-200 bg-white"
+                }`}
+              >
+                <MaterialIcons
+                  name="person"
+                  size={22}
+                  color={
+                    selected ? COLORS.primary.DEFAULT : COLORS.mutedForeground
+                  }
+                />
+                <View className="ml-3 flex-1">
+                  <Typography weight="semibold">
+                    {item.NomeSocorrista}
+                  </Typography>
+                  {!!item.NomeBase && (
+                    <Typography variant="extraSmall" tone="muted">
+                      Base: {item.NomeBase}
+                    </Typography>
+                  )}
+                </View>
+                {selected && (
+                  <MaterialIcons
+                    name="check-circle"
+                    size={20}
+                    color={COLORS.primary.DEFAULT}
+                  />
+                )}
+              </Pressable>
+            );
+          }}
+          ListEmptyComponent={
+            <View className="py-8 items-center">
+              <Typography tone="muted">Nenhum motorista encontrado</Typography>
+            </View>
+          }
+        />
+        <KeyboardSpacer />
       </View>
     </ModalWrapper>
   );

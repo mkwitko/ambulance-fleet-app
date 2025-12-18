@@ -1,11 +1,12 @@
 import { env } from "@/src/env";
 import {
-  GetAuthenticatedUser200Data,
+  GetAuthenticatedUserAmbulance200Data,
   SendMessageBodyMessageType,
   SendMessageBodyPlatform,
 } from "@/src/http/generated/api.schemas";
 import { useSendMessage } from "@/src/http/generated/chat/chat";
 import { useGetPressignedUrl } from "@/src/http/generated/upload/upload";
+import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import { generateAudioFileName } from "@/src/utils/generate-file-name";
 import axios from "axios";
 import {
@@ -35,8 +36,9 @@ export function useAudioRecorderHook({
   user,
 }: {
   selectedChatId: string;
-  user: GetAuthenticatedUser200Data | undefined;
+  user: GetAuthenticatedUserAmbulance200Data | undefined;
 }): UseAudioRecorderHookReturn {
+  const { data: userInfo } = useGetAuthenticatedUser();
   const audioRecorder = useAudioRecorder(
     RecordingPresets.HIGH_QUALITY,
     (status) => {
@@ -121,9 +123,9 @@ export function useAudioRecorderHook({
         messageType: SendMessageBodyMessageType.AUDIO,
         file: `${env.EXPO_PUBLIC_STORAGE_URL}/${selectedChatId}/audio/${fileName}`,
         user: {
-          id: user?.id as string,
-          name: user?.name as string,
-          avatarUrl: user?.avatarUrl || null,
+          id: userInfo?.data.id as string,
+          name: userInfo?.data.name as string,
+          avatarUrl: userInfo?.data.avatarUrl || null,
         },
         platform: SendMessageBodyPlatform.WEB,
       },

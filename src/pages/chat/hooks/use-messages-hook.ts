@@ -1,5 +1,5 @@
 import {
-  GetAuthenticatedUser200Data,
+  GetAuthenticatedUserAmbulance200Data,
   GetChatMessages200DataItem,
   GetChatMessages200DataItemPlatform,
   SendMessageBodyMessageType,
@@ -10,6 +10,7 @@ import {
   useReadChat,
   useSendMessage,
 } from "@/src/http/generated/chat/chat";
+import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import { InboundMessage } from "ably";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
@@ -24,7 +25,7 @@ export default function useMessageHook({
   setIncomingMessage,
 }: {
   selectedChatId: string;
-  user: GetAuthenticatedUser200Data | undefined;
+  user: GetAuthenticatedUserAmbulance200Data | undefined;
   online: boolean;
   messages: GetChatMessages200DataItem[];
   setMessages: React.Dispatch<
@@ -36,6 +37,8 @@ export default function useMessageHook({
   >;
 }) {
   const [message, setMessage] = useState("");
+
+  const { data: userInfo } = useGetAuthenticatedUser();
 
   const [page, setPage] = useState(1);
 
@@ -162,9 +165,9 @@ export default function useMessageHook({
         content: message,
         messageType: SendMessageBodyMessageType.TEXT,
         user: {
-          id: user?.id as string,
-          name: user?.name as string,
-          avatarUrl: user?.avatarUrl || null,
+          id: userInfo?.data.id as string,
+          name: userInfo?.data.name as string,
+          avatarUrl: userInfo?.data.avatarUrl || null,
         },
         platform: SendMessageBodyPlatform.APP,
       },

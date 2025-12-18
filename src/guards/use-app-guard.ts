@@ -1,13 +1,20 @@
-import { useGetAuthenticatedUserShiftValidation } from "@/src/http/generated/user/user";
+import {
+  useGetAuthenticatedUserAmbulance,
+  useGetAuthenticatedUserPermissions,
+  useGetAuthenticatedUserShiftValidation,
+} from "@/src/http/generated/user/user";
 import {
   AppPermissionType,
   checkAllPermissions,
 } from "@/src/utils/check-permissions";
 import { useAppIsForeground } from "@/src/utils/is-foreground";
 import { Href, usePathname } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppGuardStatus, AppGuardStatusType } from "../@types/app-guard";
+import { Role } from "../@types/roles";
 import { NAVIGATION_ROUTES } from "../data/blocked-navigation-data";
+import { useGetCurrentDriver } from "../http/generated/drivers/drivers";
+import { hasPermission } from "../utils/permissions";
 
 export function useAppGuard() {
   const [statuses, setStatuses] = useState<AppGuardStatusType[]>([
@@ -30,40 +37,66 @@ export function useAppGuard() {
     refetch,
   } = useGetAuthenticatedUserShiftValidation();
 
+  const { data: user, isLoading: isLoadingUser } =
+    useGetAuthenticatedUserPermissions();
+  const { data: userInfo } = useGetAuthenticatedUserAmbulance();
+
+  const {
+    data: currentDriver,
+    isLoading: isLoadingCurrentDriver,
+    refetch: refetchGetCurrentDriver,
+  } = useGetCurrentDriver(
+    {
+      ambulanceId: userInfo?.data.ambulance?.id as string,
+    },
+    {
+      query: {
+        enabled:
+          !!userInfo?.data.ambulance?.id &&
+          hasPermission(user?.data, Role["driver:associateDriver"]),
+      },
+    }
+  );
+
   // -------------------------------------------------------------
   // Função principal que sempre recalcula todos os status do app
   // -------------------------------------------------------------
-  const evaluateGuard = useCallback(
-    async (forcePermissionsCheck = false) => {
-      if (isLoading) return;
+  const evaluateGuard = async (forcePermissionsCheck = false) => {
+    if (isLoading || isLoadingUser || isLoadingCurrentDriver) return;
 
-      const newStatuses: AppGuardStatusType[] = [];
+    const newStatuses: AppGuardStatusType[] = [];
 
-      // 1) Verificar permissões (apenas se solicitado ou se ainda não calculado)
-      const permissionsResult =
-        forcePermissionsCheck || missingPermissions.length > 0
-          ? await checkAllPermissions()
-          : await checkAllPermissions(); // se quiser manter sempre consistente
+    // 1) Verificar permissões (apenas se solicitado ou se ainda não calculado)
+    const permissionsResult =
+      forcePermissionsCheck || missingPermissions.length > 0
+        ? await checkAllPermissions()
+        : await checkAllPermissions(); // se quiser manter sempre consistente
 
-      if (!permissionsResult.ok) {
-        newStatuses.push(AppGuardStatus.MISSING_PERMISSIONS);
-        setMissingPermissions(permissionsResult.missing);
-      }
+    if (!permissionsResult.ok) {
+      newStatuses.push(AppGuardStatus.MISSING_PERMISSIONS);
+      setMissingPermissions(permissionsResult.missing);
+    }
 
-      // 2) Validar turno
-      if (!shiftValidation?.data.shift.isValid) {
-        newStatuses.push(AppGuardStatus.INVALID_SHIFT);
-      }
+    // 2) Validar turno
+    if (!shiftValidation?.data.shift.isValid) {
+      newStatuses.push(AppGuardStatus.INVALID_SHIFT);
+    }
 
-      // 3) Se nada faltou → OK
-      if (newStatuses.length === 0) {
-        newStatuses.push(AppGuardStatus.OK);
-      }
+    // 3) Validar motorista associado
+    if (
+      hasPermission(user?.data, Role["driver:associateDriver"]) &&
+      !currentDriver
+    ) {
+      newStatuses.push(AppGuardStatus.MISSING_DRIVER);
+    }
 
-      setStatuses(newStatuses);
-    },
-    [isLoading, shiftValidation, missingPermissions.length]
-  );
+    // 4) Se nada faltou → OK
+    if (newStatuses.length === 0) {
+      newStatuses.push(AppGuardStatus.OK);
+    }
+
+    setStatuses(newStatuses);
+  };
 
   // -------------------------------------------------------------
   // Revalida quando volta para foreground
@@ -80,6 +113,7 @@ export function useAppGuard() {
     const id = setInterval(() => {
       if (isPathExcluded) return;
       refetch();
+      refetchGetCurrentDriver();
     }, 60_000);
     return () => clearInterval(id);
   }, []);
@@ -89,7 +123,7 @@ export function useAppGuard() {
   // -------------------------------------------------------------
   useEffect(() => {
     evaluateGuard();
-  }, [shiftValidation, isLoading]);
+  }, [shiftValidation, isLoading, isLoadingCurrentDriver, currentDriver]);
 
   // -------------------------------------------------------------
   // Retry manual de permissões (ex: botão "Conceder permissões")

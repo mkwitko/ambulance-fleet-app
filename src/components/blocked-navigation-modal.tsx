@@ -21,13 +21,11 @@ export default function BlockedNavigationModal({
   setShowBlockedModal,
   statuses,
   missingPermissions,
-  retryPermissions,
 }: {
   showBlockedModal: boolean;
   setShowBlockedModal: (value: boolean) => void;
   statuses: AppGuardStatusType[];
   missingPermissions: AppPermissionType[];
-  retryPermissions: () => Promise<void>;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -44,11 +42,13 @@ export default function BlockedNavigationModal({
 
   const availableRoutes = NAVIGATION_ROUTES.filter(
     (item) =>
-      pathname !== item.route && item.status && statuses.includes(item.status)
+      pathname !== item.route &&
+      item.status.some((status) => statuses.includes(status))
   );
 
   // Determinar o problema específico
   const isInvalidShift = statuses?.includes(AppGuardStatus.INVALID_SHIFT);
+  const isMissingDriver = statuses?.includes(AppGuardStatus.MISSING_DRIVER);
   const isMissingPermissions =
     statuses?.includes(AppGuardStatus.MISSING_PERMISSIONS) &&
     missingPermissions.length > 0;
@@ -196,6 +196,31 @@ export default function BlockedNavigationModal({
               </View>
             )}
 
+            {/* Problema de Motorista */}
+            {isMissingDriver && (
+              <View className="items-center border border-input bg-white/70 p-5 rounded-xl">
+                <View className="w-12 h-12 rounded-full bg-destructive/10 items-center justify-center mb-3">
+                  <MaterialIcons
+                    name="person-off"
+                    size={24}
+                    color={COLORS.destructive}
+                  />
+                </View>
+                <Typography
+                  variant="body"
+                  weight="bold"
+                  align="center"
+                  className="mb-1"
+                >
+                  Motorista não informado
+                </Typography>
+                <Typography variant="caption" tone="muted" align="center">
+                  É necessário vincular um motorista ativo para continuar
+                  utilizando o aplicativo.
+                </Typography>
+              </View>
+            )}
+
             {/* Problema de Permissões */}
             {isMissingPermissions && (
               <View className="items-center border border-input bg-white/70 p-5 rounded-xl">
@@ -261,7 +286,7 @@ export default function BlockedNavigationModal({
             )}
 
             {/* Caso genérico (não deveria acontecer, mas por segurança) */}
-            {!isInvalidShift && !isMissingPermissions && (
+            {!isInvalidShift && !isMissingPermissions && !isMissingDriver && (
               <View className="items-center bg-muted p-5 rounded-2xl">
                 <View className="w-12 h-12 rounded-full bg-background items-center justify-center mb-3">
                   <MaterialIcons

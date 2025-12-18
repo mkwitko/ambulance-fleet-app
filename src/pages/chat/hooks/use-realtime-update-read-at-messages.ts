@@ -1,5 +1,5 @@
 import {
-  GetAuthenticatedUser200,
+  GetAuthenticatedUserAmbulance200,
   GetChatMessages200DataItem,
   GetChatMessages200DataItemPlatform,
 } from "@/src/http/generated/api.schemas";
@@ -11,7 +11,7 @@ import { useEffect } from "react";
 export default function useRealTimeUpdateReadAtMessagesHook({
   user,
 }: {
-  user: GetAuthenticatedUser200 | undefined;
+  user: GetAuthenticatedUserAmbulance200 | undefined;
 }) {
   const isForeground = useAppIsForeground();
   const { mutateAsync: readChat } = useReadChat();

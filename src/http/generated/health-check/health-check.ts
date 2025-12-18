@@ -41,7 +41,7 @@ export const healthCheck = (
       
       
       return customInstance<HealthCheck200>(
-      {url: `https://5566b0946a83.ngrok-free.app/health`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/health`, method: 'GET', signal
     },
       options);
     }
@@ -51,7 +51,7 @@ export const healthCheck = (
 
 export const getHealthCheckQueryKey = () => {
     return [
-    `https://5566b0946a83.ngrok-free.app/health`
+    `https://92d80dbecae0.ngrok-free.app/health`
     ] as const;
     }
 

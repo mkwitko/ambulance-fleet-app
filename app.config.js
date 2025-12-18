@@ -41,7 +41,6 @@ export default ({ config }) => ({
           "defaultChannel": "default",
           "sounds": [
 						'./assets/sounds/notification.mp3',
-						'./assets/sounds/notification_destination.mp3',
 					],
         }
       ],
@@ -81,7 +80,6 @@ export default ({ config }) => ({
       EXPO_PUBLIC_STORAGE_URL: process.env.EXPO_PUBLIC_STORAGE_URL,
       EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,
       EXPO_PUBLIC_SENTRY: process.env.EXPO_PUBLIC_SENTRY,
-      EXPO_PUBLIC_ABLY_API_KEY: process.env.EXPO_PUBLIC_ABLY_API_KEY,
       EXPO_PUBLIC_AGORA_APP_ID: process.env.EXPO_PUBLIC_AGORA_APP_ID,
     },
   },

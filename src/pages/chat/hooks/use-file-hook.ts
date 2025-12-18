@@ -1,11 +1,12 @@
 import { env } from "@/src/env";
 import {
-  GetAuthenticatedUser200Data,
+  GetAuthenticatedUserAmbulance200Data,
   GetChatMessages200DataItemMessageType,
   SendMessageBodyPlatform,
 } from "@/src/http/generated/api.schemas";
 import { useSendMessage } from "@/src/http/generated/chat/chat";
 import { useGetPressignedUrl } from "@/src/http/generated/upload/upload";
+import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { useState } from "react";
@@ -18,11 +19,13 @@ export default function useFileHook({
   setAttachment,
 }: {
   selectedChatId: string;
-  user: GetAuthenticatedUser200Data | undefined;
+  user: GetAuthenticatedUserAmbulance200Data | undefined;
   setMessage: (value: string) => void;
   setAttachment: (attachment: Attachment | null) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const { data: userInfo } = useGetAuthenticatedUser();
 
   const { mutateAsync: sendMessage } = useSendMessage();
   const { mutateAsync: getPressignedUrl } = useGetPressignedUrl();
@@ -83,9 +86,9 @@ export default function useFileHook({
           messageType: attachment.type,
           file: `${env.EXPO_PUBLIC_STORAGE_URL}/${selectedChatId}/${folder}/${fileName}`,
           user: {
-            id: user?.id as string,
-            name: user?.name as string,
-            avatarUrl: user?.avatarUrl || null,
+            id: userInfo?.data.id as string,
+            name: userInfo?.data.name as string,
+            avatarUrl: userInfo?.data.avatarUrl || null,
           },
           platform: SendMessageBodyPlatform.APP,
         },

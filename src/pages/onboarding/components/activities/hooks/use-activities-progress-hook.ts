@@ -11,7 +11,7 @@ export default function useActivitiesProgressHook({
   isShiftOver,
 }: {
   contact: ExistingContact | undefined;
-  driverAssociated: boolean;
+  driverAssociated: string | undefined;
   hasDriverPermission: boolean;
   animateProgress: (progress: number) => void;
   isShiftOver: boolean;

@@ -11,15 +11,13 @@ import { Input } from "@/src/components/ui/input";
 import { SecureInput } from "@/src/components/ui/secure-input";
 import { Typography } from "@/src/components/ui/typography";
 import { useSignIn } from "@/src/http/generated/auth/auth";
-import { maskCpf } from "@/src/utils/masks";
 import { useRouter } from "expo-router";
 
 const signInSchema = z.object({
-  cpf: z
+  mail: z
     .string()
-    .min(1, "CPF é obrigatório")
-    .transform((val) => val.replace(/\D/g, ""))
-    .refine((val) => /^\d{11}$/.test(val), "CPF inválido"),
+    .min(1, "E-mail é obrigatório")
+    .refine((val) => val.includes("@"), { message: "E-mail inválido" }),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
@@ -36,13 +34,13 @@ export default function SignIn() {
     formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
-    defaultValues: { cpf: "", password: "" },
+    defaultValues: { mail: "", password: "" },
   });
 
   const onSubmit = async (data: SignInFormData) => {
     await signIn({
       data: {
-        document: data.cpf,
+        mail: data.mail,
         password: data.password,
       },
     });
@@ -136,17 +134,17 @@ export default function SignIn() {
           </View>
 
           <View className="w-full">
-            <FormField control={control} name="cpf" error={errors.cpf}>
+            <FormField control={control} name="mail" error={errors.mail}>
               {({ value, onChange, onBlur }) => (
                 <Input
                   value={value}
-                  onChangeText={(text) => onChange(maskCpf(text))}
+                  onChangeText={onChange}
                   onBlur={onBlur}
-                  placeholder="Insira seu CPF"
-                  keyboardType="numeric"
+                  placeholder="Insira seu E-mail"
+                  keyboardType="email-address"
                   returnKeyType="next"
                   onSubmitEditing={() => passwordRef.current?.focus()}
-                  variant={errors.cpf ? "error" : "default"}
+                  variant={errors.mail ? "error" : "default"}
                 />
               )}
             </FormField>

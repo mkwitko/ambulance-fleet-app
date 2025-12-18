@@ -55,7 +55,7 @@ export const createBase = (
       
       
       return customInstance<CreateBase201>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/bases`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createBaseBody, signal
     },
@@ -120,7 +120,7 @@ export const getBases = (
       
       
       return customInstance<GetBases200>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases`, method: 'GET',
+      {url: `https://92d80dbecae0.ngrok-free.app/bases`, method: 'GET',
         params, signal
     },
       options);
@@ -131,7 +131,7 @@ export const getBases = (
 
 export const getGetBasesQueryKey = (params?: GetBasesParams,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/bases`, ...(params ? [params]: [])
+    `https://92d80dbecae0.ngrok-free.app/bases`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -213,7 +213,7 @@ export const updateBase = (
       
       
       return customInstance<UpdateBase204>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases/${baseId}`, method: 'PUT',
+      {url: `https://92d80dbecae0.ngrok-free.app/bases/${baseId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateBaseBody
     },
@@ -278,7 +278,7 @@ export const getBase = (
       
       
       return customInstance<GetBase200>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases/${id}`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/bases/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -288,7 +288,7 @@ export const getBase = (
 
 export const getGetBaseQueryKey = (id?: string,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/bases/${id}`
+    `https://92d80dbecae0.ngrok-free.app/bases/${id}`
     ] as const;
     }
 
@@ -369,7 +369,7 @@ export const deleteBase = (
       
       
       return customInstance<DeleteBase204>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases/${id}`, method: 'DELETE'
+      {url: `https://92d80dbecae0.ngrok-free.app/bases/${id}`, method: 'DELETE'
     },
       options);
     }
@@ -432,7 +432,7 @@ export const deleteBasePhoneNumber = (
       
       
       return customInstance<DeleteBasePhoneNumber204>(
-      {url: `https://5566b0946a83.ngrok-free.app/bases/${baseId}/phones/${phoneId}`, method: 'DELETE'
+      {url: `https://92d80dbecae0.ngrok-free.app/bases/${baseId}/phones/${phoneId}`, method: 'DELETE'
     },
       options);
     }
@@ -495,7 +495,7 @@ export const getBasePhones = (
       
       
       return customInstance<GetBasePhones200>(
-      {url: `https://5566b0946a83.ngrok-free.app/base/${baseId}/phones`, method: 'GET', signal
+      {url: `https://92d80dbecae0.ngrok-free.app/base/${baseId}/phones`, method: 'GET', signal
     },
       options);
     }
@@ -505,7 +505,7 @@ export const getBasePhones = (
 
 export const getGetBasePhonesQueryKey = (baseId?: string,) => {
     return [
-    `https://5566b0946a83.ngrok-free.app/base/${baseId}/phones`
+    `https://92d80dbecae0.ngrok-free.app/base/${baseId}/phones`
     ] as const;
     }
 
@@ -589,7 +589,7 @@ export const createBasePhoneNumber = (
       
       
       return customInstance<CreateBasePhoneNumber201>(
-      {url: `https://5566b0946a83.ngrok-free.app/base/${baseId}/phones`, method: 'POST',
+      {url: `https://92d80dbecae0.ngrok-free.app/base/${baseId}/phones`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createBasePhoneNumberBodyItem, signal
     },

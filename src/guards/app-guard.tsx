@@ -13,18 +13,16 @@ export default function AppGuard({
   setShowBlockedModal: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 }) {
-  const { statuses, missingPermissions, retryPermissions, isPathExcluded } =
-    useAppGuard();
+  const { statuses, missingPermissions, isPathExcluded } = useAppGuard();
 
   const canNavigate = statuses.includes(AppGuardStatus.OK);
 
   useEffect(() => {
     if (isPathExcluded) return;
-
-    console.log({ statuses, missingPermissions });
     setShowBlockedModal(
       statuses.includes(AppGuardStatus.MISSING_PERMISSIONS) ||
-        statuses.includes(AppGuardStatus.INVALID_SHIFT)
+        statuses.includes(AppGuardStatus.INVALID_SHIFT) ||
+        statuses.includes(AppGuardStatus.MISSING_DRIVER)
     );
   }, [statuses]);
 
@@ -42,7 +40,6 @@ export default function AppGuard({
         setShowBlockedModal={setShowBlockedModal}
         statuses={statuses}
         missingPermissions={missingPermissions}
-        retryPermissions={retryPermissions}
       />
     </>
   );
