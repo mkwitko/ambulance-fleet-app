@@ -4,9 +4,16 @@ import { PermissionModal } from "@/src/pages/onboarding/components/permissions/c
 import useAnimationHook from "@/src/pages/onboarding/components/permissions/hooks/use-animation-hook";
 import usePermissionsHook from "@/src/pages/onboarding/components/permissions/hooks/use-permissions-hook";
 import { COLORS } from "@/src/styles/colors";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Animated, Dimensions, ScrollView, View } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  Linking,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Permissions() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,7 +21,7 @@ export default function Permissions() {
   const animationState = useAnimationHook({
     modalVisible,
   });
-  const { cardAnims, progressAnim } = animationState;
+  const { progressAnim } = animationState;
 
   const {
     activeCount,
@@ -27,10 +34,19 @@ export default function Permissions() {
     permissions,
     currentPermission,
     requestPermission,
+    checkAllPermissions,
   } = usePermissionsHook({
     animationState,
     setModalVisible,
   });
+
+  const openAppSettings = async () => {
+    await Linking.openSettings();
+  };
+
+  const handleRefresh = async () => {
+    await checkAllPermissions();
+  };
 
   const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -44,9 +60,30 @@ export default function Permissions() {
         {/* HEADER PREMIUM */}
         <View className="p-6">
           <View className="gap-2">
-            <Typography variant="title" weight="semibold">
-              Permissões
-            </Typography>
+            <View className="flex-row items-center justify-between">
+              <Typography variant="title" weight="semibold">
+                Permissões
+              </Typography>
+              <View className="flex-row items-center gap-2">
+                <TouchableOpacity
+                  onPress={openAppSettings}
+                  className="bg-primary-50 rounded-xl py-2 px-4 border border-primary"
+                >
+                  <Ionicons
+                    name="settings-outline"
+                    size={20}
+                    color={COLORS.primary.DEFAULT}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleRefresh}
+                  className="bg-primary-500 rounded-xl py-2 px-4"
+                >
+                  <Feather name="refresh-cw" size={20} color="white" />
+                </TouchableOpacity>
+              </View>
+            </View>
             <Typography variant="subtitle">
               Configure os acessos necessários antes de prosseguir
             </Typography>

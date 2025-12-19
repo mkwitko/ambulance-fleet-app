@@ -2,9 +2,15 @@ import { Button } from "@/src/components/ui/button";
 import { Typography } from "@/src/components/ui/typography";
 import { useOnboarding } from "@/src/providers/onboarding-context";
 import { COLORS } from "@/src/styles/colors";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Animated, ScrollView, View } from "react-native";
+import {
+  Animated,
+  Linking,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StepProps } from "../../hooks/use-onboard-steps-hook";
 import { PermissionCard } from "./components/permission-card";
 import { PermissionModal } from "./components/permission-modal";
@@ -32,11 +38,20 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
     permissions,
     currentPermission,
     requestPermission,
+    checkAllPermissions, // Adicione esta função no hook se não existir
   } = usePermissionsHook({
     animationState,
     setModalVisible,
     setPermissionsCompleted,
   });
+
+  const openAppSettings = async () => {
+    await Linking.openSettings();
+  };
+
+  const handleRefresh = async () => {
+    await checkAllPermissions();
+  };
 
   return (
     <View className="flex-1">
@@ -48,9 +63,30 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
         {/* HEADER PREMIUM */}
         <View className="p-6 pt-0">
           <View className="gap-2">
-            <Typography variant="title" weight="semibold">
-              Permissões
-            </Typography>
+            <View className="flex-row items-center justify-between">
+              <Typography variant="title" weight="semibold">
+                Permissões
+              </Typography>
+              <View className="flex-row items-center gap-2">
+                <TouchableOpacity
+                  onPress={openAppSettings}
+                  className="bg-primary-50 rounded-xl py-2 px-4 border border-primary"
+                >
+                  <Ionicons
+                    name="settings-outline"
+                    size={20}
+                    color={COLORS.primary.DEFAULT}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleRefresh}
+                  className="bg-primary-500 rounded-xl py-2 px-4"
+                >
+                  <Feather name="refresh-cw" size={20} color="white" />
+                </TouchableOpacity>
+              </View>
+            </View>
             <Typography variant="subtitle">
               Configure os acessos necessários antes de prosseguir
             </Typography>
@@ -100,7 +136,7 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
 
         {/* LISTA DE PERMISSÕES */}
         <View className="px-6 gap-4">
-          {permissionTypes.map((type, index) => (
+          {permissionTypes.map((type) => (
             <PermissionCard
               key={type}
               icon={permissionDetails[type].icon}
@@ -114,7 +150,7 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
         </View>
 
         {/* INFO FOOTER */}
-        <View className="mx-6 mt-4 bg-blue-50 rounded-2xl p-5">
+        <View className="mx-6 mt-4 bg-primary-50 rounded-xl p-5">
           <View className="flex-row gap-3">
             <View className="pt-0.5">
               <MaterialIcons
@@ -124,7 +160,10 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
               />
             </View>
             <View className="flex-1">
-              <Typography variant="small" className="text-blue-900 leading-5">
+              <Typography
+                variant="small"
+                className="text-primary-900 leading-5"
+              >
                 Você pode alterar estas permissões a qualquer momento nas
                 configurações do seu dispositivo
               </Typography>

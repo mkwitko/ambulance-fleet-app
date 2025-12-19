@@ -1,3 +1,7 @@
+import {
+  getRecordingPermissionsAsync,
+  requestRecordingPermissionsAsync,
+} from "expo-audio";
 import { Camera } from "expo-camera";
 import * as Contacts from "expo-contacts";
 import * as Location from "expo-location";
@@ -15,7 +19,8 @@ interface PermissionsState {
   locationBackground: PermissionStatus;
   camera: PermissionStatus;
   contacts: PermissionStatus;
-  notifications: PermissionStatus; // <-- ADICIONADO
+  notifications: PermissionStatus;
+  microphone: PermissionStatus;
 }
 
 export type PermissionType = keyof PermissionsState;
@@ -36,7 +41,8 @@ export default function usePermissionsHook({
     locationBackground: { granted: false, canAskAgain: true },
     camera: { granted: false, canAskAgain: true },
     contacts: { granted: false, canAskAgain: true },
-    notifications: { granted: false, canAskAgain: true }, // <-- ADICIONADO
+    notifications: { granted: false, canAskAgain: true },
+    microphone: { granted: false, canAskAgain: true },
   });
 
   const [currentPermission, setCurrentPermission] =
@@ -69,6 +75,11 @@ export default function usePermissionsHook({
       title: "Notificações",
       description: "Para avisar sobre eventos importantes no app.",
     },
+    microphone: {
+      icon: "mic" as const,
+      title: "Microfone",
+      description: "Para gravar áudio e interagir com o app.",
+    },
   };
 
   const activeCount = Object.values(permissions).filter(
@@ -93,6 +104,7 @@ export default function usePermissionsHook({
     const camera = await Camera.getCameraPermissionsAsync();
     const contacts = await Contacts.getPermissionsAsync();
     const notifications = await Notifications.getPermissionsAsync();
+    const microphone = await getRecordingPermissionsAsync();
 
     setPermissions({
       location: {
@@ -114,6 +126,10 @@ export default function usePermissionsHook({
       notifications: {
         granted: notifications.granted,
         canAskAgain: notifications.canAskAgain ?? true,
+      },
+      microphone: {
+        granted: microphone.granted,
+        canAskAgain: microphone.canAskAgain,
       },
     });
   };
@@ -150,6 +166,10 @@ export default function usePermissionsHook({
           granted: notif.granted,
           canAskAgain: notif.canAskAgain ?? true,
         };
+        break;
+
+      case "microphone":
+        result = await requestRecordingPermissionsAsync();
         break;
     }
 
@@ -203,5 +223,6 @@ export default function usePermissionsHook({
     permissions,
     currentPermission,
     requestPermission,
+    checkAllPermissions,
   };
 }

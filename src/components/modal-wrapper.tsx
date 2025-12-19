@@ -5,6 +5,7 @@ import {
   Animated,
   Dimensions,
   Modal,
+  ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -20,6 +21,7 @@ interface ModalWrapperProps {
   stickyFooter?: boolean;
   maxHeightPct?: number;
   persistent?: boolean;
+  removeScroll?: boolean;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({
@@ -32,6 +34,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
   stickyFooter,
   maxHeightPct = 90,
   persistent = false,
+  removeScroll = false,
 }) => {
   const { fadeAnim, scaleAnim } = useModalAnimationHook({ visible });
   const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -65,25 +68,29 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
             maxHeight: SCREEN_HEIGHT * (maxHeightPct / 100),
           }}
         >
-          <View className="p-6 gap-6">
-            {/* ÍCONE */}
-            {icon && <View className="items-center">{icon}</View>}
+          {removeScroll && (
+            <ModalContent
+              icon={icon}
+              title={title}
+              footer={footer}
+              stickyFooter={stickyFooter}
+            >
+              {children}
+            </ModalContent>
+          )}
 
-            {/* TÍTULO */}
-            {title && (
-              <View>
-                <Typography variant="title" weight="bold" align="center">
-                  {title}
-                </Typography>
-              </View>
-            )}
-
-            {/* CONTEÚDO */}
-            {children}
-
-            {/* FOOTER */}
-            {!stickyFooter && footer && <View className="mt-4">{footer}</View>}
-          </View>
+          {!removeScroll && (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <ModalContent
+                icon={icon}
+                title={title}
+                footer={footer}
+                stickyFooter={stickyFooter}
+              >
+                {children}
+              </ModalContent>
+            </ScrollView>
+          )}
 
           {stickyFooter && footer && (
             <View className="absolute left-0 bottom-0 right-0">{footer}</View>
@@ -91,5 +98,41 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
         </Animated.View>
       </Animated.View>
     </Modal>
+  );
+};
+
+const ModalContent = ({
+  icon,
+  title,
+  children,
+  footer,
+  stickyFooter,
+}: {
+  icon?: React.ReactNode;
+  title?: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  stickyFooter?: boolean;
+}) => {
+  return (
+    <View className="p-6 gap-6">
+      {/* ÍCONE */}
+      {icon && <View className="items-center">{icon}</View>}
+
+      {/* TÍTULO */}
+      {title && (
+        <View>
+          <Typography variant="title" weight="bold" align="center">
+            {title}
+          </Typography>
+        </View>
+      )}
+
+      {/* CONTEÚDO */}
+      {children}
+
+      {/* FOOTER */}
+      {!stickyFooter && footer && <View className="mt-4">{footer}</View>}
+    </View>
   );
 };

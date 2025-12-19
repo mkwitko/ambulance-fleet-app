@@ -8,7 +8,6 @@ import {
   Alert,
   Animated,
   Linking,
-  Platform,
   ScrollView,
   TouchableOpacity,
   View,
@@ -152,7 +151,6 @@ export default function Phones() {
 
       const canOpen = await Linking.canOpenURL(whatsappUrl);
       if (canOpen) {
-        await Linking.openURL(whatsappUrl);
       } else {
         Alert.alert(
           "WhatsApp não encontrado",
@@ -174,17 +172,7 @@ export default function Phones() {
       const cleaned = number.replace(/\D/g, "");
       const phoneUrl = `tel:${cleaned}`;
 
-      // No iOS, não precisa verificar canOpenURL para tel:
-      if (Platform.OS === "ios") {
-        await Linking.openURL(phoneUrl);
-      } else {
-        const canOpen = await Linking.canOpenURL(phoneUrl);
-        if (canOpen) {
-          await Linking.openURL(phoneUrl);
-        } else {
-          Alert.alert("Erro", "Não foi possível realizar a ligação.");
-        }
-      }
+      await Linking.openURL(phoneUrl);
     } catch (error) {
       console.error("Erro ao fazer ligação:", error);
       Alert.alert(

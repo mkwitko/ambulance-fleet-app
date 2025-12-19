@@ -13,7 +13,7 @@ import { FlatList, Pressable, View } from "react-native";
 interface DriverModalProps {
   visible: boolean;
   onAssociate: (driver: GetDriversIntegration200Item) => void;
-  onRemove: (driver: GetDriversIntegration200Item) => void;
+  onRemove?: (driver: GetDriversIntegration200Item) => void;
   onClose: () => void;
   drivers: GetDriversIntegration200Item[];
   driverAssociated?: string | null;
@@ -72,7 +72,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
 
   const handleLogout = () => {
     if (selectedDriver) {
-      onRemove(selectedDriver);
+      onRemove && onRemove(selectedDriver);
       setSelectedDriver(null);
       setSearch("");
       onClose();
@@ -84,6 +84,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
       visible={visible}
       onClose={onClose}
       maxHeightPct={90}
+      removeScroll
       icon={
         <View className="items-center mb-6">
           <View className="relative">
