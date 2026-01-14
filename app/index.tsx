@@ -1,6 +1,7 @@
 import { hideSplashScreen } from "@/src/config/splash-screen";
 import { useCheckAuth } from "@/src/http/generated/auth/auth";
 import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
+import "@/src/services/database/use-database";
 import { useRootNavigationState, useRouter } from "expo-router";
 import { useEffect } from "react";
 

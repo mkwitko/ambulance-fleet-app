@@ -1,10 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Animated, Image, Keyboard, TextInput, View } from "react-native";
+import {
+  Animated,
+  Image,
+  Keyboard,
+  Platform,
+  TextInput,
+  View,
+} from "react-native";
 import { z } from "zod";
 
-import { KeyboardWrapper } from "@/src/components/keyboard-wrapper";
+import KeyboardSpacer from "@/src/components/keyboard-spacer";
 import { Button } from "@/src/components/ui/button";
 import { FormField } from "@/src/components/ui/form-field";
 import { Input } from "@/src/components/ui/input";
@@ -12,6 +19,7 @@ import { SecureInput } from "@/src/components/ui/secure-input";
 import { Typography } from "@/src/components/ui/typography";
 import { useSignIn } from "@/src/http/generated/auth/auth";
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const signInSchema = z.object({
   mail: z
@@ -24,7 +32,20 @@ const signInSchema = z.object({
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
-  const { mutateAsync: signIn } = useSignIn();
+  const { mutateAsync: signIn } = useSignIn({
+    mutation: {
+      onSuccess: () => {
+        router.replace("/protected/onboarding");
+      },
+      onError: (error: any) => {
+        Toast.show({
+          type: "error",
+          text1: "Erro ao entrar",
+          text2: error.message,
+        });
+      },
+    },
+  });
   const passwordRef = useRef<TextInput>(null);
   const router = useRouter();
 
@@ -44,18 +65,28 @@ export default function SignIn() {
         password: data.password,
       },
     });
-    router.replace("/protected/onboarding");
   };
 
   // --------------------------------------
-  // 🔥 React Native Animated (substituindo Moti)
+  // 🔥 CONTROLE DO TECLADO
+  // --------------------------------------
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  // --------------------------------------
+  // 🔥 ANIMAÇÕES DA LOGO
   // --------------------------------------
   const translateY = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(1)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const subShow = Keyboard.addListener("keyboardWillShow", () => {
+    const showEvent =
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent =
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const subShow = Keyboard.addListener(showEvent, () => {
+      setKeyboardVisible(true);
+
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: -60,
@@ -67,15 +98,12 @@ export default function SignIn() {
           duration: 250,
           useNativeDriver: true,
         }),
-        Animated.timing(opacity, {
-          toValue: 0.9,
-          duration: 250,
-          useNativeDriver: true,
-        }),
       ]).start();
     });
 
-    const subHide = Keyboard.addListener("keyboardWillHide", () => {
+    const subHide = Keyboard.addListener(hideEvent, () => {
+      setKeyboardVisible(false);
+
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: 0,
@@ -83,11 +111,6 @@ export default function SignIn() {
           useNativeDriver: true,
         }),
         Animated.timing(scale, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
           toValue: 1,
           duration: 250,
           useNativeDriver: true,
@@ -102,9 +125,9 @@ export default function SignIn() {
   }, []);
 
   return (
-    <KeyboardWrapper className="flex-1" keyboardOffset={30}>
-      <View className="flex-1 justify-center items-center px-4">
-        {/* 🔥 LOGO COM ANIMAÇÃO REACT NATIVE ANIMATED */}
+    <View className="flex-1 justify-center items-center px-4">
+      {/* 🔥 LOGO (some quando teclado abre) */}
+      {!keyboardVisible && (
         <Animated.View
           style={{
             position: "absolute",
@@ -112,7 +135,6 @@ export default function SignIn() {
             width: "100%",
             alignItems: "center",
             transform: [{ translateY }, { scale }],
-            opacity,
           }}
         >
           <Image
@@ -121,67 +143,65 @@ export default function SignIn() {
             resizeMode="contain"
           />
         </Animated.View>
+      )}
 
-        {/* 🔥 CARD DO FORM */}
-        <View className="w-full bg-white p-6 gap-4 rounded-xl border border-input mt-10">
-          <View className="gap-1 mb-2">
-            <Typography variant="title" align="center">
-              Gestão de Ambulâncias
-            </Typography>
-            <Typography variant="subtitle" align="center">
-              Acesse sua conta com CPF
-            </Typography>
-          </View>
-
-          <View className="w-full">
-            <FormField control={control} name="mail" error={errors.mail}>
-              {({ value, onChange, onBlur }) => (
-                <Input
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  placeholder="Insira seu E-mail"
-                  keyboardType="email-address"
-                  returnKeyType="next"
-                  onSubmitEditing={() => passwordRef.current?.focus()}
-                  variant={errors.mail ? "error" : "default"}
-                />
-              )}
-            </FormField>
-
-            <FormField
-              control={control}
-              name="password"
-              error={errors.password}
-            >
-              {({ value, onChange, onBlur }) => (
-                <SecureInput
-                  ref={passwordRef}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  placeholder="Senha"
-                  returnKeyType="done"
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                  variant={errors.password ? "error" : "default"}
-                  keyboardType="numeric"
-                />
-              )}
-            </FormField>
-          </View>
-
-          <Button
-            title={isSubmitting ? "Entrando..." : "Entrar"}
-            onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting}
-            className="mt-2"
-          />
-
-          <Typography variant="small" align="center" className="mt-4">
-            © {new Date().getFullYear()} — Connect - Gestão de Ambulâncias
+      {/* 🔥 CARD DO FORM */}
+      <View className="w-full bg-white p-6 gap-4 rounded-xl border border-input mt-10">
+        <View className="gap-1 mb-2">
+          <Typography variant="title" align="center">
+            Gestão de Ambulâncias
+          </Typography>
+          <Typography variant="subtitle" align="center">
+            Acesse sua conta com CPF
           </Typography>
         </View>
+
+        <View className="w-full">
+          <FormField control={control} name="mail" error={errors.mail}>
+            {({ value, onChange, onBlur }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder="Insira seu E-mail"
+                keyboardType="email-address"
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
+                variant={errors.mail ? "error" : "default"}
+              />
+            )}
+          </FormField>
+
+          <FormField control={control} name="password" error={errors.password}>
+            {({ value, onChange, onBlur }) => (
+              <SecureInput
+                ref={passwordRef}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder="Senha"
+                returnKeyType="done"
+                onSubmitEditing={handleSubmit(onSubmit)}
+                variant={errors.password ? "error" : "default"}
+                keyboardType="numeric"
+              />
+            )}
+          </FormField>
+        </View>
+
+        <Button
+          title={isSubmitting ? "Entrando..." : "Entrar"}
+          onPress={handleSubmit(onSubmit)}
+          loading={isSubmitting}
+          className="mt-2"
+        />
+
+        <Typography variant="small" align="center" className="mt-4">
+          © {new Date().getFullYear()} — Connect - Gestão de Ambulâncias
+        </Typography>
       </View>
-    </KeyboardWrapper>
+
+      <KeyboardSpacer />
+    </View>
   );
 }

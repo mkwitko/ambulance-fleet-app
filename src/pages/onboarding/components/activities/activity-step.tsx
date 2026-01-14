@@ -79,6 +79,8 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
     hasDriverPermission,
     handleAssociateDriver,
     drivers,
+    hasDriverIntegration,
+    isLoadingDrivers,
   } = useDriversHook({
     setDriverModalVisible,
   });
@@ -298,10 +300,11 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
         />
       )}
 
-      {driverModalVisible && drivers && (
+      {driverModalVisible && hasDriverIntegration && (
         <DriverModal
           visible={driverModalVisible}
           onAssociate={handleAssociateDriver}
+          isLoadingDrivers={isLoadingDrivers}
           onClose={() => setDriverModalVisible(false)}
           drivers={drivers}
         />

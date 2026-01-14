@@ -1,6 +1,12 @@
 import { AblyEvents } from "@/src/@types/ably-events";
 import KeyboardSpacer from "@/src/components/keyboard-spacer";
-import { GetChatMessages200DataItem } from "@/src/http/generated/api.schemas";
+import useDatabase from "@/src/hooks/use-database";
+import { useIsOnline } from "@/src/hooks/use-network";
+import {
+  GetChatMessages200DataItem,
+  GetChatMessages200DataItemMessageType,
+  GetChatMessages200DataItemStatus,
+} from "@/src/http/generated/api.schemas";
 import { useGetAuthenticatedUserAmbulance } from "@/src/http/generated/user/user";
 import { AudioRecordingPreview } from "@/src/pages/chat/audio-recording-preview";
 import ChatInput from "@/src/pages/chat/chat-input";
@@ -60,6 +66,9 @@ export default function Chat() {
   const { attachment, pickImage, pickVideo, pickDocument, removeAttachment } =
     useAttachmentPicker();
 
+  const isOnline = useIsOnline();
+  const { deleteMessage } = useDatabase();
+
   const {
     handleSendMessage,
     isPending,
@@ -69,10 +78,11 @@ export default function Chat() {
     scrollAreaRef,
     setPage,
     chatMessages,
+    scrollToBottom,
   } = useMessageHook({
     selectedChatId: user?.data.ambulance?.chats[0].id as string,
     user: user?.data,
-    online: true,
+    online: isOnline,
     messages,
     setMessages,
     incomingMessage,
@@ -82,6 +92,7 @@ export default function Chat() {
   const { handleSendFile, isLoading } = useFileHook({
     selectedChatId: user?.data.ambulance?.chats[0].id as string,
     user: user?.data,
+    online: isOnline,
     setMessage,
     setAttachment: removeAttachment,
   });
@@ -89,6 +100,7 @@ export default function Chat() {
   const audioRecorderHook = useAudioRecorderHook({
     selectedChatId: user?.data.ambulance?.chats[0].id as string,
     user: user?.data,
+    online: isOnline,
   });
   const {
     audioRecorder,
@@ -98,6 +110,58 @@ export default function Chat() {
     recordedUri,
     isLoading: isLoadingAudio,
   } = audioRecorderHook;
+
+  const onResend = async (message: GetChatMessages200DataItem) => {
+    try {
+      let response;
+
+      if (message.messageType === GetChatMessages200DataItemMessageType.TEXT) {
+        response = await handleSendMessage(message.content as string);
+      }
+
+      if (!response) {
+        console.warn("No response returned when resending message");
+        return;
+      }
+
+      // 2. Remove a mensagem offline no RxDB
+      deleteMessage(message.id);
+
+      // 3. Atualiza o estado local
+      setMessages((prev) => {
+        // remove a mensagem offline antiga
+        const withoutOld = prev.filter((m) => m.id !== message.id);
+
+        const merged = [response, ...withoutOld];
+        return merged.sort((a, b) => {
+          // 1️⃣ Ordena por createdAt (DESC)
+          const dateDiff =
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+          if (dateDiff !== 0) return dateDiff;
+
+          // 2️⃣ PENDING sempre por último
+          const isAPending =
+            a.status === GetChatMessages200DataItemStatus.PENDING;
+          const isBPending =
+            b.status === GetChatMessages200DataItemStatus.PENDING;
+
+          if (isAPending && !isBPending) return 1;
+          if (!isAPending && isBPending) return -1;
+
+          return 0;
+        });
+      });
+      scrollToBottom();
+    } catch (error) {
+      console.log("Failed to resend message:", error);
+    }
+  };
+
+  const onDelete = async (message: GetChatMessages200DataItem) => {
+    deleteMessage(message.id);
+    setMessages((prev) => prev.filter((m) => m.id !== message.id));
+  };
 
   // Função que será chamada quando os itens visíveis mudarem
   const onViewableItemsChanged = useRef(
@@ -141,6 +205,9 @@ export default function Chat() {
           <MessageBubble
             message={item}
             isCurrentUser={item.user?.id === user?.data.id}
+            onResend={onResend}
+            onDelete={onDelete}
+            online={isOnline}
           />
         )}
         keyExtractor={(item) => item.id}

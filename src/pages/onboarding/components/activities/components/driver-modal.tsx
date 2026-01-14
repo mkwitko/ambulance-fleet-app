@@ -8,14 +8,15 @@ import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Fuse from "fuse.js";
 import React, { useEffect, useMemo, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, View } from "react-native";
 
 interface DriverModalProps {
   visible: boolean;
   onAssociate: (driver: GetDriversIntegration200Item) => void;
   onRemove?: (driver: GetDriversIntegration200Item) => void;
   onClose: () => void;
-  drivers: GetDriversIntegration200Item[];
+  drivers: GetDriversIntegration200Item[] | undefined;
+  isLoadingDrivers: boolean;
   driverAssociated?: string | null;
 }
 
@@ -25,15 +26,17 @@ export const DriverModal: React.FC<DriverModalProps> = ({
   onRemove,
   onClose,
   drivers,
+  isLoadingDrivers,
   driverAssociated,
 }) => {
   const [search, setSearch] = useState("");
   const [selectedDriver, setSelectedDriver] =
     useState<GetDriversIntegration200Item | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (driverAssociated) {
-      const associated = drivers.find(
+      const associated = drivers?.find(
         (driver) => String(driver.IdSocorrista) === driverAssociated
       );
       setSelectedDriver(associated || null);
@@ -45,7 +48,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
    */
   const fuse = useMemo(
     () =>
-      new Fuse(drivers, {
+      new Fuse(drivers || [], {
         keys: ["NomeSocorrista"],
         threshold: 0.3,
         ignoreLocation: true,
@@ -61,21 +64,31 @@ export const DriverModal: React.FC<DriverModalProps> = ({
     return fuse.search(search).map((r) => r.item);
   }, [search, fuse, drivers]);
 
-  const handleAssociate = () => {
+  const handleAssociate = async () => {
     if (selectedDriver) {
-      onAssociate(selectedDriver);
-      setSelectedDriver(null);
-      setSearch("");
-      onClose();
+      setIsSubmitting(true);
+      try {
+        await onAssociate(selectedDriver);
+        setSelectedDriver(null);
+        setSearch("");
+        onClose();
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (selectedDriver) {
-      onRemove && onRemove(selectedDriver);
-      setSelectedDriver(null);
-      setSearch("");
-      onClose();
+      setIsSubmitting(true);
+      try {
+        onRemove && (await onRemove(selectedDriver));
+        setSelectedDriver(null);
+        setSearch("");
+        onClose();
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -107,15 +120,23 @@ export const DriverModal: React.FC<DriverModalProps> = ({
               title="Remover Motorista"
               variant="destructive"
               onPress={handleLogout}
+              disabled={isSubmitting}
+              loading={isSubmitting}
             />
           ) : (
             <Button
               title="Associar Motorista"
               onPress={handleAssociate}
-              disabled={!selectedDriver}
+              disabled={!selectedDriver || isSubmitting}
+              loading={isSubmitting}
             />
           )}
-          <Button variant="secondary" title="Cancelar" onPress={onClose} />
+          <Button
+            variant="secondary"
+            title="Cancelar"
+            onPress={onClose}
+            disabled={isSubmitting}
+          />
         </View>
       }
       stickyFooter
@@ -150,64 +171,78 @@ export const DriverModal: React.FC<DriverModalProps> = ({
               placeholder="Buscar por nome"
               className="flex-1"
               autoCapitalize="words"
+              editable={!isLoadingDrivers}
             />
           </View>
         </View>
 
-        <FlatList
-          data={filteredDrivers}
-          keyExtractor={(item) => String(item.IdSocorrista)}
-          contentContainerStyle={{ paddingBottom: 120 }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={true}
-          renderItem={({ item }) => {
-            const selected = selectedDriver?.IdSocorrista === item.IdSocorrista;
-            return (
-              <Pressable
-                onPress={() =>
-                  setSelectedDriver((prev) =>
-                    prev?.IdSocorrista === item.IdSocorrista ? null : item
-                  )
-                }
-                className={`flex-row items-center px-4 py-4 rounded-xl border mb-3 ${
-                  selected
-                    ? "border-primary-500 bg-primary-50"
-                    : "border-gray-200 bg-white"
-                }`}
-              >
-                <MaterialIcons
-                  name="person"
-                  size={22}
-                  color={
-                    selected ? COLORS.primary.DEFAULT : COLORS.mutedForeground
+        {isLoadingDrivers ? (
+          <View className="py-12 items-center justify-center">
+            <ActivityIndicator size="large" color={COLORS.primary.DEFAULT} />
+            <Typography tone="muted" className="mt-4">
+              Carregando motoristas...
+            </Typography>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredDrivers}
+            keyExtractor={(item) => String(item.IdSocorrista)}
+            contentContainerStyle={{ paddingBottom: 120 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={true}
+            renderItem={({ item }) => {
+              const selected =
+                selectedDriver?.IdSocorrista === item.IdSocorrista;
+              return (
+                <Pressable
+                  onPress={() =>
+                    setSelectedDriver((prev) =>
+                      prev?.IdSocorrista === item.IdSocorrista ? null : item
+                    )
                   }
-                />
-                <View className="ml-3 flex-1">
-                  <Typography weight="semibold">
-                    {item.NomeSocorrista}
-                  </Typography>
-                  {!!item.NomeBase && (
-                    <Typography variant="extraSmall" tone="muted">
-                      Base: {item.NomeBase}
-                    </Typography>
-                  )}
-                </View>
-                {selected && (
+                  disabled={isSubmitting}
+                  className={`flex-row items-center px-4 py-4 rounded-xl border mb-3 ${
+                    selected
+                      ? "border-primary-500 bg-primary-50"
+                      : "border-gray-200 bg-white"
+                  } ${isSubmitting ? "opacity-50" : ""}`}
+                >
                   <MaterialIcons
-                    name="check-circle"
-                    size={20}
-                    color={COLORS.primary.DEFAULT}
+                    name="person"
+                    size={22}
+                    color={
+                      selected ? COLORS.primary.DEFAULT : COLORS.mutedForeground
+                    }
                   />
-                )}
-              </Pressable>
-            );
-          }}
-          ListEmptyComponent={
-            <View className="py-8 items-center">
-              <Typography tone="muted">Nenhum motorista encontrado</Typography>
-            </View>
-          }
-        />
+                  <View className="ml-3 flex-1">
+                    <Typography weight="semibold">
+                      {item.NomeSocorrista}
+                    </Typography>
+                    {!!item.NomeBase && (
+                      <Typography variant="extraSmall" tone="muted">
+                        Base: {item.NomeBase}
+                      </Typography>
+                    )}
+                  </View>
+                  {selected && (
+                    <MaterialIcons
+                      name="check-circle"
+                      size={20}
+                      color={COLORS.primary.DEFAULT}
+                    />
+                  )}
+                </Pressable>
+              );
+            }}
+            ListEmptyComponent={
+              <View className="py-8 items-center">
+                <Typography tone="muted">
+                  Nenhum motorista encontrado
+                </Typography>
+              </View>
+            }
+          />
+        )}
         <KeyboardSpacer />
       </View>
     </ModalWrapper>

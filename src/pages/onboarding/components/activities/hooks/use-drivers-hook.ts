@@ -4,6 +4,7 @@ import {
   useAssociateDriver,
   useGetCurrentDriver,
   useGetDriversIntegration,
+  useHasDriversIntegration,
   useLogoutDriver,
 } from "@/src/http/generated/drivers/drivers";
 import {
@@ -22,6 +23,7 @@ export default function useDriversHook({
   const { data: user } = useGetAuthenticatedUserAmbulance();
   const { data: userPermissions } = useGetAuthenticatedUserPermissions();
   const [driverAssociated, setDriverAssociated] = useState<string>();
+  const { data: hasDriverIntegration } = useHasDriversIntegration();
 
   const { data: currentDriver, queryKey } = useGetCurrentDriver(
     {
@@ -31,6 +33,7 @@ export default function useDriversHook({
       query: {
         enabled:
           !!user?.data.ambulance?.id &&
+          hasDriverIntegration?.hasIntegration &&
           hasPermission(userPermissions?.data, Role["driver:associateDriver"]),
       },
     }
@@ -43,21 +46,22 @@ export default function useDriversHook({
   const { mutateAsync: associateDriver } = useAssociateDriver();
   const { mutateAsync: logoutDriver } = useLogoutDriver();
 
-  const hasDriverPermission = hasPermission(
-    userPermissions?.data,
-    Role["driver:associateDriver"]
-  );
+  const hasDriverPermission =
+    hasDriverIntegration?.hasIntegration ||
+    (false &&
+      hasPermission(userPermissions?.data, Role["driver:associateDriver"]));
 
-  const { data: drivers } = useGetDriversIntegration(
-    {
-      ambulanceId: user?.data.ambulance?.id as string,
-    },
-    {
-      query: {
-        enabled: !!user?.data.ambulance?.id && hasDriverPermission,
+  const { data: drivers, isLoading: isLoadingDrivers } =
+    useGetDriversIntegration(
+      {
+        ambulanceId: user?.data.ambulance?.id as string,
       },
-    }
-  );
+      {
+        query: {
+          enabled: !!user?.data.ambulance?.id && hasDriverPermission,
+        },
+      }
+    );
 
   const foundDriver = drivers?.find(
     (d) => String(d.IdSocorrista) === (driverAssociated as string)
@@ -108,7 +112,9 @@ export default function useDriversHook({
     handleAssociateDriver,
     handleLogoutDriver,
     drivers,
+    isLoadingDrivers,
     foundDriver,
     currentDriver,
+    hasDriverIntegration: hasDriverIntegration?.hasIntegration,
   };
 }

@@ -10,15 +10,15 @@ export default ({ config }) => ({
     scheme: "connectapprefactor",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
-    package: "com.connectapp.refactor",
+    package: "com.prosperapps.connect",
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.connectapp.refactor",
+      bundleIdentifier: "com.prosperapps.connect",
     },
     android: {
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
-      package: "com.connectapp.refactor",
+      package: "com.prosperapps.connect",
     },
     web: {
       output: "static",
@@ -29,8 +29,8 @@ export default ({ config }) => ({
       [
         "expo-background-connection-plugin",
         {
-          "notificationTitle": "Call Active",
-          "notificationBody": "Your connection is active"
+          "notificationTitle": "Connect",
+          "notificationBody": "Sua conexão está ativa",
         }
       ],
       [
@@ -62,6 +62,7 @@ export default ({ config }) => ({
           isAndroidForegroundServiceEnabled: true,
         },
       ],
+      ["expo-sqlite"],
       ["expo-camera"],
       ["expo-contacts"],
       ["expo-audio"],

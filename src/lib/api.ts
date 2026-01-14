@@ -65,11 +65,13 @@ AXIOS_INSTANCE.interceptors.response.use(
     return response;
   },
   async (error) => {
+    const apiError = error.response?.data;
+
     const config = error.config;
     const status = error.response?.status;
     const url = config?.url;
     const method = config?.method?.toUpperCase();
-    const errorMessage = error.response?.data?.message || error.message;
+    const errorMessage = error.response?.data?.details.message || error.message;
 
     console.error("[AXIOS ERROR]", {
       method,
@@ -87,10 +89,19 @@ AXIOS_INSTANCE.interceptors.response.use(
       }, 2000);
     }
 
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      return Promise.reject(error);
+    if (apiError?.details?.message) {
+      const err = new Error(apiError.details.message);
+      // @ts-ignore
+      err.code = apiError.code;
+      throw err;
     }
+
+    throw error;
+
+    // if (error.response?.data?.message) {
+    //   throw new Error(error.response.data.message);
+    // } else {
+    //   return Promise.reject(error);
+    // }
   }
 );

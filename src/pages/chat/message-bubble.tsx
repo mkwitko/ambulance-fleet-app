@@ -11,15 +11,22 @@ import MessageDocument from "./messages/message-document";
 import MessageImageText from "./messages/message-image";
 import MessageText from "./messages/message-text";
 import MessageVideo from "./messages/message-video";
+import ResendWrapper from "./resend-wrapper";
 
 interface MessageBubbleProps {
   message: GetChatMessages200DataItem;
   isCurrentUser: boolean;
+  onResend: (msg: GetChatMessages200DataItem) => void;
+  onDelete: (msg: GetChatMessages200DataItem) => void;
+  online: boolean;
 }
 
 const MessageBubbleComponent: React.FC<MessageBubbleProps> = ({
   message,
   isCurrentUser,
+  onResend,
+  onDelete,
+  online,
 }) => {
   // Memoriza o texto do avatar
   const avatarText = useMemo(() => {
@@ -64,46 +71,55 @@ const MessageBubbleComponent: React.FC<MessageBubbleProps> = ({
           </TouchableOpacity>
         )}
 
-        {/* Message Content */}
-        {message.messageType === GetChatMessages200DataItemMessageType.TEXT && (
-          <MessageText
-            isCurrentUser={isCurrentUser}
-            message={message}
-            messageTime={messageTime}
-          />
-        )}
-        {message.messageType ===
-          GetChatMessages200DataItemMessageType.IMAGE && (
-          <MessageImageText
-            isCurrentUser={isCurrentUser}
-            message={message}
-            messageTime={messageTime}
-          />
-        )}
-        {message.messageType ===
-          GetChatMessages200DataItemMessageType.AUDIO && (
-          <MessageAudio
-            isCurrentUser={isCurrentUser}
-            message={message}
-            messageTime={messageTime}
-          />
-        )}
-        {message.messageType ===
-          GetChatMessages200DataItemMessageType.VIDEO && (
-          <MessageVideo
-            isCurrentUser={isCurrentUser}
-            message={message}
-            messageTime={messageTime}
-          />
-        )}
-        {message.messageType ===
-          GetChatMessages200DataItemMessageType.DOCUMENT && (
-          <MessageDocument
-            isCurrentUser={isCurrentUser}
-            message={message}
-            messageTime={messageTime}
-          />
-        )}
+        <ResendWrapper
+          isCurrentUser={isCurrentUser}
+          message={message}
+          onResend={onResend}
+          onDelete={onDelete}
+          online={online}
+        >
+          {/* Message Content */}
+          {message.messageType ===
+            GetChatMessages200DataItemMessageType.TEXT && (
+            <MessageText
+              isCurrentUser={isCurrentUser}
+              message={message}
+              messageTime={messageTime}
+            />
+          )}
+          {message.messageType ===
+            GetChatMessages200DataItemMessageType.IMAGE && (
+            <MessageImageText
+              isCurrentUser={isCurrentUser}
+              message={message}
+              messageTime={messageTime}
+            />
+          )}
+          {message.messageType ===
+            GetChatMessages200DataItemMessageType.AUDIO && (
+            <MessageAudio
+              isCurrentUser={isCurrentUser}
+              message={message}
+              messageTime={messageTime}
+            />
+          )}
+          {message.messageType ===
+            GetChatMessages200DataItemMessageType.VIDEO && (
+            <MessageVideo
+              isCurrentUser={isCurrentUser}
+              message={message}
+              messageTime={messageTime}
+            />
+          )}
+          {message.messageType ===
+            GetChatMessages200DataItemMessageType.DOCUMENT && (
+            <MessageDocument
+              isCurrentUser={isCurrentUser}
+              message={message}
+              messageTime={messageTime}
+            />
+          )}
+        </ResendWrapper>
       </View>
     </View>
   );

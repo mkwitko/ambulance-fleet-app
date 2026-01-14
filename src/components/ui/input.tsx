@@ -24,11 +24,12 @@ interface InputProps extends TextInputProps {
 }
 
 export const Input = React.forwardRef<TextInput, InputProps>(
-  ({ variant, className, ...props }, ref) => (
+  ({ variant, className, autoCapitalize = "none", ...props }, ref) => (
     <TextInput
       ref={ref}
       className={cn(input({ variant, className }))}
       placeholderTextColor="#94a3b8"
+      autoCapitalize={autoCapitalize}
       {...props}
     />
   )

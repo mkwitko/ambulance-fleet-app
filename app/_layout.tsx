@@ -12,6 +12,7 @@ import "@/src/styles/global.css";
 
 import "react-native-gesture-handler";
 import "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 // Inicializações globais
 preventAutoHideSplash();
@@ -48,6 +49,7 @@ export default function RootLayout() {
         <Providers>
           <Slot />
         </Providers>
+        <Toast />
       </Animated.View>
     </GestureHandlerRootView>
   );

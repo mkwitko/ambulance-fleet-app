@@ -14,9 +14,7 @@ export default function MessageText({
   messageTime: string;
 }) {
   return (
-    <View
-      className={`max-w-[70%] ${isCurrentUser ? "items-end" : "items-start"}`}
-    >
+    <View className={`${isCurrentUser ? "items-end" : "items-start"}`}>
       <View
         className={`rounded-xl px-4 py-3 ${
           isCurrentUser

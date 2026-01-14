@@ -10,6 +10,7 @@ import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { useState } from "react";
+import Toast from "react-native-toast-message";
 import { Attachment } from "./use-attachments-hook";
 
 export default function useFileHook({
@@ -17,11 +18,13 @@ export default function useFileHook({
   user,
   setMessage,
   setAttachment,
+  online,
 }: {
   selectedChatId: string;
   user: GetAuthenticatedUserAmbulance200Data | undefined;
   setMessage: (value: string) => void;
   setAttachment: (attachment: Attachment | null) => void;
+  online: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,6 +38,14 @@ export default function useFileHook({
     attachment: Attachment | null
   ) => {
     if (!attachment) return;
+    if (!online) {
+      Toast.show({
+        type: "info",
+        text1: "Você está offline",
+        text2: "Tente enviar novamente quando estiver online.",
+      });
+      return;
+    }
     try {
       setIsLoading(true);
 

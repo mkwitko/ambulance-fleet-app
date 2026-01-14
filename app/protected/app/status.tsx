@@ -83,10 +83,11 @@ export default function Status() {
     handleSetDriver,
     handleUnsetDriver,
     drivers,
+    isLoadingDrivers,
     handleAssociateDriver,
     handleLogoutDriver,
     foundDriver,
-    currentDriver,
+    hasDriverIntegration,
   } = useDriversHook({
     setDriverModalVisible,
   });
@@ -285,13 +286,14 @@ export default function Status() {
         />
       )}
 
-      {driverModalVisible && drivers && (
+      {driverModalVisible && hasDriverIntegration && (
         <DriverModal
           visible={driverModalVisible}
           onAssociate={handleSetDriver}
           onRemove={handleUnsetDriver}
           onClose={() => setDriverModalVisible(false)}
           drivers={drivers}
+          isLoadingDrivers={isLoadingDrivers}
           driverAssociated={driverAssociated}
         />
       )}

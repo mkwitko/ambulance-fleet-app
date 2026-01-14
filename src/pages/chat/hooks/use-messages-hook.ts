@@ -1,7 +1,9 @@
+import useDatabase from "@/src/hooks/use-database";
 import {
   GetAuthenticatedUserAmbulance200Data,
   GetChatMessages200DataItem,
   GetChatMessages200DataItemPlatform,
+  GetChatMessages200DataItemStatus,
   SendMessageBodyMessageType,
   SendMessageBodyPlatform,
 } from "@/src/http/generated/api.schemas";
@@ -12,8 +14,10 @@ import {
 } from "@/src/http/generated/chat/chat";
 import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import { InboundMessage } from "ably";
+import * as Crypto from "expo-crypto";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function useMessageHook({
   selectedChatId,
@@ -57,6 +61,21 @@ export default function useMessageHook({
     }
   );
 
+  const {
+    insertMessage,
+    convertDatabaseToReturnObject,
+    loadMessagesByChat,
+    ready,
+  } = useDatabase();
+
+  const handleLoadOfflineMessagesByChat = async () => {
+    if (!selectedChatId) return;
+
+    const offlineMessages = await loadMessagesByChat(selectedChatId);
+
+    return (offlineMessages as GetChatMessages200DataItem[]) || [];
+  };
+
   const prevScrollHeightRef = useRef<number>(0);
   const scrollAreaRef = useRef<FlatList>(null);
   const messagesEndRef = useRef<View>(null);
@@ -65,16 +84,16 @@ export default function useMessageHook({
   const { mutateAsync: sendMessage, isPending } = useSendMessage();
 
   useEffect(() => {
-    if (user?.ambulance?.chats[0]?.id !== messages[0]?.chatId) {
+    if (selectedChatId !== messages[0]?.chatId) {
       setMessages([]);
       setPage(1);
       return;
     }
-  }, [user?.ambulance?.chats[0]?.id]);
+  }, [selectedChatId]);
 
   // ▶️ Carregar mensagens e fazer merge
   useEffect(() => {
-    if (!chatMessages) return;
+    if (!chatMessages || !ready) return;
 
     const newMessages = [...chatMessages.data].sort(
       (a, b) =>
@@ -83,7 +102,17 @@ export default function useMessageHook({
 
     // primeira página → substitui
     if (page === 1) {
-      setMessages(newMessages); // já invertidas
+      handleLoadOfflineMessagesByChat().then((offlineMessages) => {
+        const messages = [
+          ...(offlineMessages as GetChatMessages200DataItem[]),
+          ...newMessages,
+        ].sort((a, b) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
+        setMessages(messages); // já invertidas
+      });
 
       // Marca todas como lidas ao carregar a primeira página
       readChat({
@@ -97,16 +126,24 @@ export default function useMessageHook({
     }
 
     // páginas seguintes → append (pois o FlatList tá invertido!)
-    setMessages((prev) => {
-      const merged = [...prev, ...newMessages];
+    handleLoadOfflineMessagesByChat().then((offlineMessages) => {
+      setMessages((prev) => {
+        const merged = [
+          ...(offlineMessages as GetChatMessages200DataItem[]),
+          ...prev,
+          ...newMessages,
+        ].sort((a, b) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
 
-      const map = new Map(merged.map((m) => [m.id, m]));
-      return Array.from(map.values()).sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+        const map = new Map(merged.map((m) => [m.id, m]));
+
+        return Array.from(map.values());
+      });
     });
-  }, [chatMessages]);
+  }, [chatMessages, ready]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -138,26 +175,36 @@ export default function useMessageHook({
 
     setMessage("");
 
-    // const offlineId = crypto.randomUUID();
+    if (!online) {
+      const offlineId = Crypto.randomUUID();
+      const offlineMessage = {
+        id: offlineId as string,
+        selectedChatId: user?.ambulance?.chats[0].id as string,
+        content: message,
+        userId: user?.id as string,
+        userName: userInfo?.data.name as string,
+        userAvatarUrl: userInfo?.data.avatarUrl || null,
+        messageType: SendMessageBodyMessageType.TEXT,
+        retries: 0,
+        status: GetChatMessages200DataItemStatus.PENDING,
+        createdAt: new Date().toISOString(),
+      };
+      insertMessage(offlineMessage);
+      Toast.show({
+        type: "info",
+        text1: "Você está offline",
+        text2: "Sua mensagem foi adicionada localmente.",
+      });
+      setMessages((prev) => {
+        return [
+          convertDatabaseToReturnObject(offlineMessage as any) as any,
+          ...prev,
+        ];
+      });
 
-    // if (!online) {
-    //   const offlineMessage: GetChatMessages200DataItem = {
-    //     id: offlineId,
-    //     chatId: selectedChat?.id as string,
-    //     user: {
-    //       id: user?.id as string,
-    //       name: user?.name as string,
-    //       avatarUrl: user?.avatarUrl || null,
-    //     },
-    //     file: "",
-    //     messageType: SendMessageBodyMessageType.TEXT,
-    //     createdAt: new Date().toISOString(),
-    //     content: message,
-    //     status: "PENDING",
-    //   };
-    //   await connectDatabase.messages.insert(offlineMessage);
-    //   return;
-    // }
+      scrollToBottom();
+      return;
+    }
 
     return await sendMessage({
       id: selectedChatId,

@@ -19,6 +19,7 @@ import {
 } from "expo-audio";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 
 export interface UseAudioRecorderHookReturn {
   audioRecorder: AudioRecorder;
@@ -34,9 +35,11 @@ export interface UseAudioRecorderHookReturn {
 export function useAudioRecorderHook({
   selectedChatId,
   user,
+  online,
 }: {
   selectedChatId: string;
   user: GetAuthenticatedUserAmbulance200Data | undefined;
+  online: boolean;
 }): UseAudioRecorderHookReturn {
   const { data: userInfo } = useGetAuthenticatedUser();
   const audioRecorder = useAudioRecorder(
@@ -69,28 +72,15 @@ export function useAudioRecorderHook({
 
   const handleSendAudioMessage = async (audioRecorder: AudioRecorder) => {
     if (!audioRecorder.uri) return;
+    if (!online) {
+      Toast.show({
+        type: "info",
+        text1: "Você está offline",
+        text2: "Tente enviar novamente quando estiver online.",
+      });
+      return;
+    }
     setIsLoading(true);
-    // const offlineId = crypto.randomUUID();
-
-    // if (!online) {
-    //   const offlineMessage = {
-    //     id: offlineId,
-    //     chatId: selectedChat?.id as string,
-    //     user: {
-    //       id: user?.id as string,
-    //       name: user?.name as string,
-    //       avatarUrl: user?.avatarUrl || null,
-    //     },
-    //     file: "",
-    //     fileToUpload: audioBlob,
-    //     messageType: SendMessageBodyMessageType.TEXT,
-    //     createdAt: new Date().toISOString(),
-    //     content: "",
-    //     status: "PENDING",
-    //   };
-    //   await connectDatabase.messages.insert(offlineMessage);
-    //   return;
-    // }
 
     const type = "audio/m4a";
 
