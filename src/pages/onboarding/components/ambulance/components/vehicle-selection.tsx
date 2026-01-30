@@ -1,6 +1,5 @@
 import { ManualSelectionModal } from "@/src/components/vehicle-selection/manual-selection-modal";
 import ManualSelectionPage from "@/src/components/vehicle-selection/manual-selection-page";
-import ScannedCode from "@/src/components/vehicle-selection/scanned-code";
 import { VehicleScanner } from "@/src/components/vehicle-selection/vehicle-scanner";
 import {
   GetAmbulances200,
@@ -8,6 +7,7 @@ import {
 } from "@/src/http/generated/api.schemas";
 import React, { useState } from "react";
 import { Animated, Modal, TouchableOpacity } from "react-native";
+import Toast from "react-native-toast-message";
 
 type SelectionMode = "qr" | "manual";
 
@@ -55,8 +55,17 @@ export const VehicleSelectionModal: React.FC<VehicleSelectionModalProps> = ({
   // ao escanear QR
   const handleBarcodeScanned = async (data: { data: string }) => {
     setScannedCode(data.data);
-    const ambulance = ambulances?.data.find((item) => item.id === data.data);
+    const ambulance = ambulances?.data.find(
+      (item) => item.ambulanceCode === data.data,
+    );
     if (!ambulance) {
+      onClose();
+      Toast.show({
+        type: "error",
+        text1: "Veículo não encontrado",
+        text2: "O código escaneado não corresponde a nenhum veículo.",
+      });
+      setScannedCode(null);
       return;
     }
     onSave(ambulance);
@@ -87,12 +96,6 @@ export const VehicleSelectionModal: React.FC<VehicleSelectionModalProps> = ({
   };
 
   const renderQRCodePage = () => {
-    if (scannedCode) {
-      return (
-        <ScannedCode scannedCode={scannedCode} handleReset={handleReset} />
-      );
-    }
-
     return (
       <VehicleScanner
         onBarcodeScanned={handleBarcodeScanned}

@@ -46,7 +46,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
       if (!latestShift.shiftStart || !latestShift.shiftEnd) return;
       handleSaveShift(
         new Date(latestShift.shiftStart),
-        new Date(latestShift.shiftEnd)
+        new Date(latestShift.shiftEnd),
       );
     }
   }, [ambulance]);
@@ -77,10 +77,12 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
     driverAssociated,
     foundDriver,
     hasDriverPermission,
+    handleSetDriver,
+    handleUnsetDriver,
     handleAssociateDriver,
     drivers,
     hasDriverIntegration,
-    isLoadingDrivers,
+    isLoading,
   } = useDriversHook({
     setDriverModalVisible,
   });
@@ -100,7 +102,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
   });
 
   const { isFinishingOnboarding, handleFinishOnboarding } =
-    useFinishOnboardHook();
+    useFinishOnboardHook({ handleAssociateDriver });
 
   useEffect(() => {
     checkContact();
@@ -213,7 +215,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
             onPress={() => setContactModalVisible(true)}
           />
 
-          {hasDriverPermission && drivers && (
+          {hasDriverPermission && (
             <ActivityCard
               icon="badge"
               title="Associar Motorista"
@@ -223,6 +225,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
                   : "Vincule seu perfil de motorista"
               }
               configured={!!foundDriver}
+              disabled={!hasDriverIntegration || !drivers || !drivers.length}
               onPress={() => setDriverModalVisible(true)}
             />
           )}
@@ -259,7 +262,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
             }
             onPress={handleFinishOnboarding}
             disabled={activeCount < totalCount}
-            loading={isFinishingOnboarding}
+            loading={isFinishingOnboarding || isLoading}
           />
           {onBack && (
             <Button
@@ -303,10 +306,12 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
       {driverModalVisible && hasDriverIntegration && (
         <DriverModal
           visible={driverModalVisible}
-          onAssociate={handleAssociateDriver}
-          isLoadingDrivers={isLoadingDrivers}
+          onAssociate={handleSetDriver}
+          onRemove={handleUnsetDriver}
           onClose={() => setDriverModalVisible(false)}
           drivers={drivers}
+          isLoadingDrivers={isLoading}
+          driverAssociated={driverAssociated}
         />
       )}
     </View>

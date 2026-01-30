@@ -8,7 +8,11 @@ import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import { useOnboarding } from "@/src/providers/onboarding-context";
 import { useRouter } from "expo-router";
 
-export default function useFinishOnboardHook() {
+export default function useFinishOnboardHook({
+  handleAssociateDriver,
+}: {
+  handleAssociateDriver: () => Promise<void>;
+}) {
   const { data: user } = useGetAuthenticatedUser();
   const { mutateAsync: associateUser, isPending: isAssociating } =
     useAssociateUserToAmbulance();
@@ -45,6 +49,7 @@ export default function useFinishOnboardHook() {
           shiftEnd: shiftConfig.exitTime.toISOString(),
         },
       }),
+      handleAssociateDriver(),
     ]);
     router.replace("/protected/app/chat");
   };

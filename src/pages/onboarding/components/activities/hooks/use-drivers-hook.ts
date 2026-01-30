@@ -23,7 +23,8 @@ export default function useDriversHook({
   const { data: user } = useGetAuthenticatedUserAmbulance();
   const { data: userPermissions } = useGetAuthenticatedUserPermissions();
   const [driverAssociated, setDriverAssociated] = useState<string>();
-  const { data: hasDriverIntegration } = useHasDriversIntegration();
+  const { data: hasDriverIntegration, isLoading: isLoadingDriverIntegration } =
+    useHasDriversIntegration();
 
   const { data: currentDriver, queryKey } = useGetCurrentDriver(
     {
@@ -36,11 +37,11 @@ export default function useDriversHook({
           hasDriverIntegration?.hasIntegration &&
           hasPermission(userPermissions?.data, Role["driver:associateDriver"]),
       },
-    }
+    },
   );
 
   useEffect(() => {
-    if (currentDriver) setDriverAssociated(String(currentDriver.driverId));
+    if (currentDriver) setDriverAssociated(String(currentDriver.logFrotaId));
   }, [currentDriver]);
 
   const { mutateAsync: associateDriver } = useAssociateDriver();
@@ -60,11 +61,13 @@ export default function useDriversHook({
         query: {
           enabled: !!user?.data.ambulance?.id && hasDriverPermission,
         },
-      }
+      },
     );
 
+  const isLoading = isLoadingDrivers || isLoadingDriverIntegration;
+
   const foundDriver = drivers?.find(
-    (d) => String(d.IdSocorrista) === (driverAssociated as string)
+    (d) => String(d.IdSocorrista) === (driverAssociated as string),
   );
 
   const handleSetDriver = (driver: GetDriversIntegration200Item) => {
@@ -78,9 +81,10 @@ export default function useDriversHook({
   };
 
   const handleAssociateDriver = async () => {
+    if (!driverAssociated) return;
     await associateDriver({
       data: {
-        driverId: driverAssociated as string,
+        logFrotaId: driverAssociated as string,
         ambulanceId: user?.data.ambulance?.id as string,
       },
     });
@@ -116,5 +120,6 @@ export default function useDriversHook({
     foundDriver,
     currentDriver,
     hasDriverIntegration: hasDriverIntegration?.hasIntegration,
+    isLoading,
   };
 }

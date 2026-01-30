@@ -2,7 +2,7 @@
 export default ({ config }) => ({
   ...config,
   expo: {
-    name: "Connect",
+    name: "Connect Message",
     slug: "connect-app-refactor",
     version: process.env.EXPO_PUBLIC_APP_VERSION || "1.0.0",
     orientation: "portrait",

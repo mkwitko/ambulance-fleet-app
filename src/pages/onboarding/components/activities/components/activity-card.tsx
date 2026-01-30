@@ -17,6 +17,7 @@ interface ActivityCardProps {
   onPress: () => void;
   animatedValue?: Animated.Value;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 export const ActivityCard: React.FC<ActivityCardProps> = ({
@@ -27,6 +28,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   onPress,
   animatedValue,
   isLoading = false,
+  disabled = false,
 }) => {
   const cardTransform = animatedValue
     ? {
@@ -53,8 +55,8 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={onPress}
-        disabled={isLoading}
-        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+        disabled={isLoading || disabled}
+        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 disabled:opacity-50"
       >
         <View className="flex-row items-start gap-4">
           {/* ÍCONE COM EFEITO GLASSMORPHISM */}
