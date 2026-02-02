@@ -1,8 +1,9 @@
-import * as Contacts from "expo-contacts";
 import { useState } from "react";
 import { UseActivitiesAnimationHookReturn } from "./use-activities-animation-hook";
 
-export const CONTATO_CONNECT = "Central Connect";
+import * as SecureStore from "expo-secure-store";
+
+export const CONTATO_CONNECT = "CONTATO";
 
 export default function useContactHook({
   animationState,
@@ -13,20 +14,13 @@ export default function useContactHook({
 }) {
   const { cardAnims, animateEntrance } = animationState || {};
 
-  const [contact, setContact] = useState<
-    Contacts.ExistingContact | undefined
-  >();
+  const [contact, setContact] = useState<string>();
 
   const checkContact = async (): Promise<void> => {
     try {
-      const { status } = await Contacts.getPermissionsAsync();
-      if (status === "granted") {
-        const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
-        });
-
-        const exists = data.find((c) => c.name === CONTATO_CONNECT);
-        setContact(exists);
+      const contact = await SecureStore.getItemAsync(CONTATO_CONNECT);
+      if (contact) {
+        setContact(contact);
       }
     } catch (error) {
       console.error("Erro ao verificar contato:", error);
@@ -37,34 +31,8 @@ export default function useContactHook({
     try {
       const formattedPhone = `+55${ddd}${phone}`;
 
-      // --- SE EXISTE → ATUALIZA ---
-      if (contact) {
-        const updated: Contacts.ExistingContact = {
-          ...contact,
-          [Contacts.Fields.FirstName]: CONTATO_CONNECT,
-          [Contacts.Fields.PhoneNumbers]: [
-            { label: "mobile", number: formattedPhone },
-          ],
-          name: CONTATO_CONNECT,
-        };
-
-        await Contacts.updateContactAsync(updated);
-        setContact(updated);
-      }
-      // --- SE NÃO EXISTE → CRIA ---
-      else {
-        const newContact: Contacts.Contact = {
-          [Contacts.Fields.FirstName]: CONTATO_CONNECT,
-          [Contacts.Fields.PhoneNumbers]: [
-            { label: "mobile", number: formattedPhone },
-          ],
-          contactType: "person",
-          name: CONTATO_CONNECT,
-        };
-
-        const id = await Contacts.addContactAsync(newContact);
-        setContact({ ...newContact, id } as Contacts.ExistingContact);
-      }
+      setContact(formattedPhone);
+      await SecureStore.setItemAsync(CONTATO_CONNECT, formattedPhone);
 
       // Modal + animação
       setContactModalVisible(false);

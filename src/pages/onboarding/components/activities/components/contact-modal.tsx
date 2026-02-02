@@ -1,9 +1,9 @@
+import KeyboardSpacer from "@/src/components/keyboard-spacer";
 import { ModalWrapper } from "@/src/components/modal-wrapper";
 import { Button } from "@/src/components/ui/button";
 import { Typography } from "@/src/components/ui/typography";
 import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as Contacts from "expo-contacts";
 import React, { useEffect, useState } from "react";
 import { TextInput, View } from "react-native";
 
@@ -11,7 +11,7 @@ interface ContactModalProps {
   visible: boolean;
   onSave: (ddd: string, phone: string) => void;
   onClose: () => void;
-  contact: Contacts.ExistingContact | undefined;
+  contact: string | undefined;
 }
 
 export const ContactModal: React.FC<ContactModalProps> = ({
@@ -33,7 +33,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
 
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(
-      7
+      7,
     )}`;
   };
 
@@ -71,7 +71,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   useEffect(() => {
     if (!contact) return;
 
-    let raw = contact.phoneNumbers?.[0]?.number || "";
+    let raw = contact || "";
     raw = raw.replace(/^\+55/, "");
     raw = raw.replace(/[\s()-]/g, "");
 
@@ -230,6 +230,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           </View>
         )}
       </View>
+
+      <KeyboardSpacer />
     </ModalWrapper>
   );
 };

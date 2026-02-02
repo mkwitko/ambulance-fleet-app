@@ -3,6 +3,7 @@ import { COLORS } from "@/src/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { Animated, Modal, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface AttachmentModalProps {
   visible: boolean;
@@ -55,71 +56,76 @@ export const AttachmentModal: React.FC<AttachmentModalProps> = ({
 
   return (
     <Modal visible={visible} transparent animationType="none">
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={onClose}
-          className="absolute inset-0 bg-black/60"
-        />
+      <SafeAreaView className="flex-1">
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={onClose}
+            className="absolute inset-0 bg-black/60"
+          />
 
-        <Animated.View
-          style={{ transform: [{ translateY }] }}
-          className="bg-white rounded-t-[32px] overflow-hidden p-6 absolute bottom-0 w-full"
-        >
-          <Typography variant="title" weight="bold" align="center">
-            Anexar Arquivo
-          </Typography>
-          <Typography
-            variant="body"
-            tone="muted"
-            align="center"
-            className="mb-4"
+          <Animated.View
+            style={{ transform: [{ translateY }] }}
+            className="bg-white rounded-t-[32px] overflow-hidden p-6 absolute bottom-0 w-full"
           >
-            Escolha o tipo de arquivo para enviar
-          </Typography>
+            <Typography variant="title" weight="bold" align="center">
+              Anexar Arquivo
+            </Typography>
+            <Typography
+              variant="body"
+              tone="muted"
+              align="center"
+              className="mb-4"
+            >
+              Escolha o tipo de arquivo para enviar
+            </Typography>
 
-          <View className="flex-row justify-around gap-4">
-            <TouchableOpacity onPress={onPickImage} className="items-center">
-              <View className="p-4 rounded-full bg-gray-100">
-                <MaterialIcons
-                  name="image"
-                  size={28}
-                  color={COLORS.mutedForeground}
-                />
-              </View>
-              <Typography variant="caption" weight="semibold">
-                Imagem
-              </Typography>
-            </TouchableOpacity>
+            <View className="flex-row justify-around gap-4">
+              <TouchableOpacity onPress={onPickImage} className="items-center">
+                <View className="p-4 rounded-full bg-gray-100">
+                  <MaterialIcons
+                    name="image"
+                    size={28}
+                    color={COLORS.mutedForeground}
+                  />
+                </View>
+                <Typography variant="caption" weight="semibold">
+                  Imagem
+                </Typography>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={onPickVideo} className="items-center">
-              <View className="p-4 rounded-full bg-gray-100">
-                <MaterialIcons
-                  name="videocam"
-                  size={28}
-                  color={COLORS.mutedForeground}
-                />
-              </View>
-              <Typography variant="caption" weight="semibold">
-                Vídeo
-              </Typography>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={onPickVideo} className="items-center">
+                <View className="p-4 rounded-full bg-gray-100">
+                  <MaterialIcons
+                    name="videocam"
+                    size={28}
+                    color={COLORS.mutedForeground}
+                  />
+                </View>
+                <Typography variant="caption" weight="semibold">
+                  Vídeo
+                </Typography>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={onPickDocument} className="items-center">
-              <View className="p-4 rounded-full bg-gray-100">
-                <MaterialIcons
-                  name="description"
-                  size={28}
-                  color={COLORS.mutedForeground}
-                />
-              </View>
-              <Typography variant="caption" weight="semibold">
-                Documento
-              </Typography>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                onPress={onPickDocument}
+                className="items-center"
+              >
+                <View className="p-4 rounded-full bg-gray-100">
+                  <MaterialIcons
+                    name="description"
+                    size={28}
+                    color={COLORS.mutedForeground}
+                  />
+                </View>
+                <Typography variant="caption" weight="semibold">
+                  Documento
+                </Typography>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
+      </SafeAreaView>
     </Modal>
   );
 };

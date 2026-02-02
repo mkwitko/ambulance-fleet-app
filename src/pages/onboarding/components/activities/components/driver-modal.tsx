@@ -37,7 +37,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
   useEffect(() => {
     if (driverAssociated) {
       const associated = drivers?.find(
-        (driver) => String(driver.IdSocorrista) === driverAssociated
+        (driver) => String(driver.IdSocorrista) === driverAssociated,
       );
       setSelectedDriver(associated || null);
     }
@@ -53,7 +53,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
         threshold: 0.3,
         ignoreLocation: true,
       }),
-    [drivers]
+    [drivers],
   );
 
   /**
@@ -197,7 +197,7 @@ export const DriverModal: React.FC<DriverModalProps> = ({
                 <Pressable
                   onPress={() =>
                     setSelectedDriver((prev) =>
-                      prev?.IdSocorrista === item.IdSocorrista ? null : item
+                      prev?.IdSocorrista === item.IdSocorrista ? null : item,
                     )
                   }
                   disabled={isSubmitting}

@@ -30,10 +30,10 @@ import { FlatList, View, ViewToken } from "react-native";
 export default function Chat() {
   const [messages, setMessages] = useState<GetChatMessages200DataItem[]>([]);
   const [currentDateOnScreen, setCurrentDateOnScreen] = useState<string | null>(
-    null
+    null,
   );
   const [incomingMessage, setIncomingMessage] = useState<InboundMessage | null>(
-    null
+    null,
   );
 
   const { data: user } = useGetAuthenticatedUserAmbulance();
@@ -175,11 +175,11 @@ export default function Chat() {
       if (lastVisibleMessage?.createdAt) {
         // Formate a data como quiser, aqui só convertendo para string simples
         const dateString = new Date(
-          lastVisibleMessage.createdAt
+          lastVisibleMessage.createdAt,
         ).toLocaleDateString();
         setCurrentDateOnScreen(dateString);
       }
-    }
+    },
   ).current;
 
   const viewabilityConfig = useRef({

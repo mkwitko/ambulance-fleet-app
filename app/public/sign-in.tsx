@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import {
   Animated,
@@ -68,11 +68,6 @@ export default function SignIn() {
   };
 
   // --------------------------------------
-  // 🔥 CONTROLE DO TECLADO
-  // --------------------------------------
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-
-  // --------------------------------------
   // 🔥 ANIMAÇÕES DA LOGO
   // --------------------------------------
   const translateY = useRef(new Animated.Value(0)).current;
@@ -85,8 +80,6 @@ export default function SignIn() {
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
 
     const subShow = Keyboard.addListener(showEvent, () => {
-      setKeyboardVisible(true);
-
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: -60,
@@ -102,8 +95,6 @@ export default function SignIn() {
     });
 
     const subHide = Keyboard.addListener(hideEvent, () => {
-      setKeyboardVisible(false);
-
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: 0,
@@ -126,24 +117,17 @@ export default function SignIn() {
 
   return (
     <View className="flex-1 justify-center items-center px-4">
-      {/* 🔥 LOGO (some quando teclado abre) */}
-      {!keyboardVisible && (
-        <Animated.View
-          style={{
-            position: "absolute",
-            top: 160,
-            width: "100%",
-            alignItems: "center",
-            transform: [{ translateY }, { scale }],
-          }}
-        >
-          <Image
-            source={require("@/assets/images/splash-icon.png")}
-            style={{ width: 240, height: 120 }}
-            resizeMode="contain"
-          />
-        </Animated.View>
-      )}
+      <Animated.View
+        style={{
+          transform: [{ translateY }, { scale }],
+        }}
+      >
+        <Image
+          source={require("@/assets/images/splash-icon.png")}
+          style={{ width: 220, height: 110 }}
+          resizeMode="contain"
+        />
+      </Animated.View>
 
       {/* 🔥 CARD DO FORM */}
       <View className="w-full bg-white p-6 gap-4 rounded-xl border border-input mt-10">

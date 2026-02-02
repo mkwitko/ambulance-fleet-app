@@ -64,7 +64,6 @@ export default ({ config }) => ({
       ],
       ["expo-sqlite"],
       ["expo-camera"],
-      ["expo-contacts"],
       ["expo-audio"],
       ["expo-video"],
       ["expo-image-picker"],

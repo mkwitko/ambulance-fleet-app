@@ -3,7 +3,6 @@ import {
   requestRecordingPermissionsAsync,
 } from "expo-audio";
 import { Camera } from "expo-camera";
-import * as Contacts from "expo-contacts";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ interface PermissionsState {
   location: PermissionStatus;
   locationBackground: PermissionStatus;
   camera: PermissionStatus;
-  contacts: PermissionStatus;
   notifications: PermissionStatus;
   microphone: PermissionStatus;
 }
@@ -40,7 +38,6 @@ export default function usePermissionsHook({
     location: { granted: false, canAskAgain: true },
     locationBackground: { granted: false, canAskAgain: true },
     camera: { granted: false, canAskAgain: true },
-    contacts: { granted: false, canAskAgain: true },
     notifications: { granted: false, canAskAgain: true },
     microphone: { granted: false, canAskAgain: true },
   });
@@ -83,7 +80,7 @@ export default function usePermissionsHook({
   };
 
   const activeCount = Object.values(permissions).filter(
-    (p) => p.granted
+    (p) => p.granted,
   ).length;
 
   const totalCount = Object.keys(permissionDetails).length; // agora 5
@@ -102,7 +99,6 @@ export default function usePermissionsHook({
     const locationForeground = await Location.getForegroundPermissionsAsync();
     const locationBackground = await Location.getBackgroundPermissionsAsync();
     const camera = await Camera.getCameraPermissionsAsync();
-    const contacts = await Contacts.getPermissionsAsync();
     const notifications = await Notifications.getPermissionsAsync();
     const microphone = await getRecordingPermissionsAsync();
 
@@ -118,10 +114,6 @@ export default function usePermissionsHook({
       camera: {
         granted: camera.granted,
         canAskAgain: camera.canAskAgain,
-      },
-      contacts: {
-        granted: contacts.granted,
-        canAskAgain: contacts.canAskAgain,
       },
       notifications: {
         granted: notifications.granted,
@@ -154,10 +146,6 @@ export default function usePermissionsHook({
 
       case "camera":
         result = await Camera.requestCameraPermissionsAsync();
-        break;
-
-      case "contacts":
-        result = await Contacts.requestPermissionsAsync();
         break;
 
       case "notifications":
@@ -194,7 +182,7 @@ export default function usePermissionsHook({
     if (!animateProgress) return;
 
     const activeCount = Object.values(permissions).filter(
-      (p) => p.granted
+      (p) => p.granted,
     ).length;
 
     const progress = activeCount / totalCount;

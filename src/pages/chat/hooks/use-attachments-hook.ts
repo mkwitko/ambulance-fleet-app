@@ -20,7 +20,7 @@ export const useAttachmentPicker = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.8,
-      allowsEditing: true,
+      allowsEditing: false,
     });
 
     if (!result.canceled && result.assets[0]) {
@@ -37,7 +37,7 @@ export const useAttachmentPicker = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       quality: 0.8,
-      allowsEditing: true,
+      allowsEditing: false,
     });
 
     if (!result.canceled && result.assets[0]) {

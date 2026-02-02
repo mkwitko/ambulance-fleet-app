@@ -1,7 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Audio from "expo-audio"; // ✅ novo expo-audio
 import { Camera } from "expo-camera";
-import * as Contacts from "expo-contacts";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 
@@ -12,7 +11,6 @@ export const AppPermission = {
   LOCATION_FOREGROUND: "locationForeground",
   LOCATION_BACKGROUND: "locationBackground",
   CAMERA: "camera",
-  CONTACTS: "contacts",
   NOTIFICATIONS: "notifications",
 
   // 🔥 Agora voice call
@@ -35,7 +33,6 @@ export const checkAllPermissions = async (): Promise<{
   const locationForeground = await Location.getForegroundPermissionsAsync();
   const locationBackground = await Location.getBackgroundPermissionsAsync();
   const camera = await Camera.getCameraPermissionsAsync();
-  const contacts = await Contacts.getPermissionsAsync();
   const audio = await Audio.getRecordingPermissionsAsync(); // ✅ correto
   const notifications = await Notifications.getPermissionsAsync();
 
@@ -48,8 +45,6 @@ export const checkAllPermissions = async (): Promise<{
     missing.push(AppPermission.LOCATION_BACKGROUND);
 
   if (!camera.granted) missing.push(AppPermission.CAMERA);
-
-  if (!contacts.granted) missing.push(AppPermission.CONTACTS);
 
   if (!audio.granted) missing.push(AppPermission.RECORD_AUDIO);
 
@@ -83,11 +78,6 @@ export const PERMISSION_LABELS: Record<
     label: "Câmera",
     description: "Necessária para tirar fotos e escanear documentos",
     icon: "camera-alt",
-  },
-  [AppPermission.CONTACTS]: {
-    label: "Contatos",
-    description: "Necessária para acessar seus contatos",
-    icon: "contacts",
   },
   [AppPermission.NOTIFICATIONS]: {
     label: "Notificações",

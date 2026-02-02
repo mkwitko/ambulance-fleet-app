@@ -1,6 +1,5 @@
 import { AmbulanceStatus } from "@/src/@types/ambulance-status";
 import { useOnboarding } from "@/src/providers/onboarding-context";
-import { ExistingContact } from "expo-contacts";
 import { useEffect } from "react";
 
 export default function useActivitiesProgressHook({
@@ -10,7 +9,7 @@ export default function useActivitiesProgressHook({
   animateProgress,
   isShiftOver,
 }: {
-  contact: ExistingContact | undefined;
+  contact: string | undefined;
   driverAssociated: string | undefined;
   hasDriverPermission: boolean;
   animateProgress: (progress: number) => void;

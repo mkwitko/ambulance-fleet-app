@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Typography } from "./ui/typography";
 
 interface ModalWrapperProps {
@@ -49,38 +50,31 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
         if (!persistent) onClose();
       }}
     >
-      <Animated.View
-        className="flex-1 justify-end"
-        style={{ opacity: fadeAnim }}
+      <SafeAreaView
+        style={{
+          flex: 1,
+        }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            if (!persistent) onClose();
-          }}
-          activeOpacity={1}
-          className="absolute inset-0 bg-black/60"
-        />
-
         <Animated.View
-          className="bg-white rounded-t-[32px] overflow-hidden"
-          style={{
-            transform: [{ scale: scaleAnim }],
-            maxHeight: SCREEN_HEIGHT * (maxHeightPct / 100),
-          }}
+          className="flex-1 justify-end"
+          style={{ opacity: fadeAnim }}
         >
-          {removeScroll && (
-            <ModalContent
-              icon={icon}
-              title={title}
-              footer={footer}
-              stickyFooter={stickyFooter}
-            >
-              {children}
-            </ModalContent>
-          )}
+          <TouchableOpacity
+            onPress={() => {
+              if (!persistent) onClose();
+            }}
+            activeOpacity={1}
+            className="absolute inset-0 bg-black/60"
+          />
 
-          {!removeScroll && (
-            <ScrollView showsVerticalScrollIndicator={false}>
+          <Animated.View
+            className="bg-white rounded-t-[32px] overflow-hidden"
+            style={{
+              transform: [{ scale: scaleAnim }],
+              maxHeight: SCREEN_HEIGHT * (maxHeightPct / 100),
+            }}
+          >
+            {removeScroll && (
               <ModalContent
                 icon={icon}
                 title={title}
@@ -89,14 +83,36 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({
               >
                 {children}
               </ModalContent>
-            </ScrollView>
-          )}
+            )}
 
-          {stickyFooter && footer && (
-            <View className="absolute left-0 bottom-0 right-0">{footer}</View>
-          )}
+            {!removeScroll && (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <ModalContent
+                  icon={icon}
+                  title={title}
+                  footer={footer}
+                  stickyFooter={stickyFooter}
+                >
+                  {children}
+                </ModalContent>
+              </ScrollView>
+            )}
+
+            {stickyFooter && footer && (
+              <View
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              >
+                {footer}
+              </View>
+            )}
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
+      </SafeAreaView>
     </Modal>
   );
 };
