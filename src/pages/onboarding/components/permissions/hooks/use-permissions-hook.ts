@@ -61,12 +61,6 @@ export default function usePermissionsHook({
       title: "Câmera",
       description: "Para tirar fotos e vídeos diretamente pelo app.",
     },
-    contacts: {
-      icon: "contacts" as const,
-      title: "Contatos",
-      description:
-        "Para podermos saber o seu número de telefone e informar à central.",
-    },
     notifications: {
       icon: "notifications" as const,
       title: "Notificações",

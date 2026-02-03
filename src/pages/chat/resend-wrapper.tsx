@@ -68,7 +68,7 @@ export default function ResendWrapper({
             <View>
               <TouchableOpacity
                 onPress={handleDeleteClick}
-                className="p-3 rounded-full bg-red-500/70 border border-gray-300 active:bg-red-600 shadow-sm"
+                className="p-4 rounded-full bg-red-500/70 border border-gray-300 active:bg-red-600 shadow-sm"
                 activeOpacity={0.7}
               >
                 <EvilIcons name="trash" size={14} color="white" />
@@ -80,7 +80,7 @@ export default function ResendWrapper({
               <TouchableOpacity
                 onPress={handleResendClick}
                 disabled={!online}
-                className={`p-3 rounded-full bg-white/70 border border-gray-300 shadow-sm ${
+                className={`p-4 rounded-full bg-white/70 border border-gray-300 shadow-sm ${
                   online ? "active:bg-white" : "opacity-50"
                 }`}
                 activeOpacity={online ? 0.7 : 1}

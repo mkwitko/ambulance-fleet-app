@@ -13,7 +13,10 @@ import { useEffect, useState } from "react";
 import { AppGuardStatus, AppGuardStatusType } from "../@types/app-guard";
 import { Role } from "../@types/roles";
 import { NAVIGATION_ROUTES } from "../data/blocked-navigation-data";
-import { useGetCurrentDriver } from "../http/generated/drivers/drivers";
+import {
+  useGetCurrentDriver,
+  useHasDriversIntegration,
+} from "../http/generated/drivers/drivers";
 import { hasPermission } from "../utils/permissions";
 
 export function useAppGuard() {
@@ -41,6 +44,7 @@ export function useAppGuard() {
     useGetAuthenticatedUserPermissions();
   const { data: userInfo } = useGetAuthenticatedUserAmbulance();
 
+  const { data: hasDriversIntegration } = useHasDriversIntegration();
   const {
     data: currentDriver,
     isLoading: isLoadingCurrentDriver,
@@ -53,9 +57,10 @@ export function useAppGuard() {
       query: {
         enabled:
           !!userInfo?.data.ambulance?.id &&
-          hasPermission(user?.data, Role["driver:associateDriver"]),
+          hasPermission(user?.data, Role["driver:associateDriver"]) &&
+          !!hasDriversIntegration?.hasIntegration,
       },
-    }
+    },
   );
 
   // -------------------------------------------------------------
@@ -84,6 +89,7 @@ export function useAppGuard() {
 
     // 3) Validar motorista associado
     if (
+      hasDriversIntegration?.hasIntegration &&
       hasPermission(user?.data, Role["driver:associateDriver"]) &&
       !currentDriver
     ) {

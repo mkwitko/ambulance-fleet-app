@@ -142,7 +142,7 @@ export const PermissionsStep: React.FC<StepProps> = ({ onNext }) => {
               icon={permissionDetails[type].icon}
               title={permissionDetails[type].title}
               description={permissionDetails[type].description}
-              granted={permissions[type].granted}
+              granted={permissions[type]?.granted}
               canAskAgain={permissions[type].canAskAgain}
               onPress={() => openModal(type)}
             />
