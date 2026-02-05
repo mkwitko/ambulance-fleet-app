@@ -58,7 +58,7 @@ export function useAppGuard() {
         enabled:
           !!userInfo?.data.ambulance?.id &&
           hasPermission(user?.data, Role["driver:associateDriver"]) &&
-          !!hasDriversIntegration?.hasIntegration,
+          hasDriversIntegration?.hasIntegration,
       },
     },
   );
@@ -119,7 +119,13 @@ export function useAppGuard() {
     const id = setInterval(() => {
       if (isPathExcluded) return;
       refetch();
-      refetchGetCurrentDriver();
+      if (
+        !!userInfo?.data.ambulance?.id &&
+        hasPermission(user?.data, Role["driver:associateDriver"]) &&
+        hasDriversIntegration?.hasIntegration
+      ) {
+        refetchGetCurrentDriver();
+      }
     }, 60_000);
     return () => clearInterval(id);
   }, []);

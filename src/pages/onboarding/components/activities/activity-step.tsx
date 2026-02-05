@@ -102,7 +102,7 @@ export const ActivitiesStep: React.FC<StepProps> = ({ onBack }) => {
   });
 
   const { isFinishingOnboarding, handleFinishOnboarding } =
-    useFinishOnboardHook({ handleAssociateDriver });
+    useFinishOnboardHook({ handleAssociateDriver, contact });
 
   useEffect(() => {
     checkContact();

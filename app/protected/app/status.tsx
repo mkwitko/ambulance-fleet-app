@@ -5,7 +5,10 @@ import { ScrollView, View } from "react-native";
 
 // ==== TIPOS / CONSTANTES ====
 import { STATUS_LABELS } from "@/src/@types/ambulance-status";
-import { GetAmbulances200DataItemStatus } from "@/src/http/generated/api.schemas";
+import {
+  GetAmbulances200DataItemStatus,
+  GetAuthenticatedUserAmbulance200,
+} from "@/src/http/generated/api.schemas";
 
 // ==== COMPONENTES ====
 import { Button } from "@/src/components/ui/button";
@@ -29,6 +32,8 @@ import {
 } from "@/src/http/generated/user/user";
 
 // ==== HOOKS INTERNOS ====
+import { AblyEvents } from "@/src/@types/ably-events";
+import { useUpdateChat } from "@/src/http/generated/chat/chat";
 import { queryClient } from "@/src/lib/react-query";
 import useAmbulanceStatusHook from "@/src/pages/onboarding/components/activities/hooks/use-ambulance-status-hook";
 import useContactHook from "@/src/pages/onboarding/components/activities/hooks/use-contact-hook";
@@ -36,6 +41,8 @@ import useDriversHook from "@/src/pages/onboarding/components/activities/hooks/u
 import useShiftHook, {
   ShiftConfig,
 } from "@/src/pages/onboarding/components/activities/hooks/use-shift-hook";
+import useAbly from "@/src/services/use-ably";
+import Toast from "react-native-toast-message";
 
 export default function Status() {
   const [loading, setLoading] = useState(false);
@@ -46,8 +53,10 @@ export default function Status() {
   const [driverModalVisible, setDriverModalVisible] = useState(false);
 
   // ====== USER DATA ======
-  const { data: user } = useGetAuthenticatedUserAmbulance();
+  const { data: user, queryKey } = useGetAuthenticatedUserAmbulance();
   const ambulance = user?.data.ambulance;
+
+  const { publish } = useAbly({});
 
   // ====== LOCAL STATE ======
   const [selectedStatus, setSelectedStatus] =
@@ -62,10 +71,89 @@ export default function Status() {
 
   // ====== API MUTATIONS ======
   const { mutateAsync: switchAmbulanceShift, isPending: isSwitchingShift } =
-    useSwitchAmbulanceShift();
+    useSwitchAmbulanceShift({
+      mutation: {
+        onSuccess: (data) => {
+          queryClient.setQueryData(
+            queryKey,
+            (oldData: GetAuthenticatedUserAmbulance200 | undefined) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                data: {
+                  id: oldData.data.id,
+                  ambulance: oldData.data.ambulance
+                    ? {
+                        ...oldData.data.ambulance,
+                        ambulanceShiftHistories: [
+                          {
+                            shiftStart: data.shiftStart,
+                            shiftEnd: data.shiftEnd,
+                          },
+                        ],
+                      }
+                    : null,
+                },
+              };
+            },
+          );
+        },
+      },
+    });
   const { mutateAsync: switchAmbulanceStatus, isPending: isSwitchingStatus } =
-    useSwitchAmbulanceStatus();
+    useSwitchAmbulanceStatus({
+      mutation: {
+        onSuccess: (data) => {
+          queryClient.setQueryData(
+            queryKey,
+            (oldData: GetAuthenticatedUserAmbulance200 | undefined) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                data: {
+                  id: oldData.data.id,
+                  ambulance: oldData.data.ambulance
+                    ? {
+                        ...oldData.data.ambulance,
+                        status: data.status,
+                      }
+                    : null,
+                },
+              };
+            },
+          );
+        },
+      },
+    });
 
+  const { mutateAsync: updateChat } = useUpdateChat({
+    mutation: {
+      onSuccess: () => {
+        publish(AblyEvents.updatePhone, {
+          chatId: ambulance?.chats[0].id as string,
+          currentPhone: contact as string,
+        });
+        queryClient.setQueryData(
+          queryKey,
+          (oldData: GetAuthenticatedUserAmbulance200 | undefined) => {
+            if (!oldData) return oldData;
+            return {
+              ...oldData,
+              data: {
+                id: oldData.data.id,
+                ambulance: oldData.data.ambulance
+                  ? {
+                      ...oldData.data.ambulance,
+                      currentPhone: contact as string,
+                    }
+                  : null,
+              },
+            };
+          },
+        );
+      },
+    },
+  });
   // ====== INTERNAL HOOKS ======
   const { contact, checkContact, handleSaveContact } = useContactHook({
     setContactModalVisible,
@@ -121,44 +209,74 @@ export default function Status() {
   // ====== SAVE CONFIG ======
   const handleFinishOnboarding = async () => {
     setLoading(true);
-    if (ambulance?.status !== selectedStatus) {
-      switchAmbulanceStatus({
-        id: ambulance?.id as string,
-        data: { status: selectedStatus },
+
+    try {
+      const promises: Promise<unknown>[] = [];
+
+      if (ambulance?.status !== selectedStatus) {
+        promises.push(
+          switchAmbulanceStatus({
+            id: ambulance?.id as string,
+            data: { status: selectedStatus },
+          }),
+        );
+      }
+
+      const latest = ambulance?.ambulanceShiftHistories[0];
+      if (
+        latest &&
+        (latest.shiftStart !== shiftConfig.entryTime.toISOString() ||
+          latest.shiftEnd !== shiftConfig.exitTime.toISOString())
+      ) {
+        promises.push(
+          (async () => {
+            await switchAmbulanceShift({
+              id: ambulance?.id as string,
+              data: {
+                shiftStart: shiftConfig.entryTime.toISOString(),
+                shiftEnd: shiftConfig.exitTime.toISOString(),
+              },
+            });
+
+            const invalidateShiftQueryKey =
+              getGetAuthenticatedUserShiftValidationQueryKey();
+
+            await queryClient.invalidateQueries({
+              queryKey: invalidateShiftQueryKey,
+            });
+          })(),
+        );
+      }
+
+      if (hasDriverIntegration) {
+        if (!driverAssociated) {
+          promises.push(handleLogoutDriver());
+        }
+
+        if (driverAssociated) {
+          promises.push(handleAssociateDriver());
+        }
+      }
+
+      if (contact !== ambulance?.chats[0].currentPhone) {
+        promises.push(
+          updateChat({
+            id: ambulance?.chats[0].id as string,
+            data: {
+              currentPhone: contact as string,
+            },
+          }),
+        );
+      }
+
+      await Promise.all(promises);
+      Toast.show({
+        type: "success",
+        text1: "Configurações salvas com sucesso!",
       });
+    } finally {
+      setLoading(false);
     }
-
-    const latest = ambulance?.ambulanceShiftHistories[0];
-    if (
-      latest &&
-      (latest.shiftStart !== shiftConfig.entryTime.toISOString() ||
-        latest.shiftEnd !== shiftConfig.exitTime.toISOString())
-    ) {
-      await switchAmbulanceShift({
-        id: ambulance?.id as string,
-        data: {
-          shiftStart: shiftConfig.entryTime.toISOString(),
-          shiftEnd: shiftConfig.exitTime.toISOString(),
-        },
-      });
-      const invalidateShiftQueryKey =
-        getGetAuthenticatedUserShiftValidationQueryKey();
-      await queryClient.invalidateQueries({
-        queryKey: invalidateShiftQueryKey,
-      });
-    }
-
-    if (!driverAssociated) {
-      await handleLogoutDriver();
-      console.log("Driver logged out");
-    }
-
-    if (driverAssociated) {
-      await handleAssociateDriver();
-      console.log("Driver associated");
-    }
-
-    setLoading(false);
   };
 
   // =====================================================================
@@ -192,12 +310,12 @@ export default function Status() {
               isShiftOver
                 ? "Seu turno atual expirou"
                 : shiftConfig.status
-                ? `${format(shiftConfig.entryTime, "dd/MM 'às' HH:mm", {
-                    locale: ptBR,
-                  })} até ${format(shiftConfig.exitTime, "dd/MM 'às' HH:mm", {
-                    locale: ptBR,
-                  })}`
-                : "Defina seu horário de trabalho"
+                  ? `${format(shiftConfig.entryTime, "dd/MM 'às' HH:mm", {
+                      locale: ptBR,
+                    })} até ${format(shiftConfig.exitTime, "dd/MM 'às' HH:mm", {
+                      locale: ptBR,
+                    })}`
+                  : "Defina seu horário de trabalho"
             }
             configured={shiftConfig.status && !isShiftOver}
             onPress={() => setShiftModalVisible(true)}

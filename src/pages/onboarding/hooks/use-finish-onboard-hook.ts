@@ -1,17 +1,22 @@
+import { AblyEvents } from "@/src/@types/ably-events";
 import { AmbulanceStatus } from "@/src/@types/ambulance-status";
 import {
   useAssociateUserToAmbulance,
   useSwitchAmbulanceShift,
   useSwitchAmbulanceStatus,
 } from "@/src/http/generated/ambulance/ambulance";
+import { useUpdateChat } from "@/src/http/generated/chat/chat";
 import { useGetAuthenticatedUser } from "@/src/http/generated/user/user";
 import { useOnboarding } from "@/src/providers/onboarding-context";
+import useAbly from "@/src/services/use-ably";
 import { useRouter } from "expo-router";
 
 export default function useFinishOnboardHook({
   handleAssociateDriver,
+  contact,
 }: {
   handleAssociateDriver: () => Promise<void>;
+  contact: string | undefined;
 }) {
   const { data: user } = useGetAuthenticatedUser();
   const { mutateAsync: associateUser, isPending: isAssociating } =
@@ -20,6 +25,19 @@ export default function useFinishOnboardHook({
     useSwitchAmbulanceShift();
   const { mutateAsync: switchAmbulanceStatus, isPending: isSwitchingStatus } =
     useSwitchAmbulanceStatus();
+
+  const { publish } = useAbly({});
+
+  const { mutateAsync: updateChat } = useUpdateChat({
+    mutation: {
+      onSuccess: () => {
+        publish(AblyEvents.updatePhone, {
+          chatId: ambulance?.chats[0].id as string,
+          currentPhone: contact as string,
+        });
+      },
+    },
+  });
 
   const { ambulance, shiftConfig, selectedStatus } = useOnboarding();
 
@@ -50,6 +68,12 @@ export default function useFinishOnboardHook({
         },
       }),
       handleAssociateDriver(),
+      updateChat({
+        id: ambulance?.chats[0].id as string,
+        data: {
+          currentPhone: contact as string,
+        },
+      }),
     ]);
     router.replace("/protected/app/chat");
   };

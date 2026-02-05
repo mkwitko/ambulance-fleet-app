@@ -28,6 +28,11 @@ export default function useAbly({
       disconnectedRetryTimeout: 4000,
       suspendedRetryTimeout: 10000,
     });
+
+    return () => {
+      clientRef.current?.close();
+      clientRef.current = null;
+    };
   }, [user]);
 
   useEffect(() => {
@@ -72,7 +77,7 @@ export default function useAbly({
 
       channel.publish(event, payload);
     },
-    [user]
+    [user],
   );
 
   return {
