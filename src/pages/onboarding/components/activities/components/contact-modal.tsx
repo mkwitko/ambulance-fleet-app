@@ -148,6 +148,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             <TextInput
               value={phoneComplete}
               onChangeText={handlePhoneChange}
+              maxLength={15}
               placeholder="(00) 00000-0000"
               keyboardType="number-pad"
               returnKeyType="done"

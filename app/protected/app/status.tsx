@@ -29,10 +29,12 @@ import {
 import {
   getGetAuthenticatedUserShiftValidationQueryKey,
   useGetAuthenticatedUserAmbulance,
+  useGetAuthenticatedUserPermissions,
 } from "@/src/http/generated/user/user";
 
 // ==== HOOKS INTERNOS ====
 import { AblyEvents } from "@/src/@types/ably-events";
+import { Role } from "@/src/@types/roles";
 import { useUpdateChat } from "@/src/http/generated/chat/chat";
 import { queryClient } from "@/src/lib/react-query";
 import useAmbulanceStatusHook from "@/src/pages/onboarding/components/activities/hooks/use-ambulance-status-hook";
@@ -42,6 +44,8 @@ import useShiftHook, {
   ShiftConfig,
 } from "@/src/pages/onboarding/components/activities/hooks/use-shift-hook";
 import useAbly from "@/src/services/use-ably";
+import { hasPermission } from "@/src/utils/permissions";
+import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 
 export default function Status() {
@@ -56,7 +60,11 @@ export default function Status() {
   const { data: user, queryKey } = useGetAuthenticatedUserAmbulance();
   const ambulance = user?.data.ambulance;
 
+  const { data: userPermissions } = useGetAuthenticatedUserPermissions();
+
   const { publish } = useAbly({});
+
+  const router = useRouter();
 
   // ====== LOCAL STATE ======
   const [selectedStatus, setSelectedStatus] =
@@ -248,7 +256,10 @@ export default function Status() {
         );
       }
 
-      if (hasDriverIntegration) {
+      if (
+        hasDriverIntegration &&
+        hasPermission(userPermissions?.data, Role["driver:associateDriver"])
+      ) {
         if (!driverAssociated) {
           promises.push(handleLogoutDriver());
         }
@@ -274,6 +285,7 @@ export default function Status() {
         type: "success",
         text1: "Configurações salvas com sucesso!",
       });
+      router.replace("/protected/app/chat");
     } finally {
       setLoading(false);
     }

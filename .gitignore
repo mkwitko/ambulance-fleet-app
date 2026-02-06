@@ -43,4 +43,6 @@ app-example
 /android
 .env
 app-release.apk
+connect-message.apk
+
 src/http

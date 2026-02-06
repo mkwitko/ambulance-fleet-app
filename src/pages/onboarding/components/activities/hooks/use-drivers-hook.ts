@@ -12,6 +12,7 @@ import {
   useGetAuthenticatedUserPermissions,
 } from "@/src/http/generated/user/user";
 import { queryClient } from "@/src/lib/react-query";
+import useAbly from "@/src/services/use-ably";
 import { hasPermission } from "@/src/utils/permissions";
 import { useEffect, useState } from "react";
 
@@ -25,6 +26,8 @@ export default function useDriversHook({
   const [driverAssociated, setDriverAssociated] = useState<string>();
   const { data: hasDriverIntegration, isLoading: isLoadingDriverIntegration } =
     useHasDriversIntegration();
+
+  const { publish } = useAbly({});
 
   const { data: currentDriver, queryKey } = useGetCurrentDriver(
     {
@@ -48,9 +51,9 @@ export default function useDriversHook({
   const { mutateAsync: logoutDriver } = useLogoutDriver();
 
   const hasDriverPermission =
-    hasDriverIntegration?.hasIntegration ||
-    (false &&
-      hasPermission(userPermissions?.data, Role["driver:associateDriver"]));
+    (hasDriverIntegration?.hasIntegration &&
+      hasPermission(userPermissions?.data, Role["driver:associateDriver"])) ||
+    false;
 
   const { data: drivers, isLoading: isLoadingDrivers } =
     useGetDriversIntegration(
