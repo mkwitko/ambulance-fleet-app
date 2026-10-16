@@ -36,7 +36,6 @@
     "drizzle-orm": "^0.45.1",
     "expo": "^54.0.30",
     "expo-audio": "~1.0.15",
-    "expo-background-connection-plugin": "/Users/mauriciodeoliveirakwitko/Desktop/coding/expo-background-connection-plugin",
     "expo-camera": "~17.0.9",
     "expo-clipboard": "~8.0.8",
     "expo-constants": "~18.0.10",
