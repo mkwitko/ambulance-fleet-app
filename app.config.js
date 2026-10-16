@@ -27,13 +27,6 @@ export default ({ config }) => ({
     plugins: [
       "expo-router",
       [
-        "expo-background-connection-plugin",
-        {
-          "notificationTitle": "Connect",
-          "notificationBody": "Sua conexão está ativa",
-        }
-      ],
-      [
         "expo-notifications",
         {
           "icon": "./assets/images/icon.png",

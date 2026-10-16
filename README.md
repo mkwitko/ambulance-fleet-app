@@ -10,7 +10,6 @@ Expo mobile app for ambulance crews and base operators on a multi-tenant fleet m
 - Onboarding flow for contacts and activities (`src/pages/onboarding`).
 - Chat with realtime delivery over Ably (`src/services/use-ably.ts`, `src/pages/chat`).
 - Push-to-talk radio and public-address calls over Agora, started by an Ably `radioCall` event (`src/services/use-agora.ts`, `src/hooks/use-radio-call-handler.ts`).
-- Foreground service and a background-connection plugin to keep the realtime link alive (`src/services/use-foreground-service.ts`, `src/hooks/use-background-service.ts`).
 - Offline message store with expo-sqlite and Drizzle (`src/services/database`, `drizzle/`).
 - Error reporting with Sentry (`src/config/sentry.ts`).
 
@@ -48,7 +47,6 @@ flowchart TB
   Radio --> Agora[use-agora]
   Radio --> Ably
   Pages --> DB[(expo-sqlite via Drizzle<br/>messages)]
-  Screens --> BG[foreground service + background plugin]
 ```
 
 Radio call flow (callee side):
@@ -84,7 +82,7 @@ Boundaries:
 - Radio is event-driven: an Ably event triggers an RTC token request and an Agora join (`src/hooks/use-radio-call-handler.ts`).
 - Environment validated at boot with zod (`src/env/index.ts`); the app refuses to start on missing variables.
 - Offline-capable message store with checked-in Drizzle migrations (`drizzle/`, `src/services/database/database-schema.ts`).
-- Native modules (Agora, background service) require a development build; Expo Go is not enough.
+- Native modules (Agora) require a development build; Expo Go is not enough.
 
 ## Tech stack
 
@@ -109,12 +107,11 @@ npx expo run:android     # or run:ios
 | `EXPO_PUBLIC_SENTRY` | Sentry DSN |
 | `EXPO_PUBLIC_AGORA_APP_ID` | Agora project identifier |
 
-`orval.config.ts` still points at an old sibling folder name (`../connect-server-refactor/swagger.json`); change it to your API checkout's `swagger.json`.
+`orval.config.ts` reads `../ambulance-fleet-api/swagger.json`, so check out the API repository next to this one.
 
 ## Known gaps
 
 - No automated tests and no CI.
-- `package.json` points `expo-background-connection-plugin` at a local filesystem path outside this repository, so `yarn install` fails until it is replaced.
 - The app depends on API routes (`/radio/ably-token`, `/radio/create-meeting`) that must be served by your API checkout.
 
 ## Testing
